@@ -23,21 +23,21 @@ export default function Insights() {
       <TopBar title="Insights" fallback="/" />
       <Card>
         <div className="muted" style={{ marginTop: 4 }}>Spent in November so far ({ins.days_counted} days)</div>
-        <div className="spread">
+        <div className="spread" style={{ marginTop: 2 }}>
           <div style={{ fontSize: 28, fontWeight: 800 }}>{money(ins.spent)}</div>
           <Chip tone={ins.vs_same_days > 0 ? 'bad' : 'good'}>{ins.vs_same_days > 0 ? '+' : ''}{money(ins.vs_same_days)} vs usual by now</Chip>
         </div>
         <div className="bars">
           {ins.months.map((m) => (
-            <div key={m.m}><div className={`bar ${m.partial ? 'now' : ''}`} style={{ height: `${(m.v / max) * 90}px` }} />{m.m}</div>
+            <div key={m.m}><div className={`bar ${m.partial ? 'now' : ''}`} style={{ height: `${(m.v / max) * 84}px` }} />{m.m}</div>
           ))}
         </div>
-        <div className="small">Full-month average {money(ins.avg_full)} · six spending categories, Everyday only</div>
+        <div className="small" style={{ marginTop: 4 }}>Usual full month: {money(ins.avg_full)}</div>
       </Card>
 
       <Card variant="windy">
         <WindyPill label="Money Coach" />
-        <p style={{ marginTop: 8 }}>{ins.coach}</p>
+        <p style={{ marginTop: 10, marginBottom: 12 }}>{ins.coach}</p>
         {limit
           ? <div className="plan-strip" style={{ marginBottom: 0 }}>✓ Eating out limit: {money(limit)} a week. Your forecast plans for it.</div>
           : <button className="btn outline" disabled={busy} onClick={async () => { const p = await propose('budget', { category: 'Eating out', weekly: 60 }); if (p) nav(`/review/${p.id}`) }}>
@@ -56,7 +56,7 @@ export default function Insights() {
             </div>
           )
         })}
-        <p className="small" style={{ marginTop: 8 }}>Compared with days 1 to {ins.days_counted} of earlier months, so a month that isn’t over is compared fairly.</p>
+        <p className="small" style={{ marginTop: 8 }}>Compared with days 1 to {ins.days_counted} of earlier months.</p>
       </Card>
     </>
   )

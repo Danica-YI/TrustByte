@@ -93,7 +93,7 @@ function TopCard({ card }: { card: HomeCard }) {
         <Card variant="windy">
           <WindyPill label="Life event" time="Just now" />
           <h2>Looks like you’re moving home</h2>
-          <p>We spotted a {money(card.bond)} bond to RTA Queensland and a new rent payee this week. Want me to check how this affects your Japan trip and home deposit?</p>
+          <p>A {money(card.bond)} bond and a new rent payee this week. Check what it means for your goals?</p>
           <div className="hstack">
             <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/life-event')}>Yes, check my plan</button>
             <button className="btn outline" onClick={() => act('dismiss_card', { card: 'life-event' }, 'Hidden. You can still plan from Your life goals.')}>Not now</button>
@@ -107,7 +107,7 @@ function TopCard({ card }: { card: HomeCard }) {
             <div className="alert-icon">!</div>
             <div>
               <h3>Early December looks tight</h3>
-              <p>After rent and your auto-saves, Everyday could dip to <b>{money(card.low.balance)}</b> around {shortDate(card.low.date)}.</p>
+              <p>Everyday could dip to <b>{money(card.low.balance)}</b> around {shortDate(card.low.date)}.</p>
               <Link to="/forecast" className="link">See forecast and fixes ›</Link>
             </div>
           </div>
@@ -119,9 +119,9 @@ function TopCard({ card }: { card: HomeCard }) {
           <WindyPill label="Commitments" time="Today" />
           <h2>{card.found.length ? `Found ${card.found.length} new regular payment${card.found.length > 1 ? 's' : ''}` : 'Your car insurance went up'}</h2>
           <p>
-            {card.found.length > 0 && <>{card.found.join(' and ')} {card.found.length > 1 ? 'look like subscriptions' : 'looks like a subscription'} you started recently. </>}
-            {card.insurance && !card.insurance.reviewed && <>Car insurance renews {shortDate(card.insurance.due)} at {money(card.insurance.now)}, up {card.insurance.pct}%. </>}
-            {card.pay_later.count} pay-later plans take {money(card.pay_later.next)} next payday.
+            {card.found.length > 0 && <>New: {card.found.join(', ')}. </>}
+            {card.insurance && !card.insurance.reviewed && <>Car insurance is up {card.insurance.pct}%. </>}
+            Pay-later takes {money(card.pay_later.next)} next payday.
           </p>
           <div className="hstack">
             <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/payments')}>Review</button>
@@ -142,8 +142,8 @@ function GroceryCard({ card }: { card: Extract<HomeCard, { id: 'grocery-check' }
         <Card variant="windy">
           <WindyPill label="Spending check" time="Just now" />
           <h2>Bigger grocery shop than usual</h2>
-          <p>{card.shop.merchant} on {shortDate(card.shop.date)} was {money(card.shop.amount, true)}. Your usual shop is about {money(card.usual)}.
-            {connected ? <> {card.shop.merchant} sent the itemised receipt, so I can show you where it went.</> : <> Want to see where it went?</>} Only you can see this.</p>
+          <p>{card.shop.merchant} on {shortDate(card.shop.date)} was {money(card.shop.amount, true)}, usually about {money(card.usual)}.
+            {connected ? <> The itemised receipt is ready.</> : <> See where it went?</>}</p>
           <div className="hstack">
             {connected
               ? <button className="btn primary" style={{ flex: 1 }} onClick={() => nav(`/receipt/${rid}`)}>See what was in it</button>

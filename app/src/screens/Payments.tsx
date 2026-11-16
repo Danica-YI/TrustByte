@@ -25,12 +25,12 @@ export default function Payments() {
   return (
     <>
       <TopBar title="Regular payments" fallback="/" />
-      <Seg options={['List', 'Calendar']} value={view} onChange={setView} />
+      <div style={{ marginBottom: 14 }}><Seg options={['List', 'Calendar']} value={view} onChange={setView} /></div>
 
       <Card>
         <div className="muted" style={{ marginTop: 4 }}>Per fortnight</div>
         <div style={{ fontSize: 28, fontWeight: 800 }}>{money(c.per_fortnight)} <span className="muted">across {c.count} regular payments</span></div>
-        <p className="small" style={{ marginTop: 6 }}>Includes rent ({c.rent.frequency}) and a share of yearly bills. Already allowed for in your Safe to spend ({money(s.everyday.safe)}).</p>
+        <p className="small" style={{ marginTop: 6 }}>Includes rent and yearly bills. Already counted in your Safe to spend.</p>
       </Card>
 
       {view === 'Calendar' ? <Calendar s={s} /> : (

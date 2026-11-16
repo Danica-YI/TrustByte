@@ -187,7 +187,7 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 10px 0; }
 .composer .send:disabled { opacity: .4; }
 
 /* ---------- Simple charts ---------- */
-.bars { display: flex; align-items: flex-end; gap: 10px; height: 110px; padding: 8px 0; }
+.bars { display: flex; align-items: flex-end; gap: 10px; height: 118px; margin-top: 16px; padding: 0 0 10px; }
 .bars > div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: var(--ink-3); }
 .bars .bar { width: 100%; border-radius: 6px 6px 0 0; background: #d9d0e6; }
 .bars .bar.now { background: var(--brand); }

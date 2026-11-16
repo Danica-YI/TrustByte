@@ -623,10 +623,10 @@ def insights(s: dict) -> dict:
         prev.append(orders(date(yy, mm, 1), date(yy, mm, min(TODAY.day, 28))))
     usual_orders = round(sum(prev) / len(prev)) if prev else 0
     parts = [f"{c['category']} ({money(c['diff_vs_same_days'], False).replace('$', '+$', 1)})" for c in up[:2]]
-    coach = (f"{' and '.join(parts)} drive the difference compared with the same days of earlier months."
+    coach = (f"{' and '.join(parts)} are above your usual by now."
              if parts else "Your spending is in line with earlier months.")
     if this_orders:
-        coach += f" {this_orders} food delivery orders so far this month; your usual by now is {usual_orders}."
+        coach += f" {this_orders} food delivery orders, usually {usual_orders}."
     if down:
         coach += f" {', '.join(down[:2])} {'is' if len(down[:2]) == 1 else 'are'} under your average."
     return {"spent": cm["totals"]["this_month"], "avg_same_days": cm["totals"]["avg_same_days"],
