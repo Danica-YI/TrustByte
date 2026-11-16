@@ -95,7 +95,7 @@ def transcript(conversation_id: str) -> list[dict] | None:
             for block in m["content"]:
                 if block.get("type") == "text":
                     out[-1]["text"] += block["text"]
-                elif block.get("type") == "tool_use":
+                elif block.get("type") == "tool_use" and block["name"] != "suggest_next":
                     out[-1]["tools"].append({"name": block["name"], "input": block["input"]})
         # tool results (user messages with a list) are Windy's working, not shown
     return out
