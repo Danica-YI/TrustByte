@@ -39,6 +39,7 @@ import guardrails as G
 import memory
 import planner
 import state as plan_state
+import suggest
 import tools
 from tools import TODAY, TOOLS, run_tool
 
@@ -79,7 +80,15 @@ Boundaries:
 - Spending insights are about money only. Never comment on health, diet, religion or lifestyle from purchases.
 - Signals like a new rent payee only suggest a life change; ask Mia rather than assume.
 - Every plan change Mia has approved (auto-saves, limits, payments on hold) is already in the tool results.
-  To change her plan, point her to the screen: Windy proposes, Mia approves there.
+
+Next steps:
+- When a plan change would clearly help with what she asked, offer it with suggest_next. Each action becomes
+  a button under your answer that opens a review screen; she decides there. Don't offer one when nothing
+  needs changing. Always write your answer to Mia in words too: the buttons never replace it.
+- Give her a choice: when there are two different ways to help (e.g. skip one Westpac Life auto-save, or
+  limit Eating out), offer them as two separate buttons, not one combined change. Name both in your answer
+  so she can compare them. Combine fixes into one button only if neither works on its own.
+- Never say a change is made or set up: you can only suggest it. Say she can review it with the button below.
 
 Memory:
 - When Mia tells you something lasting about herself (a goal, a preference, how she gets paid, how she likes
@@ -87,7 +96,7 @@ Memory:
 - Never save health, religion, relationships or other sensitive details, even if she mentions them.
 - Her questions from earlier chats, if any, are listed after these instructions. When she asks what she
   asked or said before, answer from that list."""
-CHAT_TOOLS = TOOLS + [memory.REMEMBER_TOOL]
+CHAT_TOOLS = TOOLS + [memory.REMEMBER_TOOL, suggest.SUGGEST_TOOL]
 
 
 def _system(conversation_id: str) -> list[dict]:
@@ -269,6 +278,7 @@ def chat(body: ChatIn) -> StreamingResponse:
             return
         system = _system(cid)  # read Windy's memory before answering
         answer: list[str] = []
+        tool_outputs: list[str] = []  # what the calculator returned this turn, to check Windy's figures against
         try:
             for _ in range(MAX_TOOL_ROUNDS):
                 with client.beta.messages.stream(
@@ -304,10 +314,25 @@ def chat(body: ChatIn) -> StreamingResponse:
 
                 results = []
                 for block in tool_uses:
-                    yield _sse({"type": "tool", "name": block.name, "input": block.input})
-                    output, is_error = _run_tool_on_live_plan(block.name, block.input)
+                    if block.name == "suggest_next":
+                        # Only suggestions the guardrails accept reach the app, as buttons
+                        kept, dropped = suggest.validate(block.input, plan_state.load())
+                        if kept:
+                            yield _sse({"type": "suggestions", "actions": kept})
+                        result_for_windy = {"shown_as_buttons": kept, "dropped": dropped}
+                        if not "".join(answer).strip():
+                            # Buttons never replace an answer
+                            result_for_windy["next"] = ("The buttons are ready and appear under your reply, but your "
+                                                        "reply to Mia is still empty. Write it now: answer her question "
+                                                        "in 2 to 5 sentences, then mention she can review the change "
+                                                        "with the button below. Don't call suggest_next again.")
+                        output, is_error = json.dumps(result_for_windy), False
+                    else:
+                        yield _sse({"type": "tool", "name": block.name, "input": block.input})
+                        output, is_error = _run_tool_on_live_plan(block.name, block.input)
                     usage_log.append({"time": datetime.now().isoformat(timespec="seconds"),
                                       "tool": block.name, "input": block.input, "error": is_error})
+                    tool_outputs.append(output)
                     result = {"type": "tool_result", "tool_use_id": block.id, "content": output}
                     if is_error:
                         result["is_error"] = True
@@ -316,6 +341,9 @@ def chat(body: ChatIn) -> StreamingResponse:
                 messages.append({"role": "user", "content": results})
             else:
                 yield _sse({"type": "text", "text": "\n\n(Stopped after too many steps.)"})
+            # Output guardrail: every figure in the answer should come from the tools (or from Mia / Windy's notes)
+            known_context = message + " " + " ".join(b["text"] for b in system[1:])
+            yield _sse({"type": "checks", "checks": [G.check_chat_numbers("".join(answer), tool_outputs, known_context)]})
             memory.log_exchange(cid, message, "".join(answer))  # so the next chat knows what was asked
             chats.save(cid, messages)  # so Mia can reopen this chat and carry on
             yield _sse({"type": "done"})

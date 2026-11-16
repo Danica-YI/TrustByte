@@ -1,12 +1,36 @@
 // Ask Windy: live chat with Claude through the backend (server/main.py).
 // Answers come from tools that compute over Mia's data; each tool Windy used is shown under its reply.
 // Every chat is saved (server/chats.py): "Past chats" lists them, and opening one carries on that conversation.
+// Windy can offer up to 2 next-step buttons (server/suggest.py, already checked by the guardrails); tapping one
+// opens the normal review screen. "How did you work this out?" is built from what really happened, not by the AI.
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import type { Check } from '../api'
 import { Mark, SendIcon, TopBar } from '../components/ui'
+import { useApp } from '../store'
 
 type ToolCall = { name: string; input: Record<string, unknown> }
-type Msg = { role: 'user' | 'assistant'; text: string; tools: ToolCall[]; error?: string }
+type Action = { label: string; kind: string; params: Record<string, unknown> }
+type Msg = {
+  role: 'user' | 'assistant'; text: string; tools: ToolCall[]; error?: string; actions?: Action[]
+  checks?: Check[] // input guardrails, before Windy answered
+  outChecks?: Check[] // output guardrails on the answer, e.g. every figure came from the calculator
+}
+
+// What each tool reads, for "How did you work this out?"
+const TOOL_DATA: Record<string, string> = {
+  get_accounts: 'Your account balances and goal progress',
+  spending_by_category: 'Your Everyday spending, totalled by category',
+  compare_month: 'This month’s spending against your earlier months',
+  search_transactions: 'Your Everyday transactions',
+  recurring_payments: 'Regular payments found in your history',
+  cash_flow_forecast: 'Your scheduled payments and usual spending, projected 5 weeks ahead',
+  goal_projection: 'Your goal balance and auto-saves',
+  life_events: 'Transactions that may signal a life change',
+  get_receipt: 'Itemised receipts linked to your payments',
+  pay_later_plans: 'Your Afterpay plans',
+  remember: 'Saved a short note you told Windy',
+}
 
 const TOOL_LABELS: Record<string, string> = {
   get_accounts: 'Balances',
@@ -42,12 +66,22 @@ export default function Chat() {
   const [cid, setCid] = useState<string | null>(null)
   const [health, setHealth] = useState<Health | 'offline'>(null)
   const [past, setPast] = useState<PastChat[] | null>(null) // null = chat view, list = "Past chats" view
+  const [how, setHow] = useState<number | null>(null) // which answer's "How did you work this out?" is open
+  const { propose, busy: proposing } = useApp()
+  const nav = useNavigate()
   const end = useRef<HTMLDivElement>(null)
+
+  // A next-step button: the backend works out the change and holds it; Mia reviews and approves it there.
+  async function review(a: Action) {
+    const p = await propose(a.kind, a.params)
+    if (p) nav(`/review/${p.id}`)
+  }
 
   useEffect(() => {
     fetch('/api/health').then((r) => (r.ok ? r.json() : Promise.reject())).then(setHealth).catch(() => setHealth('offline'))
   }, [])
-  useEffect(() => { end.current?.scrollIntoView({ block: 'end' }) }, [msgs])
+  // Also when Windy finishes: that's when the next-step buttons appear
+  useEffect(() => { end.current?.scrollIntoView({ block: 'end' }) }, [msgs, busy])
   // A question typed into the Home "Ask Windy" box arrives in router state: send it once on arrival.
   const loc = useLocation()
   const sentFromHome = useRef(false)
@@ -106,7 +140,9 @@ export default function Chat() {
         for (const part of parts) {
           if (!part.startsWith('data: ')) continue
           const ev = JSON.parse(part.slice(6))
-          if (ev.type === 'start') setCid(ev.conversation_id)
+          if (ev.type === 'start') { setCid(ev.conversation_id); patchLast((m) => ({ ...m, checks: ev.checks ?? [] })) }
+          else if (ev.type === 'suggestions') patchLast((m) => ({ ...m, actions: ev.actions }))
+          else if (ev.type === 'checks') patchLast((m) => ({ ...m, outChecks: ev.checks }))
           else if (ev.type === 'text') patchLast((m) => ({ ...m, text: m.text + ev.text }))
           else if (ev.type === 'tool') patchLast((m) => ({ ...m, tools: [...m.tools, { name: ev.name, input: ev.input }] }))
           else if (ev.type === 'error') patchLast((m) => ({ ...m, error: ev.message }))
@@ -189,6 +225,54 @@ export default function Chat() {
             {m.text}
             {!m.text && !m.error && busy && i === msgs.length - 1 && <span className="muted">Windy is looking…</span>}
             {m.error && <div style={{ color: 'var(--bad)' }}>{m.error}</div>}
+            {m.outChecks?.filter((c) => !c.ok).map((c) => (
+              <div key={c.name} className="small" style={{ marginTop: 8, color: 'var(--warn)', whiteSpace: 'normal' }}>
+                ⚠ Not from the calculator: {c.detail.replace('Windy worked these out itself: ', '')}. Windy worked
+                this out itself, so double-check it.
+              </div>
+            ))}
+
+            {i === msgs.length - 1 && !busy && m.actions && m.actions.length > 0 && (
+              <div className="stack" style={{ marginTop: 10, whiteSpace: 'normal' }}>
+                {m.actions.map((a) => (
+                  <button key={a.label} className="btn outline" style={{ textAlign: 'left' }} disabled={proposing} onClick={() => review(a)}>
+                    {a.label} <span className="muted">· review</span>
+                  </button>
+                ))}
+                <span className="small">Opens a review screen. Nothing changes until you approve.</span>
+              </div>
+            )}
+
+            {m.tools.length > 0 && !(busy && i === msgs.length - 1) && (
+              <div style={{ marginTop: 8, whiteSpace: 'normal' }}>
+                <button className="link small" onClick={() => setHow(how === i ? null : i)}>
+                  {how === i ? 'Hide how this was worked out' : 'How did you work this out?'}
+                </button>
+                {how === i && (
+                  <div className="small" style={{ marginTop: 6, background: 'var(--windy-soft)', borderRadius: 10, padding: 10 }}>
+                    <b>Data Windy looked at</b>
+                    {m.tools.map((t, j) => (
+                      <div key={j} style={{ marginTop: 4 }}>
+                        • {TOOL_DATA[t.name] ?? TOOL_LABELS[t.name] ?? t.name}
+                        {Object.keys(t.input).length > 0 && (
+                          <span className="muted"> ({Object.entries(t.input).map(([k, v]) => `${k.replace(/_/g, ' ')}: ${Array.isArray(v) ? v.join(', ') : String(v)}`).join(' · ')})</span>
+                        )}
+                      </div>
+                    ))}
+                    <div style={{ marginTop: 8 }}><b>Numbers:</b> worked out by the Python engine. <b>Words:</b> written by Windy (AI).</div>
+                    {[['Checks before answering', m.checks], ['Checks on the answer', m.outChecks]].map(([title, list]) =>
+                      Array.isArray(list) && list.length > 0 && (
+                        <div key={title as string} style={{ marginTop: 8 }}>
+                          <b>{title as string}</b>
+                          {list.map((c, j) => (
+                            <div key={j}>{c.ok ? '✓' : '✗'} {c.name}{c.detail && <span className="muted"> · {c.detail}</span>}</div>
+                          ))}
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ),
       )}
