@@ -1,7 +1,7 @@
 // LP-01 / LP-07 / LP-08 / RL-01 / GP-01 (+ Commitments card): one home page, only the top Windy card changes.
 // Balances, safe-to-spend, the shortfall warning and goals all come from the generated data.
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Chip, Logo, Progress, WindyPill } from '../components/ui'
 import { features, isEnabled, type HomeCardId } from '../features'
 import { money } from '../data/mia'
@@ -11,10 +11,18 @@ const GOAL_COLORS: Record<string, string> = { 'goal-japan': '#6d28d9', 'goal-eme
 
 export default function Home() {
   const [params] = useSearchParams()
-  const [dismissed, setDismissed] = useState(false)
+  const nav = useNavigate()
+  const [ask, setAsk] = useState('')
   const requested = params.get('card') as HomeCardId | null
-  const firstEnabled = features.find((f) => f.enabled && f.homeCard)?.homeCard
-  const card = requested ?? firstEnabled
+  // Windy cards queue up: "Not now" or "Next" shows the next enabled one (life event → dream nudge → …).
+  // ?card=x starts at that card; a switched-off feature can still be previewed that way.
+  const enabledCards = features.filter((f) => f.enabled && f.homeCard).map((f) => f.homeCard!)
+  const queue = requested && !enabledCards.includes(requested) ? [requested, ...enabledCards] : enabledCards
+  const start = requested ? queue.indexOf(requested) : 0
+  const [step, setStep] = useState(0)
+  useEffect(() => { setStep(0) }, [requested])
+  const pos = start + step
+  const card = queue[pos]
 
   return (
     <>
@@ -23,10 +31,23 @@ export default function Home() {
         <div className="greet">Good evening, Mia</div>
         <div className="balance">{money(everydayBalance, true)}</div>
         <div className="sub">Everyday · Safe to spend <b>{money(safeToSpend().safe)}</b> until payday</div>
+        {isEnabled('windy-chat') && (
+          <form className="ask-windy" onSubmit={(e) => { e.preventDefault(); nav('/chat', { state: { q: ask.trim() } }) }}>
+            <span aria-hidden>✦</span>
+            <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="Ask Windy anything…" aria-label="Ask Windy" />
+            <button type="submit">Ask</button>
+          </form>
+        )}
       </div>
 
       <div className="hero-overlap">
-        {card && !dismissed && <TopCard id={card} onDismiss={() => setDismissed(true)} />}
+        {card && <TopCard id={card} onDismiss={() => setStep(step + 1)} />}
+        {card && queue.length > 1 && (
+          <div className="spread small" style={{ margin: '-4px 6px 12px' }}>
+            <span>{pos + 1} of {queue.length}</span>
+            {pos + 1 < queue.length && <button className="link" onClick={() => setStep(step + 1)}>Next ›</button>}
+          </div>
+        )}
 
         {isEnabled('shortfall') && forecast().low.balance < 0 && (
           <Card>

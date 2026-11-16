@@ -1,6 +1,7 @@
 // Ask Windy: live chat with Claude through the backend (server/main.py).
 // Answers come from tools that compute over Mia's data; each tool Windy used is shown under its reply.
 import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { TopBar } from '../components/ui'
 
 type ToolCall = { name: string; input: Record<string, unknown> }
@@ -39,6 +40,14 @@ export default function Chat() {
     fetch('/api/health').then((r) => (r.ok ? r.json() : Promise.reject())).then(setHealth).catch(() => setHealth('offline'))
   }, [])
   useEffect(() => { end.current?.scrollIntoView({ block: 'end' }) }, [msgs])
+  // A question typed into the Home "Ask Windy" box arrives in router state: send it once on arrival.
+  const loc = useLocation()
+  const sentFromHome = useRef(false)
+  useEffect(() => {
+    const q = (loc.state as { q?: string } | null)?.q
+    if (q && !sentFromHome.current) { sentFromHome.current = true; send(q) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const patchLast = (f: (m: Msg) => Msg) => setMsgs((all) => [...all.slice(0, -1), f(all[all.length - 1])])
 
