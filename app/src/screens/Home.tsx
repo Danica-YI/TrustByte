@@ -54,7 +54,7 @@ export default function Home() {
           {s.goals.map((g) => (
             <div key={g.id}>
               <div className="row" style={{ padding: 0 }}>
-                <span>{g.name}</span>
+                <Link to={`/goals/${g.id}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 600 }}>{g.name} ›</Link>
                 <span className="muted">{money(g.saved)} / {money(g.target)}</span>
               </div>
               <Progress value={g.saved} max={g.target} color={g.color} />

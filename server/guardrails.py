@@ -47,6 +47,11 @@ class Budget(BaseModel):
     weekly: float = Field(ge=10, le=500)
 
 
+class GoalEdit(BaseModel):
+    goal: str = Field(pattern=r"^goal-[a-z]+$")
+    per_payday: float = Field(ge=0, le=2000)
+
+
 class LifeEventConfirm(BaseModel):
     rent_frequency: Literal["weekly", "fortnightly", "monthly"]
 
@@ -100,6 +105,8 @@ PROPOSALS = {
     "shortfall_fix": (ShortfallFix, "cash_flow"),
     "insurance_topup": (InsuranceTopup, "regular_payments"),
     "budget": (Budget, "spending_insights"),
+    # Mia sets a goal's auto-save herself (goal detail screen)
+    "goal_edit": (GoalEdit, "goals"),
 }
 ACTIONS = {
     "life_event_confirm": (LifeEventConfirm, "life_events"),

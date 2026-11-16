@@ -61,6 +61,18 @@ def _build(kind: str, p, s: dict) -> tuple[dict, str, str, dict]:
         return (new, f"{p.category} limit: {E.money(p.weekly)} a week",
                 f"You've averaged {E.money(round(E.EATING_OUT_DAILY * 7))} a week lately",
                 {"limit_weekly": E.money(p.weekly), "average_weekly": E.money(round(E.EATING_OUT_DAILY * 7))})
+    if kind == "goal_edit":
+        goal = next((g for g in E.goals(s) if g["id"] == p.goal), None)
+        if not goal:
+            raise G.GuardrailError("That goal doesn't exist.",
+                                   [G.check("input", "Input validation", False, f"unknown goal '{p.goal}'")], 422)
+        new = copy.deepcopy(s)
+        # Her own number replaces any temporary change or skipped payday on this goal
+        new["autosave"][p.goal] = E.r2(p.per_payday)
+        new["temp_autosave"] = [t for t in new["temp_autosave"] if t["account"] != p.goal]
+        new["skips"] = [x for x in new["skips"] if x["account"] != p.goal]
+        return (new, f"{goal['name']}: {E.money(p.per_payday)} a payday", "You set this amount yourself",
+                {"goal": goal["name"], "amount_before": E.money(goal["per_payday"]), "amount_now": E.money(p.per_payday)})
     raise KeyError(kind)
 
 
