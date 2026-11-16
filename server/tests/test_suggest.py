@@ -54,3 +54,25 @@ def test_malformed_input():
     assert suggest.validate("nope", _state()) == ([], [])
     kept, dropped = suggest.validate({"actions": [{"label": "x"}]}, _state())
     assert kept == [] and len(dropped) == 1
+
+
+# ---------------------------------------------------------------- follow-up questions (quick replies)
+
+def test_follow_ups_are_kept():
+    qs = ["Which nights do I order most?", "Compare with October"]
+    assert suggest.follow_ups({"questions": qs}) == qs
+
+
+def test_follow_ups_are_tidied_and_limited_to_three():
+    qs = ["  Compare   with October ", "A", "x" * 81, "Q2?", "Q3?", "Q4?", 42]
+    assert suggest.follow_ups({"questions": qs}) == ["Compare with October", "Q2?", "Q3?"]
+
+
+def test_follow_ups_skip_duplicates_and_bad_input():
+    assert suggest.follow_ups({"questions": ["This month?", "this month?"]}) == ["This month?"]
+    assert suggest.follow_ups({"actions": []}) == []
+    assert suggest.follow_ups("nope") == []
+
+
+def test_questions_only_is_valid_for_actions():
+    assert suggest.validate({"questions": ["Compare with October"]}, _state()) == ([], [])

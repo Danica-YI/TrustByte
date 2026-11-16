@@ -2,7 +2,7 @@
 // Answers come from tools that compute over Mia's data; each tool Windy used is shown under its reply.
 // Every chat is saved (server/chats.py): "Past chats" lists them, and opening one carries on that conversation.
 // Windy can offer up to 2 next-step buttons (server/suggest.py, already checked by the guardrails); tapping one
-// opens the normal review screen. "How did you work this out?" is built from what really happened, not by the AI.
+// opens the normal review screen. Follow-up questions show as chips: tapping one asks it. "How did you work this out?" is built from what really happened, not by the AI.
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { Check } from '../api'
@@ -13,6 +13,7 @@ type ToolCall = { name: string; input: Record<string, unknown> }
 type Action = { label: string; kind: string; params: Record<string, unknown> }
 type Msg = {
   role: 'user' | 'assistant'; text: string; tools: ToolCall[]; error?: string; actions?: Action[]
+  questions?: string[] // quick replies: tap to ask
   checks?: Check[] // input guardrails, before Windy answered
   outChecks?: Check[] // output guardrails on the answer, e.g. every figure came from the calculator
 }
@@ -141,7 +142,7 @@ export default function Chat() {
           if (!part.startsWith('data: ')) continue
           const ev = JSON.parse(part.slice(6))
           if (ev.type === 'start') { setCid(ev.conversation_id); patchLast((m) => ({ ...m, checks: ev.checks ?? [] })) }
-          else if (ev.type === 'suggestions') patchLast((m) => ({ ...m, actions: ev.actions }))
+          else if (ev.type === 'suggestions') patchLast((m) => ({ ...m, actions: ev.actions, questions: ev.questions ?? [] }))
           else if (ev.type === 'checks') patchLast((m) => ({ ...m, outChecks: ev.checks }))
           else if (ev.type === 'text') patchLast((m) => ({ ...m, text: m.text + ev.text }))
           else if (ev.type === 'tool') patchLast((m) => ({ ...m, tools: [...m.tools, { name: ev.name, input: ev.input }] }))
@@ -240,6 +241,16 @@ export default function Chat() {
                   </button>
                 ))}
                 <span className="small">Opens a review screen. Nothing changes until you approve.</span>
+              </div>
+            )}
+
+            {i === msgs.length - 1 && !busy && m.questions && m.questions.length > 0 && (
+              <div className="hstack" style={{ marginTop: 10, gap: 6, whiteSpace: 'normal' }}>
+                {m.questions.map((q) => (
+                  <button key={q} className="chip windy" style={{ border: 'none', cursor: 'pointer', textAlign: 'left' }} onClick={() => send(q)}>
+                    {q}
+                  </button>
+                ))}
               </div>
             )}
 

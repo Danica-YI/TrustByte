@@ -1,8 +1,10 @@
-"""Windy's next-step buttons: plan changes Windy can offer after an answer (the `suggest_next` tool).
+"""Windy's next steps after an answer (the `suggest_next` tool), shown as buttons under it:
 
-Windy only suggests. Each suggestion is checked here with the same guardrails as the app's own screens
-(permission, consent, allowed values) before Mia sees it; anything they'd reject is dropped. Tapping a
-button opens the normal review screen, where Mia approves or not, and she can undo it later.
+- Actions: plan changes. Each is checked here with the same guardrails as the app's own screens
+  (permission, consent, allowed values) before Mia sees it; anything they'd reject is dropped. Tapping one
+  opens the normal review screen, where Mia approves or not, and she can undo it later.
+- Questions: quick replies Mia might ask next (or options for Windy's own clarifying question).
+  Tapping one just sends it as her next message, so they only need tidying, not guardrails.
 """
 
 from __future__ import annotations
@@ -11,6 +13,8 @@ import guardrails as G
 
 MAX_ACTIONS = 2
 MAX_LABEL = 40
+MAX_QUESTIONS = 3
+QUESTION_CHARS = (3, 80)
 
 SUGGEST_TOOL = {
     "name": "suggest_next",
@@ -25,18 +29,39 @@ SUGGEST_TOOL = {
         "- insurance_topup: {} (cover the car insurance renewal rise from the Bills set-aside)\n"
         "- goal_plan: {\"option\": \"A\" | \"B\" | \"C\"} (A travel first, B balanced, C home first, after the move)\n"
         "- japan_sooner: {\"variant\": \"bali\" | \"home\"} (Japan in 3 months, using the Bali fund or Home deposit)\n"
-        "Label: what the button does, under 40 characters, e.g. 'Limit Eating out to $60 a week'."),
+        "Label: what the button does, under 40 characters, e.g. 'Limit Eating out to $60 a week'.\n"
+        "Questions: 2 or 3 short follow-ups Mia is likely to ask next, in her own words, that your tools can "
+        "answer (e.g. 'Which nights do I order most?', 'Compare with October'). If you asked her a clarifying "
+        "question, give its answers here instead (e.g. 'This month', 'Last month'). Under 80 characters each."),
     "input_schema": {
         "type": "object",
-        "properties": {"actions": {"type": "array", "maxItems": MAX_ACTIONS, "items": {
-            "type": "object",
-            "properties": {"label": {"type": "string"},
-                           "kind": {"type": "string", "enum": sorted(G.PROPOSALS)},
-                           "params": {"type": "object"}},
-            "required": ["label", "kind", "params"], "additionalProperties": False}}},
-        "required": ["actions"], "additionalProperties": False,
+        "properties": {
+            "actions": {"type": "array", "maxItems": MAX_ACTIONS, "items": {
+                "type": "object",
+                "properties": {"label": {"type": "string"},
+                               "kind": {"type": "string", "enum": sorted(G.PROPOSALS)},
+                               "params": {"type": "object"}},
+                "required": ["label", "kind", "params"], "additionalProperties": False}},
+            "questions": {"type": "array", "maxItems": MAX_QUESTIONS, "items": {"type": "string"}},
+        },
+        "additionalProperties": False,
     },
 }
+
+
+def follow_ups(args: object) -> list[str]:
+    """Windy's quick-reply questions, tidied: 3 to 80 characters, no repeats, at most 3."""
+    questions = args.get("questions") if isinstance(args, dict) else None
+    out: list[str] = []
+    for q in questions if isinstance(questions, list) else []:
+        if not isinstance(q, str):
+            continue
+        q = " ".join(q.split())
+        if QUESTION_CHARS[0] <= len(q) <= QUESTION_CHARS[1] and q.lower() not in {x.lower() for x in out}:
+            out.append(q)
+        if len(out) == MAX_QUESTIONS:
+            break
+    return out
 
 
 def validate(args: object, state: dict) -> tuple[list[dict], list[dict]]:
