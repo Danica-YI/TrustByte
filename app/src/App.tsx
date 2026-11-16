@@ -21,6 +21,10 @@ import More from './screens/More'
 import Placeholder from './screens/Placeholder'
 import { AccountDetail, AccountList } from './screens/Accounts'
 import Chat from './screens/Chat'
+import PayLater from './screens/PayLater'
+import QuickSplit from './screens/QuickSplit'
+import JapanSooner from './screens/JapanSooner'
+import JapanReview from './screens/JapanReview'
 
 export default function App() {
   const loc = useLocation()
@@ -43,6 +47,11 @@ export default function App() {
           <Route path="/budget" element={<BudgetCreated />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/receipt" element={<Receipt />} />
+          <Route path="/receipt/quick-split" element={<QuickSplit />} />
+          <Route path="/receipt/:id" element={<Receipt />} />
+          <Route path="/pay-later" element={<PayLater />} />
+          <Route path="/goals/japan-sooner" element={<JapanSooner />} />
+          <Route path="/goals/japan-sooner/review" element={<JapanReview />} />
           <Route path="/loan-readiness" element={<LoanReadiness />} />
           <Route path="/ask" element={<FeatureFinder />} />
           <Route path="/home-loan/apply" element={<HomeLoanApply />} />

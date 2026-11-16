@@ -1,9 +1,13 @@
-// LP-01 / LP-07 / LP-08 / RL-01 / GP-01: one home page, only the top Windy card changes.
+// LP-01 / LP-07 / LP-08 / RL-01 / GP-01 (+ Commitments card): one home page, only the top Windy card changes.
+// Balances, safe-to-spend, the shortfall warning and goals all come from the generated data.
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import { Card, Chip, Logo, Progress, WindyPill } from '../components/ui'
 import { features, isEnabled, type HomeCardId } from '../features'
-import { goals, lifeEvent, money, receipt, shortfall, user } from '../data/mia'
+import { money } from '../data/mia'
+import { everydayBalance, forecast, goals, groceryCheck, lifeEvent, payLaterPlans, safeToSpend, shortDate, yearlyBills } from '../data/analysis'
+
+const GOAL_COLORS: Record<string, string> = { 'goal-japan': '#6d28d9', 'goal-emergency': '#15803d', 'goal-home': '#d4002a', 'goal-bali': '#0e7490' }
 
 export default function Home() {
   const [params] = useSearchParams()
@@ -16,21 +20,21 @@ export default function Home() {
     <>
       <div className="hero">
         <div className="brand"><Logo /> harbour</div>
-        <div className="greet">Good evening, {user.firstName}</div>
-        <div className="balance">{money(user.everydayBalance, true)}</div>
-        <div className="sub">Everyday · Safe to spend <b>{money(user.safeToSpend)}</b> until payday</div>
+        <div className="greet">Good evening, Mia</div>
+        <div className="balance">{money(everydayBalance, true)}</div>
+        <div className="sub">Everyday · Safe to spend <b>{money(safeToSpend().safe)}</b> until payday</div>
       </div>
 
       <div className="hero-overlap">
         {card && !dismissed && <TopCard id={card} onDismiss={() => setDismissed(true)} />}
 
-        {isEnabled('shortfall') && (
+        {isEnabled('shortfall') && forecast().low.balance < 0 && (
           <Card>
             <div className="hstack" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
               <div className="alert-icon">!</div>
               <div>
-                <h3>{shortfall.title}</h3>
-                <p>{shortfall.body}</p>
+                <h3>Early December looks tight</h3>
+                <p>After rent and your auto-saves, Everyday could dip to {money(forecast().low.balance)} around {shortDate(forecast().low.date)}.</p>
                 <Link to="/forecast" className="link">See forecast and fixes ›</Link>
               </div>
             </div>
@@ -46,9 +50,9 @@ export default function Home() {
             <div key={g.id}>
               <div className="row" style={{ padding: 0 }}>
                 <span>{g.name}</span>
-                <span className="muted">{money(g.saved)} / {money(g.target)}</span>
+                <span className="muted">{money(g.closing_balance)} / {money(g.goal_target!)}</span>
               </div>
-              <Progress value={g.saved} max={g.target} color={g.color} />
+              <Progress value={g.closing_balance} max={g.goal_target!} color={GOAL_COLORS[g.id] ?? 'var(--windy)'} />
             </div>
           ))}
         </Card>
@@ -64,8 +68,8 @@ function TopCard({ id, onDismiss }: { id: HomeCardId; onDismiss: () => void }) {
       return (
         <Card variant="windy">
           <WindyPill label="Life event" time="Just now" />
-          <h2>{lifeEvent.title}</h2>
-          <p>{lifeEvent.body}</p>
+          <h2>Looks like you’re moving home</h2>
+          <p>We spotted a {money(-lifeEvent().bond.amount)} bond to RTA Queensland and a new rent payee this week. Want me to check how this affects your Japan trip and home deposit?</p>
           <div className="hstack">
             <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/life-event')}>Yes, check my plan</button>
             <button className="btn outline" onClick={onDismiss}>Not now</button>
@@ -124,13 +128,30 @@ function TopCard({ id, onDismiss }: { id: HomeCardId; onDismiss: () => void }) {
         <Card variant="windy">
           <WindyPill label="Spending check" time="Just now" />
           <h2>Bigger grocery shop than usual</h2>
-          <p>{receipt.merchant} today was {money(receipt.total, true)}. Your usual shop is about {money(receipt.usualShop)}. Want to see where it went? Only you can see this.</p>
+          <p>{groceryCheck().shop.merchant} on {shortDate(groceryCheck().shop.date)} was {money(groceryCheck().amount, true)}. Your usual shop is about {money(groceryCheck().usual)}. Want to see where it went? Only you can see this.</p>
           <div className="hstack">
             <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/receipt')}>Scan receipt</button>
-            <button className="btn outline">Quick split</button>
+            <button className="btn outline" onClick={() => nav('/receipt/quick-split')}>Quick split</button>
           </div>
         </Card>
       )
+    case 'commitments': {
+      const pl = payLaterPlans(), yb = yearlyBills()
+      const ins = yb.due.find((u) => u.label.includes('insurance'))
+      const last = yb.history('Car insurance · AAMI').pop()
+      return (
+        <Card variant="windy">
+          <WindyPill label="Commitments" time="Just now" />
+          <h2>{pl.active.length} pay-later plans take {money(pl.nextPaydayTotal)} next payday</h2>
+          <p>That’s {money(pl.owed)} still to pay across {pl.active.map((p) => p.merchant).join(', ')}.
+            {ins && last && <> Your car insurance renews on {shortDate(ins.date)} at {money(-ins.amount)}, up from {money(-last.amount)}.</>}</p>
+          <div className="hstack">
+            <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/pay-later')}>See my plans</button>
+            <button className="btn outline" onClick={() => nav('/payments?found=insurance')}>Insurance</button>
+          </div>
+        </Card>
+      )
+    }
     case 'goal-pace':
       return (
         <Card variant="windy">

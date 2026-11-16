@@ -2,7 +2,7 @@
   "meta": {
     "user": "Mia",
     "today": "2026-11-14",
-    "from": "2026-06-01",
+    "from": "2025-12-01",
     "seed": 20261116,
     "note": "Synthetic data for a hackathon demo. Not real people or accounts."
   },
@@ -186,6 +186,169 @@
         {
           "name": "Toilet Paper 12pk",
           "price": 10.0,
+          "group": "Household"
+        }
+      ]
+    },
+    {
+      "id": "rcpt-coles-20261024",
+      "merchant": "Coles",
+      "store": "Coles Taringa",
+      "date": "2026-10-24",
+      "total": 91.4,
+      "items": [
+        {
+          "name": "Coles Full Cream Milk 3L",
+          "price": 4.65,
+          "group": "Essentials"
+        },
+        {
+          "name": "Wholemeal Wraps 8pk",
+          "price": 4.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Pork Loin Steaks 500g",
+          "price": 9.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Mixed Salad Leaves 300g",
+          "price": 4.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Avocados 3pk",
+          "price": 6.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Brown Onions 1kg",
+          "price": 2.9,
+          "group": "Essentials"
+        },
+        {
+          "name": "Potatoes 2kg",
+          "price": 4.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Natural Yoghurt 1kg",
+          "price": 5.2,
+          "group": "Essentials"
+        },
+        {
+          "name": "Peanut Butter 780g",
+          "price": 6.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Canned Tuna 4pk",
+          "price": 7.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Frozen Berries 1kg",
+          "price": 9.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Kettle Chips 165g",
+          "price": 4.5,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Lindt Excellence 100g",
+          "price": 5.0,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Kombucha 4pk",
+          "price": 9.0,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Sponges 10pk",
+          "price": 3.5,
+          "group": "Household"
+        },
+        {
+          "name": "Bin Liners 50pk",
+          "price": 5.65,
+          "group": "Household"
+        }
+      ]
+    },
+    {
+      "id": "rcpt-aldi-20261017",
+      "merchant": "Aldi",
+      "store": "Aldi Milton",
+      "date": "2026-10-17",
+      "total": 52.75,
+      "items": [
+        {
+          "name": "Milk 2L",
+          "price": 2.79,
+          "group": "Essentials"
+        },
+        {
+          "name": "Bread Rolls 6pk",
+          "price": 2.99,
+          "group": "Essentials"
+        },
+        {
+          "name": "Chicken Drumsticks 1kg",
+          "price": 6.99,
+          "group": "Essentials"
+        },
+        {
+          "name": "Eggs 12pk",
+          "price": 5.49,
+          "group": "Essentials"
+        },
+        {
+          "name": "Broccolini",
+          "price": 2.99,
+          "group": "Essentials"
+        },
+        {
+          "name": "Pasta 500g",
+          "price": 1.29,
+          "group": "Essentials"
+        },
+        {
+          "name": "Mince 500g",
+          "price": 6.99,
+          "group": "Essentials"
+        },
+        {
+          "name": "Cheese Slices",
+          "price": 3.99,
+          "group": "Essentials"
+        },
+        {
+          "name": "Bananas 1kg",
+          "price": 3.49,
+          "group": "Essentials"
+        },
+        {
+          "name": "Corn Chips",
+          "price": 2.49,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Chocolate Biscuits",
+          "price": 2.79,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Dishwasher Tablets",
+          "price": 7.99,
+          "group": "Household"
+        },
+        {
+          "name": "Hand Wash",
+          "price": 2.47,
           "group": "Household"
         }
       ]

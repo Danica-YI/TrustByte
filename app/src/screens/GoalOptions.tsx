@@ -36,6 +36,7 @@ export default function GoalOptions() {
       ))}
 
       <button className="btn primary block" onClick={() => nav(`/goals/review/${picked}`)}>Review option {picked}</button>
+      <button className="btn ghost block" onClick={() => nav('/goals/japan-sooner')}>Want Japan sooner instead? Ask Windy</button>
       <p className="small center" style={{ marginTop: 10 }}>Figures from Windy’s calculator using your confirmed rent and 3 months of history.</p>
     </>
   )

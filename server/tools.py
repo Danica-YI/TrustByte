@@ -23,6 +23,7 @@ def _load(name: str) -> dict:
 
 _tx_file = _load("transactions.json")
 TODAY = date.fromisoformat(_tx_file["meta"]["today"])
+START = date.fromisoformat(_tx_file["meta"]["from"])
 TRANSACTIONS: list[dict] = _tx_file["transactions"]
 ACCOUNTS: list[dict] = _load("accounts.json")["accounts"]
 RECEIPTS: list[dict] = _load("receipts.json")["receipts"]
@@ -105,7 +106,7 @@ def compare_month(month: str, category: str | None = None) -> dict:
     while True:
         pm, py = (pm - 1, py) if pm > 1 else (12, py - 1)
         pf = date(py, pm, 1)
-        if pf < date(2026, 6, 1):
+        if pf < START or len(prev_full) >= 6:  # up to 6 previous full months
             break
         pl = date(py + (pm == 12), pm % 12 + 1, 1) - timedelta(days=1)
         prev_full.append(total(pf, pl))
@@ -140,7 +141,7 @@ def compare_month(month: str, category: str | None = None) -> dict:
 def search_transactions(query: str | None = None, category: str | None = None,
                         start_date: str | None = None, end_date: str | None = None,
                         direction: str = "any", limit: int = 20) -> dict:
-    start = _d(start_date) if start_date else date(2026, 6, 1)
+    start = _d(start_date) if start_date else START
     end = _d(end_date) if end_date else TODAY
     q = (query or "").lower()
     rows = [t for t in TRANSACTIONS
@@ -156,16 +157,24 @@ def search_transactions(query: str | None = None, category: str | None = None,
 
 
 CADENCES = [("weekly", 6, 8), ("fortnightly", 13, 15), ("monthly", 27, 32), ("quarterly", 85, 95)]
+# yearly bills seen once in 12 months are flagged with yearly=True in the data
 
 
 def recurring_payments() -> dict:
     """Detect regular payments from history: same merchant, similar amount, regular gap."""
     by_merchant: dict[str, list[dict]] = defaultdict(list)
     for t in TRANSACTIONS:
-        if t["account"] == "everyday" and t["amount"] < 0 and t["type"] not in ("transfer", "atm"):
+        if (t["account"] in ("everyday", "bills-saver") and t["amount"] < 0 and t["type"] not in ("transfer", "atm")
+                and not t.get("provider")):
             by_merchant[t["merchant"]].append(t)
     found = []
     for merchant, ts in by_merchant.items():
+        if len(ts) == 1 and ts[0].get("yearly"):
+            found.append({"merchant": merchant, "category": ts[0]["category"], "cadence": "yearly",
+                          "latest_amount": -ts[0]["amount"], "times_seen": 1, "first_seen": ts[0]["date"],
+                          "last_seen": ts[0]["date"], "status": "ongoing", "paid_from": "Bills set-aside",
+                          "note": ts[0].get("note", "")})
+            continue
         if len(ts) < 2:
             continue
         ts.sort(key=lambda t: t["date"])
@@ -175,7 +184,8 @@ def recurring_payments() -> dict:
         amounts = [-t["amount"] for t in ts]
         if not cadence or any(abs(g - gap) > 3 for g in gaps):
             continue
-        if (max(amounts) - min(amounts)) / max(amounts) > 0.15:
+        tol = 0.25 if ts[0]["category"] == "Bills and utilities" else 0.15  # energy and water bills vary
+        if (max(amounts) - min(amounts)) / max(amounts) > tol:
             continue
         first, last = _d(ts[0]["date"]), _d(ts[-1]["date"])
         row = {"merchant": merchant, "category": ts[0]["category"], "cadence": cadence,
@@ -188,7 +198,7 @@ def recurring_payments() -> dict:
             row["status"] = "new"
         else:
             row["status"] = "ongoing"
-        if len(amounts) >= 2 and abs(amounts[-1] - amounts[-2]) >= 0.5:
+        if len(amounts) >= 2 and abs(amounts[-1] - amounts[-2]) >= 0.5 and row["category"] == "Subscriptions":
             row["price_change"] = _money(amounts[-1] - amounts[-2])
         found.append(row)
     found.sort(key=lambda r: (r["status"] != "new", -r["latest_amount"]))
@@ -202,38 +212,68 @@ def _daily_flexible_spend(days: int = 90) -> float:
 
 
 def cash_flow_forecast(days_ahead: int = 35) -> dict:
-    """Known bills and pay ahead, safe-to-spend until payday, and projected low points."""
+    """Everyday projection, same model as the app's forecast screen.
+
+    Before the next payday Mia spends only her safe-to-spend, evenly; from payday on, her usual
+    daily spend. Every scheduled item on Everyday (rent, bills, auto-saves, pay-later) is applied.
+    Yearly bills come out of the Bills set-aside, not Everyday.
+    """
     days_ahead = max(7, min(int(days_ahead), 35))
     horizon = TODAY + timedelta(days=days_ahead)
     items = [u for u in UPCOMING if TODAY < _d(u["date"]) <= horizon]
+    every = [u for u in items if u["account"] == "everyday"]
     balance = next(a["closing_balance"] for a in ACCOUNTS if a["id"] == "everyday")
-    next_pay = min(_d(u["date"]) for u in items if u["amount"] > 0)
-    committed = -sum(u["amount"] for u in items if _d(u["date"]) < next_pay and u["amount"] < 0)
+    next_pay = min(_d(u["date"]) for u in every if u["kind"] == "pay")
+    committed = -sum(u["amount"] for u in every if _d(u["date"]) < next_pay and u["amount"] < 0)
+    safe = balance - committed
+    pre_days = max(1, (next_pay - TODAY).days - 1)
     daily = _daily_flexible_spend()
-
-    low_bills = (balance, TODAY)
-    low_all = (balance, TODAY)
-    b1 = b2 = balance
+    b = balance
+    low = (balance, TODAY)
     for i in range(1, days_ahead + 1):
         d = TODAY + timedelta(days=i)
-        flow = sum(u["amount"] for u in items if _d(u["date"]) == d)
-        b1 += flow
-        b2 += flow - daily
-        if b1 < low_bills[0]:
-            low_bills = (b1, d)
-        if b2 < low_all[0]:
-            low_all = (b2, d)
+        b += sum(u["amount"] for u in every if _d(u["date"]) == d)
+        b -= max(0.0, safe) / pre_days if d < next_pay else daily
+        if b < low[0]:
+            low = (b, d)
+    life_save = next((-u["amount"] for u in every if u["kind"] == "auto_save" and u.get("to_account") == "life"
+                      and _d(u["date"]) == next_pay), 0)
     return {
         "everyday_balance_now": balance,
         "next_payday": next_pay.isoformat(),
         "bills_before_payday": _money(committed),
-        "safe_to_spend_until_payday": _money(balance - committed),
-        "known_items": [{**u} for u in items],
-        "lowest_point_bills_only": {"balance": _money(low_bills[0]), "date": low_bills[1].isoformat()},
+        "safe_to_spend_until_payday": _money(safe),
+        "assumption": "Spends only safe-to-spend until payday, then the usual daily amount",
         "typical_daily_spend": daily,
         "typical_daily_spend_basis": "average of Groceries, Eating out, Shopping, Transport over the last 90 days",
-        "lowest_point_with_typical_spending": {"balance": _money(low_all[0]), "date": low_all[1].isoformat()},
+        "lowest_point": {"balance": _money(low[0]), "date": low[1].isoformat()},
+        "one_fix": {"skip_next_westpac_life_auto_save": life_save},
+        "scheduled_everyday_items": every,
+        "yearly_bills_from_set_aside": [u for u in items if u["account"] == "bills-saver"],
     }
+
+
+def pay_later_plans() -> dict:
+    """Afterpay plans: active ones, what each payday takes, what's still owed."""
+    plans: dict[str, dict] = {}
+    for t in TRANSACTIONS:
+        if t.get("plan_id"):
+            p = plans.setdefault(t["plan_id"], {"merchant": t["merchant"].replace("Afterpay · ", ""),
+                                                "total": t["plan_total"], "instalment": -t["amount"], "paid": []})
+            p["paid"].append(t["date"])
+    for u in UPCOMING:
+        if u.get("plan_id") in plans:
+            plans[u["plan_id"]].setdefault("upcoming", []).append(u["date"])
+    out = []
+    for pid, p in plans.items():
+        remaining = 4 - len(p["paid"])
+        out.append({**p, "plan_id": pid, "instalments_left": remaining, "still_owed": _money(p["instalment"] * remaining)})
+    active = [p for p in out if p["instalments_left"] > 0]
+    last_payday = max(t["date"] for t in TRANSACTIONS if t["merchant"] == "Harbour Health")
+    return {"active_plans": active, "finished_plans": [p for p in out if p["instalments_left"] == 0],
+            "taken_on_last_payday": _money(sum(-t["amount"] for t in TRANSACTIONS
+                                               if t.get("plan_id") and t["date"] == last_payday)),
+            "still_owed_total": _money(sum(p["still_owed"] for p in active))}
 
 
 def goal_projection(goal_id: str, amount_per_payday: float | None = None) -> dict:
@@ -241,11 +281,10 @@ def goal_projection(goal_id: str, amount_per_payday: float | None = None) -> dic
     if not goal:
         return {"error": f"unknown goal_id {goal_id}",
                 "valid_goal_ids": [a["id"] for a in ACCOUNTS if a.get("goal_target")]}
-    ins = sorted((t for t in TRANSACTIONS if t["account"] == goal_id and t["amount"] > 0), key=lambda t: t["date"])
-    current = ins[-1]["amount"] if ins else 0
+    current = next((-u["amount"] for u in UPCOMING if u["kind"] == "auto_save" and u.get("to_account") == goal_id), 0)
     per = float(amount_per_payday) if amount_per_payday is not None else current
     remaining = goal["goal_target"] - goal["closing_balance"]
-    pays = sorted(_d(u["date"]) for u in UPCOMING if u["amount"] > 0)
+    pays = sorted(_d(u["date"]) for u in UPCOMING if u["kind"] == "pay")
     next_pay = pays[0] if pays else TODAY + timedelta(days=13)
     out = {"goal": goal["name"], "saved": goal["closing_balance"], "target": goal["goal_target"],
            "remaining": _money(remaining), "current_amount_per_payday": current, "amount_per_payday_used": per,
@@ -322,9 +361,11 @@ TOOLS = [
           "Regular payments detected from history (subscriptions, bills, rent): cadence, latest amount, "
           "status new/ongoing/stopped, and price changes.", {}, []),
     _tool("cash_flow_forecast",
-          "Known bills and pay coming up, safe-to-spend until next payday, and the projected lowest Everyday "
-          "balance with bills only and with typical day-to-day spending.",
+          "Everything scheduled on Everyday (pay, rent, bills, auto-saves, pay-later), safe-to-spend until next "
+          "payday, and the projected lowest Everyday balance (safe-to-spend before payday, usual spending after).",
           {"days_ahead": {"type": "integer", "description": "7 to 35, default 35"}}, []),
+    _tool("pay_later_plans", "Afterpay plans: active plans, amount taken each payday, what's still owed, finished plans.",
+          {}, []),
     _tool("goal_projection",
           "When a savings goal will be reached at the current or a given amount per fortnightly payday.",
           {"goal_id": {"type": "string", "enum": [a["id"] for a in ACCOUNTS if a.get("goal_target")]},
@@ -344,6 +385,7 @@ _FUNCS = {
                                                          a.get("limit", 20)),
     "recurring_payments": lambda a: recurring_payments(),
     "cash_flow_forecast": lambda a: cash_flow_forecast(a.get("days_ahead", 35)),
+    "pay_later_plans": lambda a: pay_later_plans(),
     "goal_projection": lambda a: goal_projection(a["goal_id"], a.get("amount_per_payday")),
     "life_events": lambda a: life_events(),
     "get_receipt": lambda a: get_receipt(a.get("date"), a.get("merchant")),

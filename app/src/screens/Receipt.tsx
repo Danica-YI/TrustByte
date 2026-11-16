@@ -1,39 +1,54 @@
-// RL-02 · Receipt breakdown
-// TODO: groups are hard-coded. With real AI: upload receipt photo → backend multimodal model extracts items → code sums groups and checks the total.
-import { Card, Lock, TopBar, useWindy } from '../components/ui'
-import { money, receipt } from '../data/mia'
+// RL-02 · Receipt breakdown (Idea 10 · Receipt Lens). /receipt/:id, default the big Coles shop.
+// Groups are summed from the itemised receipt; a check confirms they add up to the card payment.
+// With real AI: receipt photo → multimodal model extracts items → this same code sums and checks.
+import { useParams } from 'react-router-dom'
+import { Card, Lock, TopBar } from '../components/ui'
+import { groceriesThisMonth, receiptGroups, shortDate } from '../data/analysis'
+import { transactions } from '../data/bank'
+import { money } from '../data/mia'
 
 export default function Receipt() {
-  const summary = useWindy('receipt-summary')
-  const sum = receipt.groups.reduce((s, g) => s + g.amount, 0)
-  const matches = Math.abs(sum - receipt.total) < 0.01
+  const { id = 'rcpt-coles-20261112' } = useParams()
+  const { receipt, groups, sum, matches } = receiptGroups(id)
+  const paid = transactions.find((t) => t.receipt_id === id)
+  const month = groceriesThisMonth()
 
   return (
     <>
       <TopBar title="Receipt breakdown" />
       <Card>
-        <div className="spread"><h3>{receipt.merchant}</h3><span className="muted">{receipt.date} · {money(receipt.total, true)}</span></div>
-        {receipt.groups.map((g) => (
-          <div key={g.name} className="row"><span>{g.name}</span><b>{money(g.amount, true)}</b></div>
+        <div className="spread"><h3>{receipt.store}</h3><span className="muted">{shortDate(receipt.date)} · {money(receipt.total, true)}</span></div>
+        {Object.entries(groups).map(([g, v]) => (
+          <div key={g} className="row"><span>{g}</span><b>{money(v, true)}</b></div>
         ))}
         <hr className="sep" />
         <div className="row">
           <span>{matches ? 'Total matches your payment' : 'Total does not match'}</span>
           <b style={{ color: matches ? 'var(--good)' : 'var(--bad)' }}>{matches ? '✓' : '✗'} {money(sum, true)}</b>
         </div>
+        <details style={{ marginTop: 6 }}>
+          <summary className="small" style={{ cursor: 'pointer' }}>{receipt.items.length} items</summary>
+          {receipt.items.map((i) => (
+            <div key={i.name} className="row small"><span>{i.name} <span className="muted">· {i.group}</span></span><span>{money(i.price, true)}</span></div>
+          ))}
+        </details>
       </Card>
 
       <Card variant="windy">
         <h3>This month so far</h3>
-        <p>{summary}</p>
+        <p>
+          • Groceries: {money(month.total)}<br />
+          • Extras and snacks were about {Math.round(month.extrasShare * 100)}% of your itemised shops, so roughly {money(month.extrasEstimate)}<br />
+          • Halving extras would free about {money(month.extrasEstimate / 2)} for your goals
+        </p>
       </Card>
 
       <Card>
         <h3>How this was worked out</h3>
-        <p>Windy read your receipt photo and grouped each item. A calculator checked that the groups add up to what you paid.</p>
+        <p>Windy read your receipt and grouped each item. A calculator checked that the groups add up to what you paid.</p>
         <h3>What this is not</h3>
         <p>Groups are about money, not health or diet. Nothing here is shared outside Westpac.</p>
-        <div className="small">Receipt linked to payment · You can delete it</div>
+        <div className="small">Receipt linked to your {paid?.merchant} payment on {shortDate(receipt.date)} · You can delete it</div>
       </Card>
 
       <button className="btn primary block">Save breakdown</button>

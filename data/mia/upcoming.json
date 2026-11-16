@@ -5,6 +5,8 @@
       "date": "2026-11-15",
       "label": "Bupa health insurance",
       "amount": -132.4,
+      "account": "everyday",
+      "kind": "bill",
       "source": "detected monthly",
       "estimate": false
     },
@@ -12,6 +14,8 @@
       "date": "2026-11-18",
       "label": "Rent \u00b7 Ray White",
       "amount": -620,
+      "account": "everyday",
+      "kind": "rent",
       "source": "detected weekly from 11 Nov",
       "estimate": false
     },
@@ -19,6 +23,17 @@
       "date": "2026-11-22",
       "label": "iCloud+",
       "amount": -4.49,
+      "account": "everyday",
+      "kind": "bill",
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-24",
+      "label": "Aussie Broadband",
+      "amount": -79,
+      "account": "everyday",
+      "kind": "bill",
       "source": "detected monthly",
       "estimate": false
     },
@@ -26,20 +41,17 @@
       "date": "2026-11-24",
       "label": "Gym \u00b7 Fitness First",
       "amount": -25,
+      "account": "everyday",
+      "kind": "bill",
       "source": "detected fortnightly",
-      "estimate": false
-    },
-    {
-      "date": "2026-11-24",
-      "label": "Aussie Broadband",
-      "amount": -79,
-      "source": "detected monthly",
       "estimate": false
     },
     {
       "date": "2026-11-25",
       "label": "Rent \u00b7 Ray White",
       "amount": -620,
+      "account": "everyday",
+      "kind": "rent",
       "source": "detected weekly from 11 Nov",
       "estimate": false
     },
@@ -47,13 +59,128 @@
       "date": "2026-11-27",
       "label": "Salary \u00b7 Harbour Health",
       "amount": 2883.24,
+      "account": "everyday",
+      "kind": "pay",
       "source": "detected fortnightly",
       "estimate": false
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Afterpay \u00b7 Chemist Warehouse (4 of 4)",
+      "amount": -9.75,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-chemist-2610",
+      "plan_total": 39.0,
+      "instalment": "4 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Afterpay \u00b7 Fantastic Furniture (2 of 4)",
+      "amount": -59.0,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-fantastic-2611",
+      "plan_total": 236.0,
+      "instalment": "2 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Afterpay \u00b7 JB Hi-Fi (3 of 4)",
+      "amount": -87.25,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-jbhifi-2610",
+      "plan_total": 349.0,
+      "instalment": "3 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Afterpay \u00b7 Uniqlo (2 of 4)",
+      "amount": -30.0,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-uniqlo-2611",
+      "plan_total": 120.0,
+      "instalment": "2 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Auto-save to Bali 2027",
+      "amount": -50,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "goal-bali"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Auto-save to Bills set-aside",
+      "amount": -60,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "bills-saver"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Auto-save to Home deposit",
+      "amount": -165,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "goal-home"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Auto-save to Japan trip",
+      "amount": -139,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "goal-japan"
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Auto-save to Westpac Life",
+      "amount": -480,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "life"
+    },
+    {
+      "date": "2026-11-28",
+      "label": "Urban Utilities water",
+      "amount": -190,
+      "account": "everyday",
+      "kind": "bill",
+      "source": "detected quarterly",
+      "estimate": true
     },
     {
       "date": "2026-12-02",
       "label": "Rent \u00b7 Ray White",
       "amount": -620,
+      "account": "everyday",
+      "kind": "rent",
       "source": "detected weekly from 11 Nov",
       "estimate": false
     },
@@ -61,6 +188,8 @@
       "date": "2026-12-02",
       "label": "Spotify Premium",
       "amount": -13.99,
+      "account": "everyday",
+      "kind": "bill",
       "source": "Windy found (not confirmed)",
       "estimate": false
     },
@@ -68,27 +197,35 @@
       "date": "2026-12-03",
       "label": "Car rego \u00b7 QLD TMR",
       "amount": -412,
-      "source": "added by customer",
-      "estimate": false
-    },
-    {
-      "date": "2026-12-05",
-      "label": "Telstra",
-      "amount": -98,
-      "source": "detected monthly",
+      "account": "bills-saver",
+      "kind": "yearly_bill",
+      "source": "added by you",
       "estimate": false
     },
     {
       "date": "2026-12-05",
       "label": "Car insurance \u00b7 AAMI",
       "amount": -806,
+      "account": "bills-saver",
+      "kind": "yearly_bill",
       "source": "renewal notice (was $720)",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-05",
+      "label": "Telstra",
+      "amount": -98,
+      "account": "everyday",
+      "kind": "bill",
+      "source": "detected monthly",
       "estimate": false
     },
     {
       "date": "2026-12-08",
       "label": "Gym \u00b7 Fitness First",
       "amount": -25,
+      "account": "everyday",
+      "kind": "bill",
       "source": "detected fortnightly",
       "estimate": false
     },
@@ -96,6 +233,8 @@
       "date": "2026-12-09",
       "label": "Rent \u00b7 Ray White",
       "amount": -620,
+      "account": "everyday",
+      "kind": "rent",
       "source": "detected weekly from 11 Nov",
       "estimate": false
     },
@@ -103,6 +242,8 @@
       "date": "2026-12-10",
       "label": "Netflix",
       "amount": -18.99,
+      "account": "everyday",
+      "kind": "bill",
       "source": "detected monthly",
       "estimate": false
     },
@@ -110,13 +251,106 @@
       "date": "2026-12-11",
       "label": "Salary \u00b7 Harbour Health",
       "amount": 2883.24,
+      "account": "everyday",
+      "kind": "pay",
       "source": "detected fortnightly",
       "estimate": false
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Afterpay \u00b7 Fantastic Furniture (3 of 4)",
+      "amount": -59.0,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-fantastic-2611",
+      "plan_total": 236.0,
+      "instalment": "3 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Afterpay \u00b7 JB Hi-Fi (4 of 4)",
+      "amount": -87.25,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-jbhifi-2610",
+      "plan_total": 349.0,
+      "instalment": "4 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Afterpay \u00b7 Uniqlo (3 of 4)",
+      "amount": -30.0,
+      "account": "everyday",
+      "kind": "pay_later",
+      "source": "pay-later plan",
+      "estimate": false,
+      "plan_id": "ap-uniqlo-2611",
+      "plan_total": 120.0,
+      "instalment": "3 of 4",
+      "provider": "Afterpay"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Auto-save to Bali 2027",
+      "amount": -50,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "goal-bali"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Auto-save to Bills set-aside",
+      "amount": -60,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "bills-saver"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Auto-save to Home deposit",
+      "amount": -165,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "goal-home"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Auto-save to Japan trip",
+      "amount": -139,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "goal-japan"
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Auto-save to Westpac Life",
+      "amount": -480,
+      "account": "everyday",
+      "kind": "auto_save",
+      "source": "your auto-save",
+      "estimate": false,
+      "to_account": "life"
     },
     {
       "date": "2026-12-14",
       "label": "Amazon Prime",
       "amount": -9.99,
+      "account": "everyday",
+      "kind": "bill",
       "source": "Windy found (not confirmed)",
       "estimate": false
     },
@@ -124,6 +358,8 @@
       "date": "2026-12-15",
       "label": "Bupa health insurance",
       "amount": -132.4,
+      "account": "everyday",
+      "kind": "bill",
       "source": "detected monthly",
       "estimate": false
     },
@@ -131,6 +367,8 @@
       "date": "2026-12-16",
       "label": "Rent \u00b7 Ray White",
       "amount": -620,
+      "account": "everyday",
+      "kind": "rent",
       "source": "detected weekly from 11 Nov",
       "estimate": false
     }

@@ -37,7 +37,9 @@ or the one in the URL, e.g. `/?card=dream-nudge`. Reorder the list to change the
 ```
 app/src/
   features.ts        feature switches + navigator list  ← start here
-  data/mia.ts        all mock numbers in one place
+  data/bank.ts       loads the generated data (data/mia/*.json)
+  data/analysis.ts   all calculations (forecast, commitments, goals, receipts)
+  data/mia.ts        remaining wireframe copy (LP-04/05 options, unselected screens)
   ai/windy.ts        AI entry point (scripted now, backend later)
   components/ui.tsx  Card, Chip, Toggle, TopBar, BottomNav …
   screens/           one file per wireframe
@@ -60,10 +62,26 @@ app/src/
 | Feature Finder | `/ask` | FF-01 |
 | Pre-filled home loan | `/home-loan/apply` | PA-01 |
 
+## Selected features (team, 16 Nov)
+
+Ideas **1, 2, 3, 4, 9+15, 10** from the FigJam board, plus the live Windy chat. All other ideas are switched
+off in `features.ts` but still open from the navigator for preview.
+
+| Idea | Feature | Screens (route) | Driven by data? |
+|---|---|---|---|
+| 1 | Life Event Detector | LP-01 `/?card=life-event`, LP-02 `/life-event` | yes: bond, new rent payee, removalist, savings top-up |
+| 2 | Goal Trade-off Simulator | LP-04 `/goals/options`, LP-05 `/goals/review/B`, **JP-01** `/goals/japan-sooner`, **JP-02** `/goals/japan-sooner/review?variant=bali\|home` | JP-01/02 yes (goal balances, auto-saves, paydays); LP-04/05 still wireframe copy |
+| 3 | Dream Nudge | LP-07 `/?card=dream-nudge` | no (same copy for everyone by design) |
+| 4 | Shortfall Early Warning | Harbour 03 `/forecast`, home card | yes: scheduled items + usual spending; fixes re-run the projection |
+| 9+15 | Commitments Watch | home card `/?card=commitments`, R-02 `/payments?found=spotify`, R-03 `/payments?found=insurance`, **pay-later** `/pay-later` | yes: recurring payments detected from history, price rises, yearly bills set-aside, Afterpay plans |
+| 10 | Receipt Lens | RL-01 `/?card=grocery-check`, RL-02 `/receipt[/:id]`, **RL-03** `/receipt/quick-split` | yes: receipts, usual shop size |
+
+Calculations live in `app/src/data/analysis.ts` (the chat backend has the same logic in `server/tools.py`).
+
 ## Fake bank data
 
-`data/generate.py` builds 6 months of Mia's banking history (1 Jun – 14 Nov 2026, ~450 transactions
-across 5 accounts). Python 3, no installs:
+`data/generate.py` builds 12 months of Mia's banking history (1 Dec 2025 – 14 Nov 2026, ~1,060
+transactions across 7 accounts). Python 3, no installs:
 
 ```bash
 python3 data/generate.py
@@ -73,22 +91,28 @@ It writes `data/mia/`:
 
 | file | what's in it |
 |---|---|
-| `accounts.json` | Everyday, Westpac Life, three goal savers, with opening and closing balances |
-| `transactions.json` / `.csv` | every transaction: raw statement text, cleaned merchant, category, amount, running balance, pending/posted, and tags such as `signal: "life-event"` or `receipt_id` (CSV is for opening in Excel / Sheets) |
-| `receipts.json` | itemised receipts for two grocery shops (Receipt Lens) |
-| `upcoming.json` | bills and pay already known for the next 5 weeks (for the forecast) |
+| `accounts.json` | Everyday, Westpac Life, Bills set-aside, and four goal savers (Japan, Emergency, Home deposit, Bali 2027) |
+| `transactions.json` / `.csv` | every transaction: raw statement text, cleaned merchant, category, amount, running balance, pending/posted, and tags: `signal: "life-event"`, `receipt_id`, `plan_id` / `instalment` (Afterpay), `auto_save`, `yearly` (CSV is for Excel / Sheets) |
+| `receipts.json` | itemised receipts for four grocery shops (Receipt Lens) |
+| `upcoming.json` | everything already scheduled for the next 5 weeks: pay, rent, bills, auto-saves, pay-later instalments, yearly bills, each with the account that pays it |
 
 The output is the same on every machine (fixed seed). Don't edit the JSON by hand: change the
 script and rerun. The script ends with checks that fail loudly if the data drifts from the story
-(closing balances, receipt totals, Spotify/Amazon dates, November delivery count, no overdrawn history,
-"safe to spend" close to the wireframe's $180).
+(closing balances, no overdrawn history, receipt totals, Spotify/Amazon dates, 4 Afterpay plans = $186
+on the last payday, November delivery count, "safe to spend" close to the wireframe's $180).
 
-Story built into the data: fortnightly salary + ABN side income; moving home in November
-(removalist, IKEA, Bunnings, $500 from savings, $2,400 RTA bond, first $620 rent to Ray White);
-Spotify starting in Sep and Amazon Prime in Oct (for "Windy found 2"); Netflix up $2 in Nov;
-14 food deliveries in Nov vs ~8 usually; a $142.30 Coles shop on 12 Nov with a receipt.
+Story built into the data:
+- Fortnightly salary + ABN side income; auto-saves every payday to Home deposit, Japan (from Aug), Bali 2027
+  (from Mar), Westpac Life, and a Bills set-aside that pays rego and insurance.
+- **Idea 1**: moving home in November (removalist, IKEA, Bunnings, $500 from savings, $2,400 RTA bond,
+  first $620 rent to Ray White; old rent was $540/wk).
+- **Idea 4**: after the move, early December is tight. Projection: about −$478 around 10 Dec; skipping one
+  Westpac Life auto-save covers it.
+- **Idea 9+15**: Spotify (from Sep) and Amazon Prime (from Oct) to "discover"; Disney+ cancelled in May;
+  Netflix up $2; car insurance renewal $720 → $806 (set-aside ends up $8 short); 4 Afterpay plans.
+- **Idea 10**: a $142.30 Coles shop on 12 Nov with a receipt; usual main shop about $75.
 
-The **Accounts** tab in the app shows this data (search and filter by category).
+The **Accounts** tab in the app shows all of it (search and filter by category).
 
 ## Ask Windy: live AI chat (Claude)
 
@@ -107,6 +131,7 @@ compute over `data/mia/*.json` and return totals, then explains them. Each reply
 | `goal_projection` | "If I save $160 a payday, when do I reach Japan?" |
 | `life_events` | "Has anything changed?" (moving-home signals) |
 | `get_receipt` | "What was in my Coles shop?" |
+| `pay_later_plans` | "How much do I owe on Afterpay?" |
 
 Why tools and not RAG: transactions are numbers in a table. Retrieving rows and letting the model add
 them up gets totals wrong; code gets them right, and the model only sends summaries back.
@@ -140,21 +165,17 @@ The other screens still use scripted copy from `app/src/ai/windy.ts`, so the dem
 
 ## Known gaps in the wireframes (decide as a team)
 
-- Rent is $620/week in LP-02 but $1,200 in the Harbour 03 forecast.
-- LP-05 only details option B; options A and C have no breakdown yet (they fall back to B).
-- LP-09 and DC-01 reused the LP-05 template, so some leftover numbers (e.g. "$3,500 →") were dropped.
-- Income is $3,303/fortnight in B-01 but $1,450/fortnight in LP-09.
-- More tab was not designed; it is a placeholder. Accounts shows the generated data.
-- In 2026, 22 Nov is a Sunday (LP-02 says "Sat 22 Nov"). Payday is 27 Nov in most screens but 28 Nov in Harbour 03.
-- Harbour 02 compares November *so far* with full-month averages. With the generated data, Subscriptions
-  and Bills for 1–14 Nov are well below their monthly averages, so a data-driven Insights screen would
-  show November total *below* average. Either compare against the same days of previous months, or use
-  "last 30 days".
-- Generated averages differ slightly from the wireframe: Subscriptions $84 (wireframe $96), Bills $571 ($576).
-  Jun–Oct averages for Eating out, Shopping, Transport and Groceries match exactly. For 1–14 Nov the data
-  keeps the wireframe's Eating out ($486) and Shopping ($390), but Transport is $120 and Groceries $260
-  (the wireframe's $238 / $412 were full-month sized and made half a month look doubled).
-- B-05 shows savings of $495 a fortnight; the data saves $165 + $139 to goals plus $600 to Westpac Life.
-- Counting known bills only, Everyday's low is +$197 on 25 Nov (that's the "safe to spend"). Add Mia's
-  usual day-to-day spending (~$60 a day) and she dips below $0 *before* the 27 Nov payday, earlier than
-  the wireframe's −$120 on 3 Dec. The forecast needs a spending assumption the team agrees on.
+- Screens now driven by data show different numbers from some wireframe copy. The data is internally
+  consistent; the wireframes disagree with each other in places:
+  - Forecast (Harbour 03): wireframe −$120 on 3 Dec; data −$478 around 10 Dec. Model: Mia spends only her
+    safe-to-spend until payday, then her usual $50/day; auto-saves and Afterpay come out on payday; yearly
+    bills come from the set-aside.
+  - JP-01/02: wireframe saves $118 a payday for Japan (after plan B); data uses the current $139, so the
+    Home deposit redirect is $105 a payday (wireframe $130) and the deposit date is in 2034 (as LP-09), not 2029.
+  - RL-01: usual shop is $75 in the data (median of shops over $40), wireframe says about $90.
+- LP-04/05 (options A/B/C) are still wireframe copy; LP-05 only details option B.
+- Payday is 27 Nov in most screens but 28 Nov in Harbour 03. In 2026, 22 Nov is a Sunday (LP-02 "Sat 22 Nov");
+  the app shows the removalist date (Sun 8 Nov) as the moving date.
+- The pay-later screen and the Commitments home card are new (the board describes them, no wireframe yet).
+- Insights (Harbour 02, not selected) compares November so far with full-month averages; the chat's
+  `compare_month` tool uses the fair same-days comparison.

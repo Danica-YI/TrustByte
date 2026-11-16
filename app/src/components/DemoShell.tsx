@@ -36,6 +36,7 @@ export function DemoShell({ children }: { children: ReactNode }) {
           {list.map((f) => (
             <div key={f.id} className={`feature ${f.enabled ? '' : 'off'}`}>
               <div className="feature-head">
+                {f.idea && <span className="tag">Idea {f.idea}</span>}
                 {f.name}
                 {f.hero && <span className="tag hero">HERO</span>}
                 {!f.enabled && <span className="tag">off</span>}

@@ -2,7 +2,7 @@
   "meta": {
     "user": "Mia",
     "today": "2026-11-14",
-    "from": "2026-06-01",
+    "from": "2025-12-01",
     "seed": 20261116,
     "note": "Synthetic data for a hackathon demo. Not real people or accounts."
   },
@@ -12,16 +12,25 @@
       "name": "Everyday",
       "product": "Choice",
       "closing_balance": 1678.25,
-      "opening_balance": 2176.51,
-      "opening_date": "2026-06-01"
+      "opening_balance": 2269.68,
+      "opening_date": "2025-12-01"
     },
     {
       "id": "life",
       "name": "Westpac Life",
       "product": "Savings",
-      "closing_balance": 8112.4,
-      "opening_balance": 1512.4,
-      "opening_date": "2026-06-01"
+      "closing_balance": 12240.4,
+      "opening_balance": 1140.4,
+      "opening_date": "2025-12-01"
+    },
+    {
+      "id": "bills-saver",
+      "name": "Bills set-aside",
+      "product": "Savings",
+      "closing_balance": 1150.0,
+      "note": "Pays yearly bills: car rego, car insurance, contents insurance",
+      "opening_balance": 1184.0,
+      "opening_date": "2025-12-01"
     },
     {
       "id": "goal-japan",
@@ -30,7 +39,7 @@
       "closing_balance": 1140.0,
       "goal_target": 3500,
       "opening_balance": 28.0,
-      "opening_date": "2026-06-01"
+      "opening_date": "2025-12-01"
     },
     {
       "id": "goal-emergency",
@@ -38,8 +47,8 @@
       "product": "Goal saver",
       "closing_balance": 2600.0,
       "goal_target": 6000,
-      "opening_balance": 2400.0,
-      "opening_date": "2026-06-01"
+      "opening_balance": 1750.0,
+      "opening_date": "2025-12-01"
     },
     {
       "id": "goal-home",
@@ -47,8 +56,18 @@
       "product": "Goal saver",
       "closing_balance": 8000.0,
       "goal_target": 40000,
-      "opening_balance": 6020.0,
-      "opening_date": "2026-06-01"
+      "opening_balance": 3875.0,
+      "opening_date": "2025-12-01"
+    },
+    {
+      "id": "goal-bali",
+      "name": "Bali 2027",
+      "product": "Goal saver",
+      "closing_balance": 900.0,
+      "goal_target": 2500,
+      "goal_date": "2027-09-01",
+      "opening_balance": 0.0,
+      "opening_date": "2025-12-01"
     }
   ]
 }
