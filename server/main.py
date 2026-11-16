@@ -9,7 +9,9 @@
   POST /api/action          small confirmations (consent, "yes that's a bill", receipt saved...)
   POST /api/undo/{id}       roll a change back
   POST /api/reset           start the demo story again
-  POST /api/chat            Ask Windy: Claude with tools over the same live plan
+  POST /api/chat            Ask Windy: Claude with tools over the same live plan, reading its memory first
+  GET  /api/memory          what Windy remembers (notes + earlier chats);  DELETE /api/memory/{id}, /api/memory/chats
+  GET  /api/chats           past conversations;  GET /api/chats/{id} reopen one;  DELETE /api/chats/{id}
 
 Run (from the repo root):
     server/.venv/bin/uvicorn main:app --app-dir server --port 8787 --reload
@@ -31,8 +33,10 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
+import chats
 import engine
 import guardrails as G
+import memory
 import planner
 import state as plan_state
 import tools
@@ -75,7 +79,24 @@ Boundaries:
 - Spending insights are about money only. Never comment on health, diet, religion or lifestyle from purchases.
 - Signals like a new rent payee only suggest a life change; ask Mia rather than assume.
 - Every plan change Mia has approved (auto-saves, limits, payments on hold) is already in the tool results.
-  To change her plan, point her to the screen: Windy proposes, Mia approves there."""
+  To change her plan, point her to the screen: Windy proposes, Mia approves there.
+
+Memory:
+- When Mia tells you something lasting about herself (a goal, a preference, how she gets paid, how she likes
+  answers), save it with the remember tool without asking, then mention in a few words that you'll remember it.
+- Never save health, religion, relationships or other sensitive details, even if she mentions them.
+- Her questions from earlier chats, if any, are listed after these instructions. When she asks what she
+  asked or said before, answer from that list."""
+CHAT_TOOLS = TOOLS + [memory.REMEMBER_TOOL]
+
+
+def _system(conversation_id: str) -> list[dict]:
+    """Windy's instructions plus its notes about Mia and her earlier chats, read fresh before every answer."""
+    blocks = [{"type": "text", "text": SYSTEM}]
+    notes = memory.prompt_block(current_conversation=conversation_id)
+    if notes:
+        blocks.append({"type": "text", "text": notes})
+    return blocks
 
 client = anthropic.Anthropic()
 app = FastAPI(title="harbour + Windy backend")
@@ -138,6 +159,13 @@ def reset() -> dict:
 
 def _run_tool_on_live_plan(name: str, args: object) -> tuple[str, bool]:
     """Chat tools see the same plan as the screens: approved moves, auto-saves, holds and limits."""
+    if name == "remember":
+        if not isinstance(args, dict) or not isinstance(args.get("note"), str):
+            return json.dumps({"error": "remember needs a 'note' string"}), True
+        try:
+            return json.dumps({"saved": memory.remember(args["note"])}), False
+        except ValueError as e:
+            return json.dumps({"error": str(e)}), True
     s = plan_state.load()
     tools.ACCOUNTS = engine.effective_accounts(s)
     tools.UPCOMING = engine.effective_upcoming(s)
@@ -179,12 +207,56 @@ def usage() -> dict:
     return {"entries": usage_log[-100:]}
 
 
+@app.get("/api/memory")
+def get_memory() -> dict:
+    return {"memories": memory.all_memories(), "earlier_chats": memory.recent_exchanges()}
+
+
+@app.delete("/api/memory/chats")
+def forget_chats() -> dict:
+    memory.forget_chats()
+    return {"memories": memory.all_memories(), "earlier_chats": []}
+
+
+@app.delete("/api/memory/{memory_id}")
+def forget_memory(memory_id: int) -> dict:
+    if not memory.forget(memory_id):
+        raise HTTPException(404, "unknown memory")
+    return {"memories": memory.all_memories()}
+
+
+@app.get("/api/chats")
+def list_chats() -> dict:
+    """Mia's past conversations, most recent first."""
+    return {"chats": chats.sessions()}
+
+
+@app.get("/api/chats/{conversation_id}")
+def open_chat(conversation_id: str) -> dict:
+    messages = chats.transcript(conversation_id)
+    if messages is None:
+        raise HTTPException(404, "unknown chat")
+    return {"id": conversation_id, "messages": messages}
+
+
+@app.delete("/api/chats/{conversation_id}")
+def delete_chat(conversation_id: str) -> dict:
+    if not chats.delete(conversation_id):
+        raise HTTPException(404, "unknown chat")
+    conversations.pop(conversation_id, None)
+    return {"chats": chats.sessions()}
+
+
 @app.post("/api/chat")
 def chat(body: ChatIn) -> StreamingResponse:
     message, _checks = G.clean_chat_input(body.message, plan_state.load())
     cid = body.conversation_id or uuid.uuid4().hex
     if body.conversation_id and body.conversation_id not in conversations:
-        raise HTTPException(404, "unknown conversation_id (the server may have restarted); start a new chat")
+        # A past chat Mia reopened: carry on from what was saved (also works after a restart)
+        saved = chats.load(body.conversation_id)
+        if saved is None:
+            raise HTTPException(404, "unknown conversation_id; start a new chat")
+        conversations[cid] = saved
     messages = conversations.setdefault(cid, [])
     turn_start = len(messages)
     messages.append({"role": "user", "content": message})
@@ -195,13 +267,15 @@ def chat(body: ChatIn) -> StreamingResponse:
             del messages[turn_start:]
             yield _sse({"type": "error", "message": "No API key on the server. Put ANTHROPIC_API_KEY in server/.env and restart it."})
             return
+        system = _system(cid)  # read Windy's memory before answering
+        answer: list[str] = []
         try:
             for _ in range(MAX_TOOL_ROUNDS):
                 with client.beta.messages.stream(
                     model=MODEL,
                     max_tokens=16000,
-                    system=SYSTEM,
-                    tools=TOOLS,
+                    system=system,
+                    tools=CHAT_TOOLS,
                     messages=messages,
                     output_config={"effort": EFFORT},
                     cache_control={"type": "ephemeral"},
@@ -211,6 +285,7 @@ def chat(body: ChatIn) -> StreamingResponse:
                 ) as stream:
                     for event in stream:
                         if event.type == "text":
+                            answer.append(event.text)
                             yield _sse({"type": "text", "text": event.text})
                     response = stream.get_final_message()
 
@@ -241,6 +316,8 @@ def chat(body: ChatIn) -> StreamingResponse:
                 messages.append({"role": "user", "content": results})
             else:
                 yield _sse({"type": "text", "text": "\n\n(Stopped after too many steps.)"})
+            memory.log_exchange(cid, message, "".join(answer))  # so the next chat knows what was asked
+            chats.save(cid, messages)  # so Mia can reopen this chat and carry on
             yield _sse({"type": "done"})
         except ValueError:
             # Tool input JSON the SDK couldn't parse at all (eager input streaming)

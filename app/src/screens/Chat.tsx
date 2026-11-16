@@ -1,5 +1,6 @@
 // Ask Windy: live chat with Claude through the backend (server/main.py).
 // Answers come from tools that compute over Mia's data; each tool Windy used is shown under its reply.
+// Every chat is saved (server/chats.py): "Past chats" lists them, and opening one carries on that conversation.
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Mark, TopBar } from '../components/ui'
@@ -18,6 +19,7 @@ const TOOL_LABELS: Record<string, string> = {
   life_events: 'Life event signals',
   get_receipt: 'Receipt',
   pay_later_plans: 'Pay-later plans',
+  remember: 'Remembered this',
 }
 
 const SUGGESTIONS = [
@@ -28,6 +30,10 @@ const SUGGESTIONS = [
 ]
 
 type Health = { ok: boolean; has_credentials: boolean; model: string } | null
+type PastChat = { id: string; title: string; updated_at: string; questions: number }
+
+const when = (iso: string) =>
+  new Date(iso).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })
 
 export default function Chat() {
   const [msgs, setMsgs] = useState<Msg[]>([])
@@ -35,6 +41,7 @@ export default function Chat() {
   const [busy, setBusy] = useState(false)
   const [cid, setCid] = useState<string | null>(null)
   const [health, setHealth] = useState<Health | 'offline'>(null)
+  const [past, setPast] = useState<PastChat[] | null>(null) // null = chat view, list = "Past chats" view
   const end = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -49,6 +56,25 @@ export default function Chat() {
     if (q && !sentFromHome.current) { sentFromHome.current = true; send(q) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  async function showPast() {
+    const res = await fetch('/api/chats')
+    setPast(res.ok ? (await res.json()).chats : [])
+  }
+
+  async function openChat(id: string) {
+    const res = await fetch(`/api/chats/${id}`)
+    if (!res.ok) return
+    setMsgs((await res.json()).messages)
+    setCid(id)
+    setPast(null)
+  }
+
+  async function deleteChat(id: string) {
+    const res = await fetch(`/api/chats/${id}`, { method: 'DELETE' })
+    if (res.ok) setPast((await res.json()).chats)
+    if (id === cid) { setMsgs([]); setCid(null) }
+  }
 
   const patchLast = (f: (m: Msg) => Msg) => setMsgs((all) => [...all.slice(0, -1), f(all[all.length - 1])])
 
@@ -95,7 +121,32 @@ export default function Chat() {
 
   return (
     <>
-      <TopBar title="Ask Windy" fallback="/more" right={<button className="link" onClick={() => { setMsgs([]); setCid(null) }}>New</button>} />
+      <TopBar title="Ask Windy" fallback="/more" right={
+        <span className="hstack" style={{ gap: 12 }}>
+          <button className="link" onClick={() => (past ? setPast(null) : showPast())}>{past ? 'Back' : 'Past chats'}</button>
+          <button className="link" onClick={() => { setMsgs([]); setCid(null); setPast(null) }}>New</button>
+        </span>
+      } />
+
+      {past && (
+        <>
+          {past.length === 0 && <div className="card"><p style={{ margin: 0 }}>No past chats yet. Ask Windy something and it’ll show up here.</p></div>}
+          {past.map((c) => (
+            <div key={c.id} className="card">
+              <div className="spread" style={{ alignItems: 'flex-start' }}>
+                <button className="link" style={{ textAlign: 'left', flex: 1 }} onClick={() => openChat(c.id)}>
+                  <div style={{ fontWeight: 600, color: 'var(--ink)' }}>{c.title}</div>
+                  <div className="muted">{when(c.updated_at)} · {c.questions} question{c.questions === 1 ? '' : 's'}{c.id === cid ? ' · open now' : ''}</div>
+                </button>
+                <button className="link" style={{ color: 'var(--bad)' }} onClick={() => deleteChat(c.id)} aria-label={`Delete chat: ${c.title}`}>Delete</button>
+              </div>
+            </div>
+          ))}
+          <p className="lock">🔒 Only you can see your chats. Delete one any time; Reset demo clears them all.</p>
+        </>
+      )}
+
+      {!past && <>
 
       {health === 'offline' && (
         <div className="card" style={{ background: 'var(--warn-soft)' }}>
@@ -148,6 +199,7 @@ export default function Chat() {
         <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about your money" disabled={busy} />
         <button className="btn primary" type="submit" disabled={busy || !input.trim()}>➤</button>
       </form>
+      </>}
     </>
   )
 }

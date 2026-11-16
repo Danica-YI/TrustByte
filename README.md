@@ -54,6 +54,8 @@ Harbour web app (React)
 - **Financial checks** on every proposal: emergency fund untouched, no savings account below $0, moves between
   Mia's accounts add up to zero, no negative auto-saves.
 - **Plan state** (SQLite, `server/plan_state.db`, gitignored, created on first run): everything Mia approved or confirmed, with history and the log of what Windy used. Tables: `consent`, `plan_sections`, `history`, `usage` (see `server/state.py`). Tests: `server/.venv/bin/python -m pytest server/tests`.
+- **Windy's memory** (same database, `server/memory.py`), read before every answer, even in a new chat: short notes Windy saves by itself when Mia shares something lasting (a goal, a preference; `memory` table), and her questions from earlier chats with the start of each answer (`chat_log` table, latest 10 shown to Windy). `GET /api/memory` lists both, `DELETE /api/memory/{id}` forgets a note, `DELETE /api/memory/chats` clears earlier chats, reset clears everything.
+- **Past chats** (`chat_sessions` and `chat_messages` tables, `server/chats.py`): every conversation is saved whole, including Windy's tool steps. On Ask Windy, **Past chats** lists them; opening one carries on the conversation, even after the backend restarts. `GET /api/chats`, `GET /api/chats/{id}`, `DELETE /api/chats/{id}`.
   Any change can be undone from **Your plan**.
 - **Consent**: each feature checks its switch first. Turn one off and its card disappears and the backend
   refuses to run it.
