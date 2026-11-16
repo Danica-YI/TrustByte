@@ -70,6 +70,8 @@ def default_state() -> dict:
         # Joint savings: people Mia invited to save for a goal with her, by goal account id.
         # Each is {"name", "per_payday", "status": "invited" | "joined"}. Simulated: no message is sent.
         "shared_goals": {},
+        # Goal details Mia edited herself, by goal account id: {"target": amount, "goal_date": "YYYY-MM-DD"}
+        "goal_overrides": {},
         # The trade-off option or Japan plan Mia approved, for the home screen
         "plan_choice": None,
         # Every change, newest last. Each entry keeps the state before it, so it can be undone.

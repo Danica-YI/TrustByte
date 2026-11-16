@@ -99,6 +99,12 @@ def effective_accounts(s: dict) -> list[dict]:
     for m in s["moves"]:
         by_id[m["from"]]["closing_balance"] = r2(by_id[m["from"]]["closing_balance"] - m["amount"])
         by_id[m["to"]]["closing_balance"] = r2(by_id[m["to"]]["closing_balance"] + m["amount"])
+    for gid, o in s.get("goal_overrides", {}).items():
+        if gid in by_id:
+            if o.get("target"):
+                by_id[gid]["goal_target"] = o["target"]
+            if o.get("goal_date"):
+                by_id[gid]["goal_date"] = o["goal_date"]
     return accs
 
 
@@ -299,7 +305,9 @@ def goals(s: dict) -> list[dict]:
                     "id": a["id"], "name": a["name"], "saved": a["closing_balance"], "target": a["goal_target"],
                     "per_payday": autosave_amount(s, a["id"], 0), "reached": reached.isoformat() if reached else None,
                     "reached_label": month_year(reached) if reached else "No regular saving",
-                    "color": GOAL_COLORS.get(a["id"], "#6d28d9"), "goal_date": a.get("goal_date")})
+                    "color": GOAL_COLORS.get(a["id"], "#6d28d9"), "goal_date": a.get("goal_date"),
+                    # With a target date: is the current plan in time for it?
+                    "on_track": (reached is not None and reached <= _d(a["goal_date"])) if a.get("goal_date") else None})
     return out
 
 
@@ -665,6 +673,8 @@ def metrics(s: dict) -> dict[str, tuple[str, float | str]]:
         out[f"{g['name']} balance"] = (money(g["saved"]), g["saved"])
         out[f"{g['name']} each payday"] = per(g["id"])
         out[f"{g['name']} reached"] = (g["reached_label"], g["reached"] or "")
+        out[f"{g['name']} target"] = (money(g["target"]), g["target"])
+        out[f"{g['name']} target date"] = (month_year(g["goal_date"]) if g["goal_date"] else "None", g["goal_date"] or "")
     for acc in ("life", "bills-saver"):
         out[f"{SHORT_NAMES[acc]} each payday"] = per(acc)
     yb = yearly_bills(s)

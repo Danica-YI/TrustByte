@@ -10,7 +10,7 @@ export type Upcoming = {
 
 export type Goal = {
   id: string; name: string; saved: number; target: number; per_payday: number
-  reached: string | null; reached_label: string; color: string; goal_date?: string
+  reached: string | null; reached_label: string; color: string; goal_date?: string | null; on_track: boolean | null
   // Joint savings: people saving for this goal with Mia, and when she would get there alone
   members: GoalMember[]; partner_per_payday: number; reached_solo: string | null
 }

@@ -50,6 +50,8 @@ class Budget(BaseModel):
 class GoalEdit(BaseModel):
     goal: str = Field(pattern=r"^goal-[a-z]+$")
     per_payday: float = Field(ge=0, le=2000)
+    target: float | None = Field(default=None, ge=50, le=1_000_000)
+    goal_date: str | None = Field(default=None, pattern=r"^\d{4}-\d{2}-\d{2}$")
 
 
 class LifeEventConfirm(BaseModel):

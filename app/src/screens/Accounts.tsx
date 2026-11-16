@@ -59,6 +59,12 @@ export function AccountDetail() {
         <div className="small">{all.length} transactions since 1 Jun</div>
       </Card>
 
+      {account.goal_target && (
+        <Card>
+          <Link to={`/goals/${account.id}`} className="row"><span>Goal: {money(account.balance)} of {money(account.goal_target)}</span><span className="link">Edit goal ›</span></Link>
+        </Card>
+      )}
+
       <div className="hstack" style={{ marginBottom: 10 }}>
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search"
           style={{ flex: 1, border: '1px solid var(--line)', borderRadius: 99, padding: '9px 14px', font: 'inherit' }} />

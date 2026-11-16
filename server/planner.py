@@ -67,11 +67,25 @@ def _build(kind: str, p, s: dict) -> tuple[dict, str, str, dict]:
             raise G.GuardrailError("That goal doesn't exist.",
                                    [G.check("input", "Input validation", False, f"unknown goal '{p.goal}'")], 422)
         new = copy.deepcopy(s)
+        override = dict(new["goal_overrides"].get(p.goal, {}))
+        if p.target is not None:
+            override["target"] = E.r2(p.target)
+        if p.goal_date is not None:
+            try:
+                when = E._d(p.goal_date)
+            except ValueError:
+                when = None
+            if not when or when <= E.TODAY or when.year > E.TODAY.year + 30:
+                raise G.GuardrailError("Pick a target date in the future.",
+                                       [G.check("input", "Input validation", False, f"target date '{p.goal_date}' isn't a future date")], 422)
+            override["goal_date"] = when.isoformat()
+        if override:
+            new["goal_overrides"][p.goal] = override
         # Her own number replaces any temporary change or skipped payday on this goal
         new["autosave"][p.goal] = E.r2(p.per_payday)
         new["temp_autosave"] = [t for t in new["temp_autosave"] if t["account"] != p.goal]
         new["skips"] = [x for x in new["skips"] if x["account"] != p.goal]
-        return (new, f"{goal['name']}: {E.money(p.per_payday)} a payday", "You set this amount yourself",
+        return (new, f"{goal['name']}: your changes", "You set these yourself",
                 {"goal": goal["name"], "amount_before": E.money(goal["per_payday"]), "amount_now": E.money(p.per_payday)})
     raise KeyError(kind)
 
