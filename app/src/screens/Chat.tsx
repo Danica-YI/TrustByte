@@ -4,7 +4,7 @@
 // Windy can offer up to 2 next-step buttons (server/suggest.py, already checked by the guardrails); tapping one
 // opens the normal review screen. Follow-up questions show as chips: tapping one asks it. "How did you work this out?" is built from what really happened, not by the AI.
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import type { Check } from '../api'
 import { Mark, SendIcon, TopBar, UserAvatar } from '../components/ui'
 import { useApp } from '../store'
@@ -60,11 +60,36 @@ type PastChat = { id: string; title: string; updated_at: string; questions: numb
 const when = (iso: string) =>
   new Date(iso).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })
 
+// The open chat lives in the URL (/chat?c=<id>), so leaving for a review screen and coming back reopens it.
+// The latest answer's buttons and chips are kept for this browser tab only, so they come back too.
+type NextSteps = { actions: Action[]; questions: string[] }
+const nextKey = (id: string) => `windy-next:${id}`
+function saveNext(id: string, next: NextSteps | null) {
+  try {
+    if (next) sessionStorage.setItem(nextKey(id), JSON.stringify(next))
+    else sessionStorage.removeItem(nextKey(id))
+  } catch { /* storage blocked: the buttons just won't come back */ }
+}
+function loadNext(id: string): NextSteps | null {
+  try {
+    return JSON.parse(sessionStorage.getItem(nextKey(id)) ?? 'null')
+  } catch {
+    return null
+  }
+}
+
 export default function Chat() {
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
-  const [cid, setCid] = useState<string | null>(null)
+  const [cid, setCidState] = useState<string | null>(null)
+  const [params, setParams] = useSearchParams()
+  const cidRef = useRef<string | null>(null)
+  const setCid = (id: string | null) => {
+    cidRef.current = id
+    setCidState(id)
+    setParams(id ? { c: id } : {}, { replace: true })
+  }
   const [health, setHealth] = useState<Health | 'offline'>(null)
   const [past, setPast] = useState<PastChat[] | null>(null) // null = chat view, list = "Past chats" view
   const [how, setHow] = useState<number | null>(null) // which answer's "How did you work this out?" is open
@@ -83,12 +108,17 @@ export default function Chat() {
   }, [])
   // Also when Windy finishes: that's when the next-step buttons appear
   useEffect(() => { end.current?.scrollIntoView({ block: 'end' }) }, [msgs, busy])
-  // A question typed into the Home "Ask Windy" box arrives in router state: send it once on arrival.
+  // On arrival: a question typed into the Home "Ask Windy" box (router state) is sent once;
+  // otherwise the chat named in the URL is reopened (e.g. after "Not now" on a review screen).
   const loc = useLocation()
-  const sentFromHome = useRef(false)
+  const arrived = useRef(false)
   useEffect(() => {
+    if (arrived.current) return
+    arrived.current = true
     const q = (loc.state as { q?: string } | null)?.q
-    if (q && !sentFromHome.current) { sentFromHome.current = true; send(q) }
+    const open = params.get('c')
+    if (q) send(q)
+    else if (open) openChat(open)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -99,8 +129,12 @@ export default function Chat() {
 
   async function openChat(id: string) {
     const res = await fetch(`/api/chats/${id}`)
-    if (!res.ok) return
-    setMsgs((await res.json()).messages)
+    if (!res.ok) { setCid(null); return }
+    const messages: Msg[] = (await res.json()).messages
+    const next = loadNext(id)
+    const last = messages[messages.length - 1]
+    if (next && last?.role === 'assistant') messages[messages.length - 1] = { ...last, ...next }
+    setMsgs(messages)
     setCid(id)
     setPast(null)
   }
@@ -117,12 +151,13 @@ export default function Chat() {
     if (!text.trim() || busy) return
     setInput('')
     setBusy(true)
+    if (cidRef.current) saveNext(cidRef.current, null) // the earlier answer's buttons no longer apply
     setMsgs((all) => [...all, { role: 'user', text, tools: [] }, { role: 'assistant', text: '', tools: [] }])
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, conversation_id: cid }),
+        body: JSON.stringify({ message: text, conversation_id: cidRef.current }),
       })
       if (res.status === 404) setCid(null)
       if (!res.ok || !res.body) {
@@ -142,7 +177,11 @@ export default function Chat() {
           if (!part.startsWith('data: ')) continue
           const ev = JSON.parse(part.slice(6))
           if (ev.type === 'start') { setCid(ev.conversation_id); patchLast((m) => ({ ...m, checks: ev.checks ?? [] })) }
-          else if (ev.type === 'suggestions') patchLast((m) => ({ ...m, actions: ev.actions, questions: ev.questions ?? [] }))
+          else if (ev.type === 'suggestions') {
+            const next = { actions: ev.actions, questions: ev.questions ?? [] }
+            if (cidRef.current) saveNext(cidRef.current, next)
+            patchLast((m) => ({ ...m, ...next }))
+          }
           else if (ev.type === 'checks') patchLast((m) => ({ ...m, outChecks: ev.checks }))
           else if (ev.type === 'text') patchLast((m) => ({ ...m, text: m.text + ev.text }))
           else if (ev.type === 'tool') patchLast((m) => ({ ...m, tools: [...m.tools, { name: ev.name, input: ev.input }] }))
