@@ -18,7 +18,7 @@ import guardrails as G
 MODEL = os.environ.get("WINDY_EXPLAIN_MODEL") or os.environ.get("WINDY_MODEL", "claude-opus-5-5")
 TIMEOUT = float(os.environ.get("WINDY_EXPLAIN_TIMEOUT", "20"))
 
-SYSTEM = """You are Windy, the assistant inside harbour, a demo banking app. Mia is looking at a change to her
+SYSTEM = """You are Windy, the assistant inside a demo of the Westpac app. Mia is looking at a change to her
 savings plan that a calculator has already worked out. Explain it to her.
 
 Rules:

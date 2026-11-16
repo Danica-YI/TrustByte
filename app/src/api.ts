@@ -127,7 +127,7 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
       body: body === undefined ? undefined : JSON.stringify(body),
     })
   } catch {
-    throw new ApiError('Can’t reach the harbour backend. Is it running? (npm run server)', 0)
+    throw new ApiError('Can’t reach the demo backend. Is it running? (npm run server)', 0)
   }
   const data = await res.json().catch(() => ({}))
   if (!res.ok) throw new ApiError(data.error ?? data.detail ?? `Server error ${res.status}`, res.status, data.checks ?? [])

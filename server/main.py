@@ -61,7 +61,7 @@ EFFORT = os.environ.get("WINDY_EFFORT", "medium")  # low | medium | high (chat: 
 MAX_TOOL_ROUNDS = 8
 
 # Kept stable (no timestamps) so the prompt prefix can be cached between requests.
-SYSTEM = f"""You are Windy, the AI assistant inside harbour, a demo banking app built for a hackathon.
+SYSTEM = f"""You are Windy, the AI assistant inside a demo of the Westpac app built for a hackathon.
 You are talking with the customer, Mia. Today is {TODAY:%A} {TODAY.day} {TODAY:%B %Y}. All data is synthetic.
 
 How to answer:
@@ -99,7 +99,7 @@ def _system(conversation_id: str) -> list[dict]:
     return blocks
 
 client = anthropic.Anthropic()
-app = FastAPI(title="harbour + Windy backend")
+app = FastAPI(title="Westpac + Windy demo backend")
 
 
 @app.exception_handler(G.GuardrailError)

@@ -52,7 +52,7 @@ function StoryPanel() {
   const { pathname } = useLocation()
   return (
     <aside className="side-panel left">
-      <h1>harbour · Windy</h1>
+      <h1>Westpac · Windy</h1>
       <p className="hint">TrustByte · Westpac Hackathon 2026. Demo user Mia, synthetic data. Press P to hide the panels.</p>
       <div className="side-title">Demo story</div>
       {STORY.map((s, i) => (
@@ -69,7 +69,7 @@ function StoryPanel() {
 }
 
 const LAYERS: { key: Check['layer'] | 'app' | 'api' | 'state'; label: string; sub: string }[] = [
-  { key: 'app', label: 'Harbour web app', sub: 'Mia interacts with Windy' },
+  { key: 'app', label: 'Westpac web app (demo)', sub: 'Mia interacts with Windy' },
   { key: 'input', label: 'Input guardrails', sub: 'Consent · Permissions · Validation' },
   { key: 'api', label: 'FastAPI backend', sub: 'Coordinates the services' },
   { key: 'engine', label: 'Python engine', sub: 'Forecasts and scenarios' },
