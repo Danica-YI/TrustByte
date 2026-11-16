@@ -1,37 +1,16 @@
-// App settings shared across screens. Kept in the browser (localStorage) so a refresh remembers them;
-// if storage is blocked the app still works with the defaults.
-import { useSyncExternalStore } from 'react'
-
-const KEY = 'harbour.connectedReceipts'
-
-function read(): boolean {
-  try {
-    return localStorage.getItem(KEY) === 'on'
-  } catch {
-    return false
-  }
-}
-
-let connected = read() // Connected merchant receipts: OFF by default (opt-in)
-const listeners = new Set<() => void>()
-
-export function setConnectedReceipts(on: boolean) {
-  connected = on
-  try {
-    localStorage.setItem(KEY, on ? 'on' : 'off')
-  } catch {
-    // storage blocked: keep it for this session only
-  }
-  listeners.forEach((l) => l())
-}
+// Connected merchant receipts (Idea 10). It's a consent switch, off by default (opt-in), saved in the plan
+// state on the backend, so it goes through the input guardrails, shows on the consent screen and resets with
+// "Reset demo".
+import { useApp, useSnap } from '../store'
 
 /** Whether itemised receipts arrive automatically from connected merchants. */
 export function useConnectedReceipts(): boolean {
-  return useSyncExternalStore(
-    (cb) => {
-      listeners.add(cb)
-      return () => listeners.delete(cb)
-    },
-    () => connected,
-  )
+  return useSnap().consent.connected_receipts ?? false
+}
+
+/** Returns a function that turns connected receipts on or off. */
+export function useSetConnectedReceipts() {
+  const { act } = useApp()
+  return (on: boolean) =>
+    act('consent', { key: 'connected_receipts', on }, on ? 'Connected receipts on' : 'Connected receipts off')
 }

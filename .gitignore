@@ -15,3 +15,7 @@ dist/
 # Python
 .venv/
 __pycache__/
+
+# Saved demo plan (POST /api/reset clears it)
+server/plan_state.json
+server/plan_state.tmp

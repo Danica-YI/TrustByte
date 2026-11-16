@@ -1,4 +1,15 @@
-"""Windy chat backend: FastAPI + Claude tool use over Mia's fake bank data.
+"""harbour + Windy backend (FastAPI): coordinates the services in the architecture.
+
+  Harbour web app -> input guardrails -> FastAPI -> AI model + Python engine -> output guardrails
+  -> customer reviews and approves -> only the simulated financial plan is updated
+
+  GET  /api/snapshot        everything the app shows, worked out by the engine from base data + plan state
+  POST /api/propose         a plan change: guardrails, engine, AI explanation, held for approval
+  POST /api/approve/{id}    Mia approves: the plan state is updated
+  POST /api/action          small confirmations (consent, "yes that's a bill", receipt saved...)
+  POST /api/undo/{id}       roll a change back
+  POST /api/reset           start the demo story again
+  POST /api/chat            Ask Windy: Claude with tools over the same live plan
 
 Run (from the repo root):
     server/.venv/bin/uvicorn main:app --app-dir server --port 8787 --reload
@@ -16,10 +27,15 @@ from datetime import datetime
 from pathlib import Path
 
 import anthropic
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
+import engine
+import guardrails as G
+import planner
+import state as plan_state
+import tools
 from tools import TODAY, TOOLS, run_tool
 
 
@@ -57,10 +73,81 @@ Boundaries:
   investments, and don't make lending decisions. Loan figures are estimates, not offers.
 - You can't move money, change settings or submit applications in this demo. Point to the screen she'd use.
 - Spending insights are about money only. Never comment on health, diet, religion or lifestyle from purchases.
-- Signals like a new rent payee only suggest a life change; ask Mia rather than assume."""
+- Signals like a new rent payee only suggest a life change; ask Mia rather than assume.
+- Every plan change Mia has approved (auto-saves, limits, payments on hold) is already in the tool results.
+  To change her plan, point her to the screen: Windy proposes, Mia approves there."""
 
 client = anthropic.Anthropic()
-app = FastAPI(title="Windy chat backend")
+app = FastAPI(title="harbour + Windy backend")
+
+
+@app.exception_handler(G.GuardrailError)
+def _guardrail_error(_: Request, e: G.GuardrailError) -> JSONResponse:
+    return JSONResponse({"error": e.message, "checks": e.checks}, status_code=e.status)
+
+
+def _snapshot() -> dict:
+    return engine.snapshot(plan_state.load())
+
+
+@app.get("/api/snapshot")
+def snapshot() -> dict:
+    return _snapshot()
+
+
+class ProposeIn(BaseModel):
+    kind: str
+    params: dict = {}
+
+
+@app.post("/api/propose")
+def propose(body: ProposeIn) -> dict:
+    return planner.propose(body.kind, body.params)
+
+
+@app.post("/api/approve/{pid}")
+def approve(pid: str) -> dict:
+    out = planner.approve(pid)
+    return {**out, "snapshot": _snapshot()}
+
+
+@app.post("/api/action")
+def action(body: ProposeIn) -> dict:
+    out = planner.act(body.kind, body.params)
+    return {**out, "snapshot": _snapshot()}
+
+
+@app.post("/api/undo/{entry_id}")
+def undo(entry_id: str) -> dict:
+    s = plan_state.load()
+    try:
+        restored = plan_state.undo(s, entry_id)
+    except KeyError:
+        raise HTTPException(404, "unknown change")
+    plan_state.save(restored)
+    return {"snapshot": _snapshot(), "checks": [G.check("approve", "Change undone", True, "Plan rolled back")]}
+
+
+@app.post("/api/reset")
+def reset() -> dict:
+    plan_state.reset()
+    conversations.clear()
+    usage_log.clear()
+    return {"snapshot": _snapshot()}
+
+
+def _run_tool_on_live_plan(name: str, args: object) -> tuple[str, bool]:
+    """Chat tools see the same plan as the screens: approved moves, auto-saves, holds and limits."""
+    s = plan_state.load()
+    tools.ACCOUNTS = engine.effective_accounts(s)
+    tools.UPCOMING = engine.effective_upcoming(s)
+    if isinstance(args, dict) and name == "cash_flow_forecast":
+        return json.dumps(engine.forecast_for_chat(s), default=str), False
+    if isinstance(args, dict) and name == "goal_projection" and "goal_id" in args:
+        return json.dumps(engine.goal_projection_for_chat(s, args["goal_id"], args.get("amount_per_payday"))), False
+    plan_state.log_usage(s, "chat", name.replace("_", " "))
+    plan_state.save(s)
+    return run_tool(name, args)
 
 # conversation_id -> full message history (append-only, including tool calls and thinking blocks)
 conversations: dict[str, list] = {}
@@ -94,15 +181,16 @@ def usage() -> dict:
 
 @app.post("/api/chat")
 def chat(body: ChatIn) -> StreamingResponse:
+    message, _checks = G.clean_chat_input(body.message, plan_state.load())
     cid = body.conversation_id or uuid.uuid4().hex
     if body.conversation_id and body.conversation_id not in conversations:
         raise HTTPException(404, "unknown conversation_id (the server may have restarted); start a new chat")
     messages = conversations.setdefault(cid, [])
     turn_start = len(messages)
-    messages.append({"role": "user", "content": body.message})
+    messages.append({"role": "user", "content": message})
 
     def events():
-        yield _sse({"type": "start", "conversation_id": cid})
+        yield _sse({"type": "start", "conversation_id": cid, "checks": _checks})
         if not _has_credentials():
             del messages[turn_start:]
             yield _sse({"type": "error", "message": "No API key on the server. Put ANTHROPIC_API_KEY in server/.env and restart it."})
@@ -142,7 +230,7 @@ def chat(body: ChatIn) -> StreamingResponse:
                 results = []
                 for block in tool_uses:
                     yield _sse({"type": "tool", "name": block.name, "input": block.input})
-                    output, is_error = run_tool(block.name, block.input)
+                    output, is_error = _run_tool_on_live_plan(block.name, block.input)
                     usage_log.append({"time": datetime.now().isoformat(timespec="seconds"),
                                       "tool": block.name, "input": block.input, "error": is_error})
                     result = {"type": "tool_result", "tool_use_id": block.id, "content": output}
@@ -176,3 +264,20 @@ def chat(body: ChatIn) -> StreamingResponse:
 
     return StreamingResponse(events(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+# ------------------------------------------------------------------ serve the built web app (npm run build)
+# One process, one URL: handy for hosting and for the awards-day demo.
+DIST = Path(__file__).resolve().parent.parent / "app" / "dist"
+
+
+@app.get("/{path:path}", include_in_schema=False)
+def web_app(path: str):
+    if path.startswith("api/"):
+        raise HTTPException(404)
+    target = DIST / path
+    if path and target.is_file():
+        return FileResponse(target)
+    if (DIST / "index.html").exists():
+        return FileResponse(DIST / "index.html")
+    return JSONResponse({"message": "Backend is running. Build the app (cd app && npm run build) or use npm run dev."})

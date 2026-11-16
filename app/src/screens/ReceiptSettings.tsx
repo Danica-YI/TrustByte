@@ -2,10 +2,12 @@
 // Pitch (docs/share/LifePilot-Connected-Receipts): we don't build a connector. Receipts come through
 // receipt networks that already exist (e.g. Slyp, card-network digital receipts); in this demo they are
 // synthetic receipts linked to Mia's card payments by transaction.
+// The switch is a consent setting (off by default) saved on the backend and checked by the input guardrails.
 import { useNavigate } from 'react-router-dom'
 import { Card, Lock, Toggle, TopBar } from '../components/ui'
 import { receipts, transactions } from '../data/bank'
-import { setConnectedReceipts, useConnectedReceipts } from '../data/settings'
+import { useConnectedReceipts, useSetConnectedReceipts } from '../data/settings'
+import { useApp } from '../store'
 
 const STEPS = [
   { title: 'Store checkout', note: 'You pay with your Westpac card' },
@@ -17,12 +19,14 @@ const STEPS = [
 export default function ReceiptSettings() {
   const nav = useNavigate()
   const on = useConnectedReceipts()
+  const setConnectedReceipts = useSetConnectedReceipts()
+  const { busy } = useApp()
   const merchants = [...new Set(receipts.map((r) => r.merchant))]
   const linked = transactions.filter((t) => t.receipt_id).length
 
   return (
     <>
-      <TopBar title="Receipt Lens" fallback="/?card=grocery-check" />
+      <TopBar title="Receipt Lens" fallback="/" />
 
       <Card variant={on ? 'windy' : undefined}>
         <div className="spread" style={{ alignItems: 'flex-start', gap: 12 }}>
@@ -33,7 +37,7 @@ export default function ReceiptSettings() {
               No photo needed.
             </p>
           </div>
-          <Toggle on={on} onChange={setConnectedReceipts} />
+          <Toggle on={on} onChange={(v) => !busy && setConnectedReceipts(v)} />
         </div>
         <div className="small" style={{ marginTop: 10 }}>
           {on ? `On · ${linked} receipts linked to your card payments` : 'Off · you can still scan a receipt or tick what you bought'}
@@ -81,7 +85,7 @@ export default function ReceiptSettings() {
 
       {on
         ? <button className="btn primary block" onClick={() => nav('/receipt')}>See my latest receipt</button>
-        : <button className="btn primary block" onClick={() => setConnectedReceipts(true)}>Turn on connected receipts</button>}
+        : <button className="btn primary block" disabled={busy} onClick={() => setConnectedReceipts(true)}>Turn on connected receipts</button>}
       <Lock>Off by default. Off means off: receipts stop arriving and Windy stops reading them. You can delete any receipt.</Lock>
     </>
   )

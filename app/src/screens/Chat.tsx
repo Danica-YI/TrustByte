@@ -16,6 +16,7 @@ const TOOL_LABELS: Record<string, string> = {
   goal_projection: 'Goal projection',
   life_events: 'Life event signals',
   get_receipt: 'Receipt',
+  pay_later_plans: 'Pay-later plans',
 }
 
 const SUGGESTIONS = [
@@ -54,7 +55,10 @@ export default function Chat() {
         body: JSON.stringify({ message: text, conversation_id: cid }),
       })
       if (res.status === 404) setCid(null)
-      if (!res.ok || !res.body) throw new Error(`Server returned ${res.status}`)
+      if (!res.ok || !res.body) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error ?? `Server returned ${res.status}`)
+      }
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       let buf = ''
@@ -74,7 +78,7 @@ export default function Chat() {
         }
       }
     } catch (e) {
-      patchLast((m) => ({ ...m, error: `Can't reach Windy (${(e as Error).message}). Is the backend running?` }))
+      patchLast((m) => ({ ...m, error: (e as Error).message.includes('fetch') ? 'Can’t reach Windy. Is the backend running?' : (e as Error).message }))
     } finally {
       setBusy(false)
     }

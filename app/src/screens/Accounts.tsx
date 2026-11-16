@@ -3,11 +3,13 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Card, Chip, Progress, TopBar } from '../components/ui'
-import { accounts, fmtDate, txFor } from '../data/bank'
-import { money } from '../data/mia'
+import { fmtDate, txFor } from '../data/bank'
+import { money } from '../format'
+import { useSnap } from '../store'
 import { useConnectedReceipts } from '../data/settings'
 
 export function AccountList() {
+  const accounts = useSnap().accounts
   return (
     <>
       <TopBar title="Accounts" fallback="/" />
@@ -16,9 +18,9 @@ export function AccountList() {
           <Card>
             <div className="spread">
               <div><h3 style={{ margin: 0 }}>{a.name}</h3><div className="muted">{a.product}</div></div>
-              <b style={{ fontSize: 18 }}>{money(a.closing_balance, true)}</b>
+              <b style={{ fontSize: 18 }}>{money(a.balance, true)}</b>
             </div>
-            {a.goal_target && <Progress value={a.closing_balance} max={a.goal_target} color="var(--windy)" />}
+            {a.goal_target && <Progress value={a.balance} max={a.goal_target} color="var(--windy)" />}
           </Card>
         </Link>
       ))}
@@ -27,8 +29,9 @@ export function AccountList() {
 }
 
 export function AccountDetail() {
-  const connected = useConnectedReceipts()
   const { id = 'everyday' } = useParams()
+  const connected = useConnectedReceipts()
+  const accounts = useSnap().accounts
   const account = accounts.find((a) => a.id === id) ?? accounts[0]
   const all = useMemo(() => txFor(account.id), [account.id])
   const [q, setQ] = useState('')
@@ -52,7 +55,7 @@ export function AccountDetail() {
       <TopBar title={account.name} />
       <Card>
         <div className="muted">Available balance</div>
-        <div style={{ fontSize: 30, fontWeight: 800 }}>{money(account.closing_balance, true)}</div>
+        <div style={{ fontSize: 30, fontWeight: 800 }}>{money(account.balance, true)}</div>
         <div className="small">{all.length} transactions since 1 Jun</div>
       </Card>
 

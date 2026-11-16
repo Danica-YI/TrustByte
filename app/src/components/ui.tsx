@@ -1,7 +1,6 @@
 // Small components reused across the wireframes. Styling lives in styles.css.
-import { useEffect, useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { askWindy, windyFallback, type WindyTopic } from '../ai/windy'
 
 export function Logo({ color = '#fff', size = 22 }: { color?: string; size?: number }) {
   // Placeholder logo (a flower shape in the wireframes). Replace with the final icon.
@@ -115,16 +114,4 @@ export function BottomNav() {
       ))}
     </nav>
   )
-}
-
-/** Windy's explanation text: shows the scripted copy first, then the model output if a backend is configured */
-export function useWindy(topic: WindyTopic, context?: Record<string, unknown>) {
-  const [text, setText] = useState(windyFallback[topic])
-  useEffect(() => {
-    let alive = true
-    askWindy(topic, context).then((t) => alive && setText(t))
-    return () => { alive = false }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic])
-  return text
 }

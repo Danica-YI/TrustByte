@@ -1,21 +1,25 @@
-// More tab: not in the wireframes. Temporary list of every enabled feature.
+// More tab.
 import { Link } from 'react-router-dom'
 import { Card, TopBar } from '../components/ui'
-import { features } from '../features'
+
+const LINKS = [
+  ['/chat', '✦ Ask Windy'],
+  ['/plan', 'Your plan and history'],
+  ['/consent', 'Your data and consent'],
+  ['/goals/options', 'Goal options'],
+  ['/goals/japan-sooner', 'Plan a trip sooner'],
+  ['/forecast', 'Cash flow forecast'],
+  ['/payments', 'Regular payments'],
+  ['/pay-later', 'Pay-later plans'],
+  ['/receipt', 'Receipts'],
+]
 
 export default function More() {
   return (
     <>
       <TopBar title="More" fallback="/" />
       <Card>
-        <Link to="/chat" className="row"><span>✦ Ask Windy</span><span>›</span></Link>
-        <Link to="/consent" className="row"><span>Your data and consent</span><span>›</span></Link>
-      </Card>
-      <Card>
-        <h3>Windy features</h3>
-        {features.filter((f) => f.enabled).map((f) => (
-          <Link key={f.id} to={f.screens[0].path} className="row"><span>{f.name}</span><span>›</span></Link>
-        ))}
+        {LINKS.map(([to, label]) => <Link key={to} to={to} className="row"><span>{label}</span><span>›</span></Link>)}
       </Card>
     </>
   )
