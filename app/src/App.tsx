@@ -20,6 +20,7 @@ import HomeLoanApply from './screens/HomeLoanApply'
 import More from './screens/More'
 import Placeholder from './screens/Placeholder'
 import { AccountDetail, AccountList } from './screens/Accounts'
+import Chat from './screens/Chat'
 
 export default function App() {
   const loc = useLocation()
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="/ask" element={<FeatureFinder />} />
           <Route path="/home-loan/apply" element={<HomeLoanApply />} />
           <Route path="/more" element={<More />} />
+          <Route path="/chat" element={<Chat />} />
           <Route path="/accounts" element={<AccountList />} />
           <Route path="/accounts/:id" element={<AccountDetail />} />
           <Route path="*" element={<Placeholder />} />

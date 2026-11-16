@@ -42,12 +42,13 @@ SPENDING = ["Eating out", "Shopping", "Transport", "Subscriptions", "Groceries",
 
 # Flexible categories are scaled to hit these monthly totals exactly.
 # Jun–Oct averages match the wireframe: Eating out 310, Shopping 260, Transport 220, Groceries 430.
-# Nov is month-to-date (1–14 Nov) and matches the wireframe's November figures.
+# Nov is month-to-date (1–14 Nov). Eating out and Shopping match the wireframe (moving week:
+# no kitchen, new furniture); Transport and Groceries are normal for half a month.
 TARGETS = {
     "Eating out": {6: 295, 7: 330, 8: 300, 9: 320, 10: 305, 11: 486},
     "Shopping":   {6: 240, 7: 290, 8: 250, 9: 270, 10: 250, 11: 390},
-    "Transport":  {6: 210, 7: 230, 8: 215, 9: 225, 10: 220, 11: 238},
-    "Groceries":  {6: 420, 7: 445, 8: 425, 9: 440, 10: 420, 11: 412},
+    "Transport":  {6: 210, 7: 230, 8: 215, 9: 225, 10: 220, 11: 120},
+    "Groceries":  {6: 420, 7: 445, 8: 425, 9: 440, 10: 420, 11: 260},
 }
 
 ACCOUNTS = [

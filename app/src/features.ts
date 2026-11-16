@@ -19,6 +19,13 @@ export type Feature = {
 
 export const features: Feature[] = [
   {
+    id: 'windy-chat',
+    name: 'Ask Windy (live AI chat)',
+    pitch: 'Real Claude answers from Mia\'s own transactions, balances and goals; shows which data it used.',
+    enabled: true,
+    screens: [{ path: '/chat', label: 'Chat with Windy', figma: 'new' }],
+  },
+  {
     id: 'life-event',
     name: 'Life Event Detector',
     pitch: 'Reads "you\'re moving" from transactions, asks before planning.',

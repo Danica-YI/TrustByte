@@ -15,7 +15,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -45.62,
-      "balance_after": 2400.89,
+      "balance_after": 2130.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -28,7 +28,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -54.03,
-      "balance_after": 2346.86,
+      "balance_after": 2076.86,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -41,7 +41,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -21.02,
-      "balance_after": 2325.84,
+      "balance_after": 2055.84,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -54,7 +54,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -23.82,
-      "balance_after": 2302.02,
+      "balance_after": 2032.02,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -67,7 +67,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -78.79,
-      "balance_after": 2223.23,
+      "balance_after": 1953.23,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -80,7 +80,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2198.23,
+      "balance_after": 1928.23,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -92,7 +92,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -29.34,
-      "balance_after": 2168.89,
+      "balance_after": 1898.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -105,7 +105,7 @@
       "merchant": "The Tivoli",
       "category": "Entertainment",
       "amount": -135.79,
-      "balance_after": 2033.1,
+      "balance_after": 1763.1,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -118,7 +118,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1493.1,
+      "balance_after": 1223.1,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -130,7 +130,7 @@
       "merchant": "Amazon",
       "category": "Shopping",
       "amount": -52.39,
-      "balance_after": 1440.71,
+      "balance_after": 1170.71,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -143,7 +143,7 @@
       "merchant": "Telstra",
       "category": "Bills and utilities",
       "amount": -98,
-      "balance_after": 1342.71,
+      "balance_after": 1072.71,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -155,7 +155,7 @@
       "merchant": "ATM",
       "category": "Cash",
       "amount": -50,
-      "balance_after": 1292.71,
+      "balance_after": 1022.71,
       "type": "atm",
       "status": "posted"
     },
@@ -167,7 +167,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -14.56,
-      "balance_after": 1278.15,
+      "balance_after": 1008.15,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -180,7 +180,7 @@
       "merchant": "Kmart",
       "category": "Shopping",
       "amount": -69.38,
-      "balance_after": 1208.77,
+      "balance_after": 938.77,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -193,7 +193,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -6.29,
-      "balance_after": 1202.48,
+      "balance_after": 932.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -206,7 +206,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -7.47,
-      "balance_after": 1195.01,
+      "balance_after": 925.01,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -219,7 +219,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -39.36,
-      "balance_after": 1155.65,
+      "balance_after": 885.65,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -232,7 +232,7 @@
       "merchant": "Netflix",
       "category": "Subscriptions",
       "amount": -16.99,
-      "balance_after": 1138.66,
+      "balance_after": 868.66,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -245,7 +245,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 598.66,
+      "balance_after": 328.66,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -257,7 +257,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -59.63,
-      "balance_after": 539.03,
+      "balance_after": 269.03,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -270,7 +270,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 3422.27,
+      "balance_after": 3152.27,
       "type": "salary",
       "status": "posted"
     },
@@ -324,7 +324,7 @@
       "merchant": "Emergency fund",
       "category": "Transfers",
       "amount": -50,
-      "balance_after": 3372.27,
+      "balance_after": 3102.27,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-emergency"
@@ -337,7 +337,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 3207.27,
+      "balance_after": 2937.27,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -350,7 +350,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 2607.27,
+      "balance_after": 2337.27,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -363,7 +363,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -72.85,
-      "balance_after": 2534.42,
+      "balance_after": 2264.42,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -376,7 +376,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -42.06,
-      "balance_after": 2492.36,
+      "balance_after": 2222.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -389,7 +389,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -35.93,
-      "balance_after": 2456.43,
+      "balance_after": 2186.43,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -402,7 +402,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -24.89,
-      "balance_after": 2431.54,
+      "balance_after": 2161.54,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -415,7 +415,7 @@
       "merchant": "Bupa",
       "category": "Bills and utilities",
       "amount": -132.4,
-      "balance_after": 2299.14,
+      "balance_after": 2029.14,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -427,7 +427,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -42.37,
-      "balance_after": 2256.77,
+      "balance_after": 1986.77,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -440,7 +440,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -42.27,
-      "balance_after": 2214.5,
+      "balance_after": 1944.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -453,7 +453,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2189.5,
+      "balance_after": 1919.5,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -465,7 +465,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 360.0,
-      "balance_after": 2549.5,
+      "balance_after": 2279.5,
       "type": "deposit",
       "status": "posted"
     },
@@ -477,7 +477,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -20.26,
-      "balance_after": 2529.24,
+      "balance_after": 2259.24,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -490,7 +490,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -21.37,
-      "balance_after": 2507.87,
+      "balance_after": 2237.87,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -503,7 +503,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -24.37,
-      "balance_after": 2483.5,
+      "balance_after": 2213.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -516,7 +516,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -7.28,
-      "balance_after": 2476.22,
+      "balance_after": 2206.22,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -529,7 +529,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1936.22,
+      "balance_after": 1666.22,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -541,7 +541,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -22.19,
-      "balance_after": 1914.03,
+      "balance_after": 1644.03,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -554,7 +554,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -82.47,
-      "balance_after": 1831.56,
+      "balance_after": 1561.56,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -567,7 +567,7 @@
       "merchant": "Priceline",
       "category": "Health",
       "amount": -27.37,
-      "balance_after": 1804.19,
+      "balance_after": 1534.19,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -580,7 +580,7 @@
       "merchant": "Amazon",
       "category": "Shopping",
       "amount": -35.76,
-      "balance_after": 1768.43,
+      "balance_after": 1498.43,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -593,7 +593,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -40.03,
-      "balance_after": 1728.4,
+      "balance_after": 1458.4,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -606,7 +606,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -21.78,
-      "balance_after": 1706.62,
+      "balance_after": 1436.62,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -619,7 +619,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -15.69,
-      "balance_after": 1690.93,
+      "balance_after": 1420.93,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -632,7 +632,7 @@
       "merchant": "iCloud+",
       "category": "Subscriptions",
       "amount": -4.49,
-      "balance_after": 1686.44,
+      "balance_after": 1416.44,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -645,7 +645,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -24.56,
-      "balance_after": 1661.88,
+      "balance_after": 1391.88,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -658,7 +658,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -67.02,
-      "balance_after": 1594.86,
+      "balance_after": 1324.86,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -671,7 +671,7 @@
       "merchant": "Smile Dental (gap)",
       "category": "Health",
       "amount": -79.27,
-      "balance_after": 1515.59,
+      "balance_after": 1245.59,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -684,7 +684,7 @@
       "merchant": "Aussie Broadband",
       "category": "Bills and utilities",
       "amount": -79,
-      "balance_after": 1436.59,
+      "balance_after": 1166.59,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -696,7 +696,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 896.59,
+      "balance_after": 626.59,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -708,7 +708,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 3779.83,
+      "balance_after": 3509.83,
       "type": "salary",
       "status": "posted"
     },
@@ -762,7 +762,7 @@
       "merchant": "Emergency fund",
       "category": "Transfers",
       "amount": -50,
-      "balance_after": 3729.83,
+      "balance_after": 3459.83,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-emergency"
@@ -775,7 +775,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 3564.83,
+      "balance_after": 3294.83,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -788,7 +788,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 2964.83,
+      "balance_after": 2694.83,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -801,7 +801,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -13.7,
-      "balance_after": 2951.13,
+      "balance_after": 2681.13,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -814,7 +814,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -31.01,
-      "balance_after": 2920.12,
+      "balance_after": 2650.12,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -827,7 +827,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2895.12,
+      "balance_after": 2625.12,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -839,7 +839,7 @@
       "merchant": "Event Cinemas",
       "category": "Entertainment",
       "amount": -53.5,
-      "balance_after": 2841.62,
+      "balance_after": 2571.62,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -852,7 +852,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -59.46,
-      "balance_after": 2782.16,
+      "balance_after": 2512.16,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -865,7 +865,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 445.5,
-      "balance_after": 3227.66,
+      "balance_after": 2957.66,
       "type": "deposit",
       "status": "posted"
     },
@@ -877,7 +877,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -17.9,
-      "balance_after": 3209.76,
+      "balance_after": 2939.76,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -890,7 +890,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -5.9,
-      "balance_after": 3203.86,
+      "balance_after": 2933.86,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -903,7 +903,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -20.85,
-      "balance_after": 3183.01,
+      "balance_after": 2913.01,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -916,7 +916,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2643.01,
+      "balance_after": 2373.01,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -928,7 +928,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -56.43,
-      "balance_after": 2586.58,
+      "balance_after": 2316.58,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -941,7 +941,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -32.18,
-      "balance_after": 2554.4,
+      "balance_after": 2284.4,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -954,7 +954,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -35.82,
-      "balance_after": 2518.58,
+      "balance_after": 2248.58,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -967,7 +967,7 @@
       "merchant": "Virgin Australia",
       "category": "Travel",
       "amount": -389.0,
-      "balance_after": 2129.58,
+      "balance_after": 1859.58,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -980,7 +980,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -56.13,
-      "balance_after": 2073.45,
+      "balance_after": 1803.45,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -993,7 +993,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -26.33,
-      "balance_after": 2047.12,
+      "balance_after": 1777.12,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1006,7 +1006,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -26.63,
-      "balance_after": 2020.49,
+      "balance_after": 1750.49,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1019,7 +1019,7 @@
       "merchant": "Telstra",
       "category": "Bills and utilities",
       "amount": -98,
-      "balance_after": 1922.49,
+      "balance_after": 1652.49,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1031,7 +1031,7 @@
       "merchant": "The Tivoli",
       "category": "Entertainment",
       "amount": -60.52,
-      "balance_after": 1861.97,
+      "balance_after": 1591.97,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1044,7 +1044,7 @@
       "merchant": "ATM",
       "category": "Cash",
       "amount": -50,
-      "balance_after": 1811.97,
+      "balance_after": 1541.97,
       "type": "atm",
       "status": "posted"
     },
@@ -1056,7 +1056,7 @@
       "merchant": "JB Hi-Fi",
       "category": "Shopping",
       "amount": -107.65,
-      "balance_after": 1704.32,
+      "balance_after": 1434.32,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1069,7 +1069,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -43.47,
-      "balance_after": 1660.85,
+      "balance_after": 1390.85,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1082,7 +1082,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -64.37,
-      "balance_after": 1596.48,
+      "balance_after": 1326.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1095,7 +1095,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -18.84,
-      "balance_after": 1577.64,
+      "balance_after": 1307.64,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1108,7 +1108,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -19.75,
-      "balance_after": 1557.89,
+      "balance_after": 1287.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1121,7 +1121,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1017.89,
+      "balance_after": 747.89,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1133,7 +1133,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -27.31,
-      "balance_after": 990.58,
+      "balance_after": 720.58,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1146,7 +1146,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -65.79,
-      "balance_after": 924.79,
+      "balance_after": 654.79,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1159,7 +1159,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -83.06,
-      "balance_after": 841.73,
+      "balance_after": 571.73,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1172,7 +1172,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 3724.97,
+      "balance_after": 3454.97,
       "type": "salary",
       "status": "posted"
     },
@@ -1226,7 +1226,7 @@
       "merchant": "Emergency fund",
       "category": "Transfers",
       "amount": -50,
-      "balance_after": 3674.97,
+      "balance_after": 3404.97,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-emergency"
@@ -1239,7 +1239,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 3509.97,
+      "balance_after": 3239.97,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -1252,7 +1252,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 2909.97,
+      "balance_after": 2639.97,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -1265,7 +1265,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -19.62,
-      "balance_after": 2890.35,
+      "balance_after": 2620.35,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1278,7 +1278,7 @@
       "merchant": "Netflix",
       "category": "Subscriptions",
       "amount": -16.99,
-      "balance_after": 2873.36,
+      "balance_after": 2603.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1291,7 +1291,7 @@
       "merchant": "Sam Nguyen",
       "category": "Transfers",
       "amount": 42.5,
-      "balance_after": 2915.86,
+      "balance_after": 2645.86,
       "type": "payid",
       "status": "posted"
     },
@@ -1303,7 +1303,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -21.8,
-      "balance_after": 2894.06,
+      "balance_after": 2624.06,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1316,7 +1316,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -32.22,
-      "balance_after": 2861.84,
+      "balance_after": 2591.84,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1329,7 +1329,7 @@
       "merchant": "Uber",
       "category": "Transport",
       "amount": -17.67,
-      "balance_after": 2844.17,
+      "balance_after": 2574.17,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1342,7 +1342,7 @@
       "merchant": "Uber",
       "category": "Transport",
       "amount": -14.36,
-      "balance_after": 2829.81,
+      "balance_after": 2559.81,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1355,7 +1355,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2804.81,
+      "balance_after": 2534.81,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1367,7 +1367,7 @@
       "merchant": "Uniqlo",
       "category": "Shopping",
       "amount": -90.42,
-      "balance_after": 2714.39,
+      "balance_after": 2444.39,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1380,7 +1380,7 @@
       "merchant": "Bupa",
       "category": "Bills and utilities",
       "amount": -132.4,
-      "balance_after": 2581.99,
+      "balance_after": 2311.99,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1392,7 +1392,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 398.0,
-      "balance_after": 2979.99,
+      "balance_after": 2709.99,
       "type": "deposit",
       "status": "posted"
     },
@@ -1404,7 +1404,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2439.99,
+      "balance_after": 2169.99,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1416,7 +1416,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -25.14,
-      "balance_after": 2414.85,
+      "balance_after": 2144.85,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1429,7 +1429,7 @@
       "merchant": "Origin Energy",
       "category": "Bills and utilities",
       "amount": -548.2,
-      "balance_after": 1866.65,
+      "balance_after": 1596.65,
       "type": "bpay",
       "status": "posted"
     },
@@ -1441,7 +1441,7 @@
       "merchant": "Airbnb",
       "category": "Travel",
       "amount": -412.6,
-      "balance_after": 1454.05,
+      "balance_after": 1184.05,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1454,7 +1454,7 @@
       "merchant": "Smile Dental (gap)",
       "category": "Health",
       "amount": -48.15,
-      "balance_after": 1405.9,
+      "balance_after": 1135.9,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1467,7 +1467,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -25.71,
-      "balance_after": 1380.19,
+      "balance_after": 1110.19,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1480,7 +1480,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -56.07,
-      "balance_after": 1324.12,
+      "balance_after": 1054.12,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1493,7 +1493,7 @@
       "merchant": "Toowong Physio",
       "category": "Health",
       "amount": -61.27,
-      "balance_after": 1262.85,
+      "balance_after": 992.85,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1506,7 +1506,7 @@
       "merchant": "iCloud+",
       "category": "Subscriptions",
       "amount": -4.49,
-      "balance_after": 1258.36,
+      "balance_after": 988.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1519,7 +1519,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -24.45,
-      "balance_after": 1233.91,
+      "balance_after": 963.91,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1532,7 +1532,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 693.91,
+      "balance_after": 423.91,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1544,7 +1544,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -23.1,
-      "balance_after": 670.81,
+      "balance_after": 400.81,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1557,7 +1557,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -42.03,
-      "balance_after": 628.78,
+      "balance_after": 358.78,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1570,7 +1570,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 3512.02,
+      "balance_after": 3242.02,
       "type": "salary",
       "status": "posted"
     },
@@ -1624,7 +1624,7 @@
       "merchant": "Emergency fund",
       "category": "Transfers",
       "amount": -50,
-      "balance_after": 3462.02,
+      "balance_after": 3192.02,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-emergency"
@@ -1637,7 +1637,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 3297.02,
+      "balance_after": 3027.02,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -1650,7 +1650,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 2697.02,
+      "balance_after": 2427.02,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -1663,7 +1663,7 @@
       "merchant": "Aussie Broadband",
       "category": "Bills and utilities",
       "amount": -79,
-      "balance_after": 2618.02,
+      "balance_after": 2348.02,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1675,7 +1675,7 @@
       "merchant": "Chemist Warehouse",
       "category": "Shopping",
       "amount": -23.27,
-      "balance_after": 2594.75,
+      "balance_after": 2324.75,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1688,7 +1688,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -15.21,
-      "balance_after": 2579.54,
+      "balance_after": 2309.54,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1701,7 +1701,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -56.6,
-      "balance_after": 2522.94,
+      "balance_after": 2252.94,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1714,7 +1714,7 @@
       "merchant": "Steam",
       "category": "Entertainment",
       "amount": -40.76,
-      "balance_after": 2482.18,
+      "balance_after": 2212.18,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1727,7 +1727,7 @@
       "merchant": "Steam",
       "category": "Entertainment",
       "amount": -54.16,
-      "balance_after": 2428.02,
+      "balance_after": 2158.02,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1740,7 +1740,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2403.02,
+      "balance_after": 2133.02,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1752,7 +1752,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -19.15,
-      "balance_after": 2383.87,
+      "balance_after": 2113.87,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1765,7 +1765,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 472.0,
-      "balance_after": 2855.87,
+      "balance_after": 2585.87,
       "type": "deposit",
       "status": "posted"
     },
@@ -1777,7 +1777,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -25.99,
-      "balance_after": 2829.88,
+      "balance_after": 2559.88,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1790,7 +1790,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -7.66,
-      "balance_after": 2822.22,
+      "balance_after": 2552.22,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1803,7 +1803,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -9.74,
-      "balance_after": 2812.48,
+      "balance_after": 2542.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1816,7 +1816,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -32.95,
-      "balance_after": 2779.53,
+      "balance_after": 2509.53,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1829,7 +1829,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2239.53,
+      "balance_after": 1969.53,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1841,7 +1841,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -38.85,
-      "balance_after": 2200.68,
+      "balance_after": 1930.68,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1854,7 +1854,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -27.51,
-      "balance_after": 2173.17,
+      "balance_after": 1903.17,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1867,7 +1867,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -27.92,
-      "balance_after": 2145.25,
+      "balance_after": 1875.25,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1880,7 +1880,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -35.18,
-      "balance_after": 2110.07,
+      "balance_after": 1840.07,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1893,7 +1893,7 @@
       "merchant": "Kmart",
       "category": "Shopping",
       "amount": -72.13,
-      "balance_after": 2037.94,
+      "balance_after": 1767.94,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1906,7 +1906,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -32.42,
-      "balance_after": 2005.52,
+      "balance_after": 1735.52,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1919,7 +1919,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -35.12,
-      "balance_after": 1970.4,
+      "balance_after": 1700.4,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1932,7 +1932,7 @@
       "merchant": "Telstra",
       "category": "Bills and utilities",
       "amount": -98,
-      "balance_after": 1872.4,
+      "balance_after": 1602.4,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -1944,7 +1944,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -23.16,
-      "balance_after": 1849.24,
+      "balance_after": 1579.24,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1957,7 +1957,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -10.17,
-      "balance_after": 1839.07,
+      "balance_after": 1569.07,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1970,7 +1970,7 @@
       "merchant": "Toowong Physio",
       "category": "Health",
       "amount": -27.38,
-      "balance_after": 1811.69,
+      "balance_after": 1541.69,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1983,7 +1983,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -17.16,
-      "balance_after": 1794.53,
+      "balance_after": 1524.53,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -1996,7 +1996,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1254.53,
+      "balance_after": 984.53,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2008,7 +2008,7 @@
       "merchant": "ATM",
       "category": "Cash",
       "amount": -50,
-      "balance_after": 1204.53,
+      "balance_after": 934.53,
       "type": "atm",
       "status": "posted"
     },
@@ -2020,7 +2020,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 4087.77,
+      "balance_after": 3817.77,
       "type": "salary",
       "status": "posted"
     },
@@ -2074,7 +2074,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 3922.77,
+      "balance_after": 3652.77,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -2087,7 +2087,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 3783.77,
+      "balance_after": 3513.77,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -2100,7 +2100,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 3183.77,
+      "balance_after": 2913.77,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -2113,7 +2113,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -15.9,
-      "balance_after": 3167.87,
+      "balance_after": 2897.87,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2126,7 +2126,7 @@
       "merchant": "Event Cinemas",
       "category": "Entertainment",
       "amount": -33.25,
-      "balance_after": 3134.62,
+      "balance_after": 2864.62,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2139,7 +2139,7 @@
       "merchant": "Smile Dental (gap)",
       "category": "Health",
       "amount": -25.42,
-      "balance_after": 3109.2,
+      "balance_after": 2839.2,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2152,7 +2152,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -42.16,
-      "balance_after": 3067.04,
+      "balance_after": 2797.04,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2165,7 +2165,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -32.65,
-      "balance_after": 3034.39,
+      "balance_after": 2764.39,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2178,7 +2178,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -21.55,
-      "balance_after": 3012.84,
+      "balance_after": 2742.84,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2191,7 +2191,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -31.0,
-      "balance_after": 2981.84,
+      "balance_after": 2711.84,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2204,7 +2204,7 @@
       "merchant": "Netflix",
       "category": "Subscriptions",
       "amount": -16.99,
-      "balance_after": 2964.85,
+      "balance_after": 2694.85,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2217,7 +2217,7 @@
       "merchant": "Uniqlo",
       "category": "Shopping",
       "amount": -43.32,
-      "balance_after": 2921.53,
+      "balance_after": 2651.53,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2230,7 +2230,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2896.53,
+      "balance_after": 2626.53,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2242,7 +2242,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -22.33,
-      "balance_after": 2874.2,
+      "balance_after": 2604.2,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2255,7 +2255,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 350.0,
-      "balance_after": 3224.2,
+      "balance_after": 2954.2,
       "type": "deposit",
       "status": "posted"
     },
@@ -2267,7 +2267,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2684.2,
+      "balance_after": 2414.2,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2279,7 +2279,7 @@
       "merchant": "Chemist Warehouse",
       "category": "Shopping",
       "amount": -56.84,
-      "balance_after": 2627.36,
+      "balance_after": 2357.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2292,7 +2292,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -9.74,
-      "balance_after": 2617.62,
+      "balance_after": 2347.62,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2305,7 +2305,7 @@
       "merchant": "Uber",
       "category": "Transport",
       "amount": -8.02,
-      "balance_after": 2609.6,
+      "balance_after": 2339.6,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2318,7 +2318,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -104.96,
-      "balance_after": 2504.64,
+      "balance_after": 2234.64,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2331,7 +2331,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -12.37,
-      "balance_after": 2492.27,
+      "balance_after": 2222.27,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2344,7 +2344,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -25.52,
-      "balance_after": 2466.75,
+      "balance_after": 2196.75,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2357,7 +2357,7 @@
       "merchant": "Bupa",
       "category": "Bills and utilities",
       "amount": -132.4,
-      "balance_after": 2334.35,
+      "balance_after": 2064.35,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2369,7 +2369,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -59.78,
-      "balance_after": 2274.57,
+      "balance_after": 2004.57,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2382,7 +2382,7 @@
       "merchant": "Toowong Physio",
       "category": "Health",
       "amount": -24.66,
-      "balance_after": 2249.91,
+      "balance_after": 1979.91,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2395,7 +2395,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -16.25,
-      "balance_after": 2233.66,
+      "balance_after": 1963.66,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2408,7 +2408,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -28.18,
-      "balance_after": 2205.48,
+      "balance_after": 1935.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2421,7 +2421,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -90.25,
-      "balance_after": 2115.23,
+      "balance_after": 1845.23,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2434,7 +2434,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1575.23,
+      "balance_after": 1305.23,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2446,7 +2446,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -13.15,
-      "balance_after": 1562.08,
+      "balance_after": 1292.08,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2459,7 +2459,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -21.65,
-      "balance_after": 1540.43,
+      "balance_after": 1270.43,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2472,7 +2472,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -32.46,
-      "balance_after": 1507.97,
+      "balance_after": 1237.97,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2485,7 +2485,7 @@
       "merchant": "Toowong Physio",
       "category": "Health",
       "amount": -20.22,
-      "balance_after": 1487.75,
+      "balance_after": 1217.75,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2498,7 +2498,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 4370.99,
+      "balance_after": 4100.99,
       "type": "salary",
       "status": "posted"
     },
@@ -2552,7 +2552,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 4205.99,
+      "balance_after": 3935.99,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -2565,7 +2565,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 4066.99,
+      "balance_after": 3796.99,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -2578,7 +2578,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 3466.99,
+      "balance_after": 3196.99,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -2591,7 +2591,7 @@
       "merchant": "iCloud+",
       "category": "Subscriptions",
       "amount": -4.49,
-      "balance_after": 3462.5,
+      "balance_after": 3192.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2604,7 +2604,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -25.45,
-      "balance_after": 3437.05,
+      "balance_after": 3167.05,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2617,7 +2617,7 @@
       "merchant": "David Jones (gift)",
       "category": "Gifts",
       "amount": -124.95,
-      "balance_after": 3312.1,
+      "balance_after": 3042.1,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2630,7 +2630,7 @@
       "merchant": "Kmart",
       "category": "Shopping",
       "amount": -39.65,
-      "balance_after": 3272.45,
+      "balance_after": 3002.45,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2643,7 +2643,7 @@
       "merchant": "Ticketek",
       "category": "Entertainment",
       "amount": -119.01,
-      "balance_after": 3153.44,
+      "balance_after": 2883.44,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2656,7 +2656,7 @@
       "merchant": "Aussie Broadband",
       "category": "Bills and utilities",
       "amount": -79,
-      "balance_after": 3074.44,
+      "balance_after": 2804.44,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2668,7 +2668,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -72.26,
-      "balance_after": 3002.18,
+      "balance_after": 2732.18,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2681,7 +2681,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 2977.18,
+      "balance_after": 2707.18,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2693,7 +2693,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 415.0,
-      "balance_after": 3392.18,
+      "balance_after": 3122.18,
       "type": "deposit",
       "status": "posted"
     },
@@ -2705,7 +2705,7 @@
       "merchant": "Chemist Warehouse",
       "category": "Shopping",
       "amount": -38.06,
-      "balance_after": 3354.12,
+      "balance_after": 3084.12,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2718,7 +2718,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2814.12,
+      "balance_after": 2544.12,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2730,7 +2730,7 @@
       "merchant": "Uber",
       "category": "Transport",
       "amount": -13.48,
-      "balance_after": 2800.64,
+      "balance_after": 2530.64,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2743,7 +2743,7 @@
       "merchant": "Urban Utilities",
       "category": "Bills and utilities",
       "amount": -186.9,
-      "balance_after": 2613.74,
+      "balance_after": 2343.74,
       "type": "bpay",
       "status": "posted"
     },
@@ -2755,7 +2755,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -14.36,
-      "balance_after": 2599.38,
+      "balance_after": 2329.38,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2768,7 +2768,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -85.38,
-      "balance_after": 2514.0,
+      "balance_after": 2244.0,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2781,7 +2781,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -15.42,
-      "balance_after": 2498.58,
+      "balance_after": 2228.58,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2794,7 +2794,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -31.1,
-      "balance_after": 2467.48,
+      "balance_after": 2197.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2807,7 +2807,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -19.37,
-      "balance_after": 2448.11,
+      "balance_after": 2178.11,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2820,7 +2820,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -10.81,
-      "balance_after": 2437.3,
+      "balance_after": 2167.3,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2833,7 +2833,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -18.95,
-      "balance_after": 2418.35,
+      "balance_after": 2148.35,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2846,7 +2846,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -22.84,
-      "balance_after": 2395.51,
+      "balance_after": 2125.51,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2859,7 +2859,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -32.45,
-      "balance_after": 2363.06,
+      "balance_after": 2093.06,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2872,7 +2872,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -26.16,
-      "balance_after": 2336.9,
+      "balance_after": 2066.9,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2885,7 +2885,7 @@
       "merchant": "Spotify Premium",
       "category": "Subscriptions",
       "amount": -13.99,
-      "balance_after": 2322.91,
+      "balance_after": 2052.91,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2898,7 +2898,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1782.91,
+      "balance_after": 1512.91,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -2910,7 +2910,7 @@
       "merchant": "Amazon",
       "category": "Shopping",
       "amount": -38.35,
-      "balance_after": 1744.56,
+      "balance_after": 1474.56,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2923,7 +2923,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -31.11,
-      "balance_after": 1713.45,
+      "balance_after": 1443.45,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2936,7 +2936,7 @@
       "merchant": "The Tivoli",
       "category": "Entertainment",
       "amount": -36.29,
-      "balance_after": 1677.16,
+      "balance_after": 1407.16,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2949,7 +2949,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -20.2,
-      "balance_after": 1656.96,
+      "balance_after": 1386.96,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -2962,7 +2962,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 4540.2,
+      "balance_after": 4270.2,
       "type": "salary",
       "status": "posted"
     },
@@ -3016,7 +3016,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 4375.2,
+      "balance_after": 4105.2,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -3029,7 +3029,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 4236.2,
+      "balance_after": 3966.2,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -3042,7 +3042,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 3636.2,
+      "balance_after": 3366.2,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -3055,7 +3055,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -9.8,
-      "balance_after": 3626.4,
+      "balance_after": 3356.4,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3068,7 +3068,7 @@
       "merchant": "Telstra",
       "category": "Bills and utilities",
       "amount": -98,
-      "balance_after": 3528.4,
+      "balance_after": 3258.4,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3080,7 +3080,7 @@
       "merchant": "The Tivoli",
       "category": "Entertainment",
       "amount": -34.0,
-      "balance_after": 3494.4,
+      "balance_after": 3224.4,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3093,7 +3093,7 @@
       "merchant": "ATM",
       "category": "Cash",
       "amount": -50,
-      "balance_after": 3444.4,
+      "balance_after": 3174.4,
       "type": "atm",
       "status": "posted"
     },
@@ -3105,7 +3105,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -100.41,
-      "balance_after": 3343.99,
+      "balance_after": 3073.99,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3118,7 +3118,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -9.04,
-      "balance_after": 3334.95,
+      "balance_after": 3064.95,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3131,7 +3131,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 3309.95,
+      "balance_after": 3039.95,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3143,7 +3143,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -13.7,
-      "balance_after": 3296.25,
+      "balance_after": 3026.25,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3156,7 +3156,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 455.0,
-      "balance_after": 3751.25,
+      "balance_after": 3481.25,
       "type": "deposit",
       "status": "posted"
     },
@@ -3168,7 +3168,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -8.23,
-      "balance_after": 3743.02,
+      "balance_after": 3473.02,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3181,7 +3181,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 3203.02,
+      "balance_after": 2933.02,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3193,7 +3193,7 @@
       "merchant": "Event Cinemas",
       "category": "Entertainment",
       "amount": -15.42,
-      "balance_after": 3187.6,
+      "balance_after": 2917.6,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3206,7 +3206,7 @@
       "merchant": "Netflix",
       "category": "Subscriptions",
       "amount": -16.99,
-      "balance_after": 3170.61,
+      "balance_after": 2900.61,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3219,7 +3219,7 @@
       "merchant": "Priceline",
       "category": "Health",
       "amount": -23.6,
-      "balance_after": 3147.01,
+      "balance_after": 2877.01,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3232,7 +3232,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -22.7,
-      "balance_after": 3124.31,
+      "balance_after": 2854.31,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3245,7 +3245,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -14.42,
-      "balance_after": 3109.89,
+      "balance_after": 2839.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3258,7 +3258,7 @@
       "merchant": "Sea World Resort",
       "category": "Travel",
       "amount": -318.0,
-      "balance_after": 2791.89,
+      "balance_after": 2521.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3271,7 +3271,7 @@
       "merchant": "Priya K",
       "category": "Transfers",
       "amount": -35,
-      "balance_after": 2756.89,
+      "balance_after": 2486.89,
       "type": "payid",
       "status": "posted"
     },
@@ -3283,7 +3283,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -15.78,
-      "balance_after": 2741.11,
+      "balance_after": 2471.11,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3296,7 +3296,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -24.1,
-      "balance_after": 2717.01,
+      "balance_after": 2447.01,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3309,7 +3309,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -42.24,
-      "balance_after": 2674.77,
+      "balance_after": 2404.77,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3322,7 +3322,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -6.22,
-      "balance_after": 2668.55,
+      "balance_after": 2398.55,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3335,7 +3335,7 @@
       "merchant": "Bupa",
       "category": "Bills and utilities",
       "amount": -132.4,
-      "balance_after": 2536.15,
+      "balance_after": 2266.15,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3347,7 +3347,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -14.42,
-      "balance_after": 2521.73,
+      "balance_after": 2251.73,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3360,7 +3360,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -9.55,
-      "balance_after": 2512.18,
+      "balance_after": 2242.18,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3373,7 +3373,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 1972.18,
+      "balance_after": 1702.18,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3385,7 +3385,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -43.84,
-      "balance_after": 1928.34,
+      "balance_after": 1658.34,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3398,7 +3398,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 4811.58,
+      "balance_after": 4541.58,
       "type": "salary",
       "status": "posted"
     },
@@ -3452,7 +3452,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 4646.58,
+      "balance_after": 4376.58,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -3465,7 +3465,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 4507.58,
+      "balance_after": 4237.58,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -3478,7 +3478,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 3907.58,
+      "balance_after": 3637.58,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -3491,7 +3491,7 @@
       "merchant": "Ticketek",
       "category": "Entertainment",
       "amount": -73.31,
-      "balance_after": 3834.27,
+      "balance_after": 3564.27,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3504,7 +3504,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -22.63,
-      "balance_after": 3811.64,
+      "balance_after": 3541.64,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3517,7 +3517,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -90.93,
-      "balance_after": 3720.71,
+      "balance_after": 3450.71,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3530,7 +3530,7 @@
       "merchant": "JB Hi-Fi",
       "category": "Shopping",
       "amount": -78.29,
-      "balance_after": 3642.42,
+      "balance_after": 3372.42,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3543,7 +3543,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": 300,
-      "balance_after": 3942.42,
+      "balance_after": 3672.42,
       "type": "transfer",
       "status": "posted",
       "transfer_from": "life",
@@ -3570,7 +3570,7 @@
       "merchant": "Smile Dental (gap)",
       "category": "Health",
       "amount": -74.53,
-      "balance_after": 3867.89,
+      "balance_after": 3597.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3583,7 +3583,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -7.82,
-      "balance_after": 3860.07,
+      "balance_after": 3590.07,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3596,7 +3596,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -22.82,
-      "balance_after": 3837.25,
+      "balance_after": 3567.25,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3609,7 +3609,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -47.66,
-      "balance_after": 3789.59,
+      "balance_after": 3519.59,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3622,7 +3622,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -62.78,
-      "balance_after": 3726.81,
+      "balance_after": 3456.81,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3635,7 +3635,7 @@
       "merchant": "Chemist Warehouse",
       "category": "Shopping",
       "amount": -20.2,
-      "balance_after": 3706.61,
+      "balance_after": 3436.61,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3648,7 +3648,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -21.37,
-      "balance_after": 3685.24,
+      "balance_after": 3415.24,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3661,7 +3661,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -21.12,
-      "balance_after": 3664.12,
+      "balance_after": 3394.12,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3674,7 +3674,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 3639.12,
+      "balance_after": 3369.12,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3686,7 +3686,7 @@
       "merchant": "iCloud+",
       "category": "Subscriptions",
       "amount": -4.49,
-      "balance_after": 3634.63,
+      "balance_after": 3364.63,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3699,7 +3699,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -30.4,
-      "balance_after": 3604.23,
+      "balance_after": 3334.23,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3712,7 +3712,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -16.41,
-      "balance_after": 3587.82,
+      "balance_after": 3317.82,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3725,7 +3725,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -7.14,
-      "balance_after": 3580.68,
+      "balance_after": 3310.68,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3738,7 +3738,7 @@
       "merchant": "Uber",
       "category": "Transport",
       "amount": -14.88,
-      "balance_after": 3565.8,
+      "balance_after": 3295.8,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3751,7 +3751,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 380.0,
-      "balance_after": 3945.8,
+      "balance_after": 3675.8,
       "type": "deposit",
       "status": "posted"
     },
@@ -3763,7 +3763,7 @@
       "merchant": "Aussie Broadband",
       "category": "Bills and utilities",
       "amount": -79,
-      "balance_after": 3866.8,
+      "balance_after": 3596.8,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3775,7 +3775,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 3326.8,
+      "balance_after": 3056.8,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3787,7 +3787,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -25.77,
-      "balance_after": 3301.03,
+      "balance_after": 3031.03,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3800,7 +3800,7 @@
       "merchant": "Kmart",
       "category": "Shopping",
       "amount": -49.98,
-      "balance_after": 3251.05,
+      "balance_after": 2981.05,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3813,7 +3813,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -20.68,
-      "balance_after": 3230.37,
+      "balance_after": 2960.37,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3826,7 +3826,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -60.45,
-      "balance_after": 3169.92,
+      "balance_after": 2899.92,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3839,7 +3839,7 @@
       "merchant": "BP",
       "category": "Transport",
       "amount": -56.76,
-      "balance_after": 3113.16,
+      "balance_after": 2843.16,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3852,7 +3852,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -67.97,
-      "balance_after": 3045.19,
+      "balance_after": 2775.19,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3865,7 +3865,7 @@
       "merchant": "JB Hi-Fi",
       "category": "Shopping",
       "amount": -60.36,
-      "balance_after": 2984.83,
+      "balance_after": 2714.83,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3878,7 +3878,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2444.83,
+      "balance_after": 2174.83,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -3890,7 +3890,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -18.64,
-      "balance_after": 2426.19,
+      "balance_after": 2156.19,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3903,7 +3903,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -58.23,
-      "balance_after": 2367.96,
+      "balance_after": 2097.96,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -3916,7 +3916,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 5251.2,
+      "balance_after": 4981.2,
       "type": "salary",
       "status": "posted"
     },
@@ -3970,7 +3970,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 5086.2,
+      "balance_after": 4816.2,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -3983,7 +3983,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 4947.2,
+      "balance_after": 4677.2,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -3996,7 +3996,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 4347.2,
+      "balance_after": 4077.2,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -4009,7 +4009,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -18.12,
-      "balance_after": 4329.08,
+      "balance_after": 4059.08,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4022,7 +4022,7 @@
       "merchant": "Spotify Premium",
       "category": "Subscriptions",
       "amount": -13.99,
-      "balance_after": 4315.09,
+      "balance_after": 4045.09,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4035,7 +4035,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -14.59,
-      "balance_after": 4300.5,
+      "balance_after": 4030.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4048,7 +4048,7 @@
       "merchant": "Lifeline (donation)",
       "category": "Gifts",
       "amount": -50.0,
-      "balance_after": 4250.5,
+      "balance_after": 3980.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4061,7 +4061,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -19.96,
-      "balance_after": 4230.54,
+      "balance_after": 3960.54,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4074,7 +4074,7 @@
       "merchant": "The Tivoli",
       "category": "Entertainment",
       "amount": -42.6,
-      "balance_after": 4187.94,
+      "balance_after": 3917.94,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4087,7 +4087,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -9.12,
-      "balance_after": 4178.82,
+      "balance_after": 3908.82,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4100,7 +4100,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -9.85,
-      "balance_after": 4168.97,
+      "balance_after": 3898.97,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4113,7 +4113,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -8.3,
-      "balance_after": 4160.67,
+      "balance_after": 3890.67,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4126,7 +4126,7 @@
       "merchant": "Telstra",
       "category": "Bills and utilities",
       "amount": -98,
-      "balance_after": 4062.67,
+      "balance_after": 3792.67,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4138,7 +4138,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 4037.67,
+      "balance_after": 3767.67,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4150,7 +4150,7 @@
       "merchant": "ATM",
       "category": "Cash",
       "amount": -50,
-      "balance_after": 3987.67,
+      "balance_after": 3717.67,
       "type": "atm",
       "status": "posted"
     },
@@ -4162,7 +4162,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -27.45,
-      "balance_after": 3960.22,
+      "balance_after": 3690.22,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4175,7 +4175,7 @@
       "merchant": "Uniqlo",
       "category": "Shopping",
       "amount": -82.01,
-      "balance_after": 3878.21,
+      "balance_after": 3608.21,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4188,7 +4188,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 410.0,
-      "balance_after": 4288.21,
+      "balance_after": 4018.21,
       "type": "deposit",
       "status": "posted"
     },
@@ -4200,7 +4200,7 @@
       "merchant": "Chemist Warehouse",
       "category": "Shopping",
       "amount": -25.6,
-      "balance_after": 4262.61,
+      "balance_after": 3992.61,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4213,7 +4213,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -26.62,
-      "balance_after": 4235.99,
+      "balance_after": 3965.99,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4226,7 +4226,7 @@
       "merchant": "Uber",
       "category": "Transport",
       "amount": -16.42,
-      "balance_after": 4219.57,
+      "balance_after": 3949.57,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4239,7 +4239,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -49.99,
-      "balance_after": 4169.58,
+      "balance_after": 3899.58,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4252,7 +4252,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 3629.58,
+      "balance_after": 3359.58,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4264,7 +4264,7 @@
       "merchant": "Translink go card",
       "category": "Transport",
       "amount": -28.69,
-      "balance_after": 3600.89,
+      "balance_after": 3330.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4277,7 +4277,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -37.57,
-      "balance_after": 3563.32,
+      "balance_after": 3293.32,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4290,7 +4290,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -10.25,
-      "balance_after": 3553.07,
+      "balance_after": 3283.07,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4303,7 +4303,7 @@
       "merchant": "Netflix",
       "category": "Subscriptions",
       "amount": -16.99,
-      "balance_after": 3536.08,
+      "balance_after": 3266.08,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4316,7 +4316,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -48.58,
-      "balance_after": 3487.5,
+      "balance_after": 3217.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4329,7 +4329,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -60.59,
-      "balance_after": 3426.91,
+      "balance_after": 3156.91,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4342,7 +4342,7 @@
       "merchant": "Amazon Prime",
       "category": "Subscriptions",
       "amount": -9.99,
-      "balance_after": 3416.92,
+      "balance_after": 3146.92,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4355,7 +4355,7 @@
       "merchant": "Kmart",
       "category": "Shopping",
       "amount": -23.57,
-      "balance_after": 3393.35,
+      "balance_after": 3123.35,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4368,7 +4368,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -3.73,
-      "balance_after": 3389.62,
+      "balance_after": 3119.62,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4381,7 +4381,7 @@
       "merchant": "Bupa",
       "category": "Bills and utilities",
       "amount": -132.4,
-      "balance_after": 3257.22,
+      "balance_after": 2987.22,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4393,7 +4393,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2717.22,
+      "balance_after": 2447.22,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4405,7 +4405,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 5600.46,
+      "balance_after": 5330.46,
       "type": "salary",
       "status": "posted"
     },
@@ -4459,7 +4459,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 5435.46,
+      "balance_after": 5165.46,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -4472,7 +4472,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 5296.46,
+      "balance_after": 5026.46,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -4485,7 +4485,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 4696.46,
+      "balance_after": 4426.46,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -4498,7 +4498,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -59.07,
-      "balance_after": 4637.39,
+      "balance_after": 4367.39,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4511,7 +4511,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -66.37,
-      "balance_after": 4571.02,
+      "balance_after": 4301.02,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4524,7 +4524,7 @@
       "merchant": "Origin Energy",
       "category": "Bills and utilities",
       "amount": -571.35,
-      "balance_after": 3999.67,
+      "balance_after": 3729.67,
       "type": "bpay",
       "status": "posted"
     },
@@ -4536,7 +4536,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -58.6,
-      "balance_after": 3941.07,
+      "balance_after": 3671.07,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4549,7 +4549,7 @@
       "merchant": "Ticketek",
       "category": "Entertainment",
       "amount": -108.96,
-      "balance_after": 3832.11,
+      "balance_after": 3562.11,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4562,7 +4562,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -15.32,
-      "balance_after": 3816.79,
+      "balance_after": 3546.79,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4575,7 +4575,7 @@
       "merchant": "Priceline",
       "category": "Health",
       "amount": -11.03,
-      "balance_after": 3805.76,
+      "balance_after": 3535.76,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4588,7 +4588,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 3780.76,
+      "balance_after": 3510.76,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4600,7 +4600,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -17.56,
-      "balance_after": 3763.2,
+      "balance_after": 3493.2,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4613,7 +4613,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 470.0,
-      "balance_after": 4233.2,
+      "balance_after": 3963.2,
       "type": "deposit",
       "status": "posted"
     },
@@ -4625,7 +4625,7 @@
       "merchant": "Aldi",
       "category": "Groceries",
       "amount": -50.23,
-      "balance_after": 4182.97,
+      "balance_after": 3912.97,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4638,7 +4638,7 @@
       "merchant": "Ampol",
       "category": "Transport",
       "amount": -68.69,
-      "balance_after": 4114.28,
+      "balance_after": 3844.28,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4651,7 +4651,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -14.28,
-      "balance_after": 4100.0,
+      "balance_after": 3830.0,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4664,7 +4664,7 @@
       "merchant": "Toowong Physio",
       "category": "Health",
       "amount": -39.29,
-      "balance_after": 4060.71,
+      "balance_after": 3790.71,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4677,7 +4677,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 3520.71,
+      "balance_after": 3250.71,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4689,7 +4689,7 @@
       "merchant": "iCloud+",
       "category": "Subscriptions",
       "amount": -4.49,
-      "balance_after": 3516.22,
+      "balance_after": 3246.22,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4702,7 +4702,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -35.05,
-      "balance_after": 3481.17,
+      "balance_after": 3211.17,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4715,7 +4715,7 @@
       "merchant": "Aussie Broadband",
       "category": "Bills and utilities",
       "amount": -79,
-      "balance_after": 3402.17,
+      "balance_after": 3132.17,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4727,7 +4727,7 @@
       "merchant": "Toowong Physio",
       "category": "Health",
       "amount": -28.9,
-      "balance_after": 3373.27,
+      "balance_after": 3103.27,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4740,7 +4740,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -25.15,
-      "balance_after": 3348.12,
+      "balance_after": 3078.12,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4753,7 +4753,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -17.58,
-      "balance_after": 3330.54,
+      "balance_after": 3060.54,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4766,7 +4766,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -78.04,
-      "balance_after": 3252.5,
+      "balance_after": 2982.5,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4779,7 +4779,7 @@
       "merchant": "Jordan Lee",
       "category": "Transfers",
       "amount": 89,
-      "balance_after": 3341.5,
+      "balance_after": 3071.5,
       "type": "payid",
       "status": "posted"
     },
@@ -4791,7 +4791,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -24.21,
-      "balance_after": 3317.29,
+      "balance_after": 3047.29,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4804,7 +4804,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -19.48,
-      "balance_after": 3297.81,
+      "balance_after": 3027.81,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4817,7 +4817,7 @@
       "merchant": "Secure Parking",
       "category": "Transport",
       "amount": -14.61,
-      "balance_after": 3283.2,
+      "balance_after": 3013.2,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4830,7 +4830,7 @@
       "merchant": "Smile Dental (gap)",
       "category": "Health",
       "amount": -35.9,
-      "balance_after": 3247.3,
+      "balance_after": 2977.3,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4843,7 +4843,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -35.15,
-      "balance_after": 3212.15,
+      "balance_after": 2942.15,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4856,7 +4856,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -12.79,
-      "balance_after": 3199.36,
+      "balance_after": 2929.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4869,7 +4869,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -13.95,
-      "balance_after": 3185.41,
+      "balance_after": 2915.41,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4882,7 +4882,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -21.82,
-      "balance_after": 3163.59,
+      "balance_after": 2893.59,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4895,7 +4895,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 2623.59,
+      "balance_after": 2353.59,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -4907,7 +4907,7 @@
       "merchant": "Sakura Ramen",
       "category": "Eating out",
       "amount": -17.71,
-      "balance_after": 2605.88,
+      "balance_after": 2335.88,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -4920,7 +4920,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 5489.12,
+      "balance_after": 5219.12,
       "type": "salary",
       "status": "posted"
     },
@@ -4974,7 +4974,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 5324.12,
+      "balance_after": 5054.12,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -4987,7 +4987,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 5185.12,
+      "balance_after": 4915.12,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -5000,7 +5000,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 4585.12,
+      "balance_after": 4315.12,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -5013,7 +5013,7 @@
       "merchant": "Mecca",
       "category": "Personal care",
       "amount": -14.66,
-      "balance_after": 4570.46,
+      "balance_after": 4300.46,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5026,7 +5026,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -16.98,
-      "balance_after": 4553.48,
+      "balance_after": 4283.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5039,7 +5039,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -27.54,
-      "balance_after": 4525.94,
+      "balance_after": 4255.94,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5052,7 +5052,7 @@
       "merchant": "The Glasshouse",
       "category": "Eating out",
       "amount": -38.6,
-      "balance_after": 4487.34,
+      "balance_after": 4217.34,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5065,7 +5065,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -34.86,
-      "balance_after": 4452.48,
+      "balance_after": 4182.48,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5078,7 +5078,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": 300,
-      "balance_after": 4752.48,
+      "balance_after": 4482.48,
       "type": "transfer",
       "status": "posted",
       "transfer_from": "life",
@@ -5105,7 +5105,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -26.69,
-      "balance_after": 4725.79,
+      "balance_after": 4455.79,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5118,7 +5118,7 @@
       "merchant": "Spotify Premium",
       "category": "Subscriptions",
       "amount": -13.99,
-      "balance_after": 4711.8,
+      "balance_after": 4441.8,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5131,7 +5131,7 @@
       "merchant": "Fitness First",
       "category": "Subscriptions",
       "amount": -25,
-      "balance_after": 4686.8,
+      "balance_after": 4416.8,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -5143,7 +5143,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -23.39,
-      "balance_after": 4663.41,
+      "balance_after": 4393.41,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5156,7 +5156,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -31.05,
-      "balance_after": 4632.36,
+      "balance_after": 4362.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5169,7 +5169,7 @@
       "merchant": "Target",
       "category": "Shopping",
       "amount": -24.85,
-      "balance_after": 4607.51,
+      "balance_after": 4337.51,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5182,7 +5182,7 @@
       "merchant": "Ticketek",
       "category": "Entertainment",
       "amount": -59.56,
-      "balance_after": 4547.95,
+      "balance_after": 4277.95,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5195,7 +5195,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -27.77,
-      "balance_after": 4520.18,
+      "balance_after": 4250.18,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5208,7 +5208,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 395.0,
-      "balance_after": 4915.18,
+      "balance_after": 4645.18,
       "type": "deposit",
       "status": "posted"
     },
@@ -5219,8 +5219,8 @@
       "description": "BP CONNECT INDOOROOPILLY",
       "merchant": "BP",
       "category": "Transport",
-      "amount": -49.07,
-      "balance_after": 4866.11,
+      "amount": -24.75,
+      "balance_after": 4620.43,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5233,7 +5233,7 @@
       "merchant": "Northside Realty",
       "category": "Housing",
       "amount": -540,
-      "balance_after": 4326.11,
+      "balance_after": 4080.43,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -5245,7 +5245,7 @@
       "merchant": "Telstra",
       "category": "Bills and utilities",
       "amount": -98,
-      "balance_after": 4228.11,
+      "balance_after": 3982.43,
       "type": "direct_debit",
       "status": "posted"
     },
@@ -5257,7 +5257,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -17.78,
-      "balance_after": 4210.33,
+      "balance_after": 3964.65,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5269,8 +5269,8 @@
       "description": "WOOLWORTHS 1234 TOOWONG",
       "merchant": "Woolworths",
       "category": "Groceries",
-      "amount": -78.73,
-      "balance_after": 4131.6,
+      "amount": -12.81,
+      "balance_after": 3951.84,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5283,7 +5283,7 @@
       "merchant": "ATM",
       "category": "Cash",
       "amount": -50,
-      "balance_after": 4081.6,
+      "balance_after": 3901.84,
       "type": "atm",
       "status": "posted"
     },
@@ -5294,8 +5294,8 @@
       "description": "BP CONNECT INDOOROOPILLY",
       "merchant": "BP",
       "category": "Transport",
-      "amount": -43.54,
-      "balance_after": 4038.06,
+      "amount": -21.95,
+      "balance_after": 3879.89,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5308,7 +5308,7 @@
       "merchant": "Event Cinemas",
       "category": "Entertainment",
       "amount": -20.44,
-      "balance_after": 4017.62,
+      "balance_after": 3859.45,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5321,7 +5321,7 @@
       "merchant": "Woolworths",
       "category": "Groceries",
       "amount": -88.15,
-      "balance_after": 3929.47,
+      "balance_after": 3771.3,
       "type": "card",
       "status": "posted",
       "card_last4": "7089",
@@ -5335,7 +5335,7 @@
       "merchant": "Guzman y Gomez",
       "category": "Eating out",
       "amount": -15.94,
-      "balance_after": 3913.53,
+      "balance_after": 3755.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5348,7 +5348,7 @@
       "merchant": "IKEA",
       "category": "Shopping",
       "amount": -189.0,
-      "balance_after": 3724.53,
+      "balance_after": 3566.36,
       "type": "card",
       "status": "posted",
       "card_last4": "7089",
@@ -5362,7 +5362,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -24.45,
-      "balance_after": 3700.08,
+      "balance_after": 3541.91,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5375,7 +5375,7 @@
       "merchant": "Bean There Cafe",
       "category": "Eating out",
       "amount": -6.73,
-      "balance_after": 3693.35,
+      "balance_after": 3535.18,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5388,7 +5388,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -20.45,
-      "balance_after": 3672.9,
+      "balance_after": 3514.73,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5401,7 +5401,7 @@
       "merchant": "Swift Movers",
       "category": "Moving",
       "amount": -480,
-      "balance_after": 3192.9,
+      "balance_after": 3034.73,
       "type": "card",
       "status": "posted",
       "card_last4": "7089",
@@ -5414,8 +5414,8 @@
       "description": "BP CONNECT INDOOROOPILLY",
       "merchant": "BP",
       "category": "Transport",
-      "amount": -41.11,
-      "balance_after": 3151.79,
+      "amount": -20.73,
+      "balance_after": 3014.0,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5428,7 +5428,7 @@
       "merchant": "Bunnings",
       "category": "Shopping",
       "amount": -64.85,
-      "balance_after": 3086.94,
+      "balance_after": 2949.15,
       "type": "card",
       "status": "posted",
       "card_last4": "7089",
@@ -5442,7 +5442,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -32.34,
-      "balance_after": 3054.6,
+      "balance_after": 2916.81,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5455,7 +5455,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": 500,
-      "balance_after": 3554.6,
+      "balance_after": 3416.81,
       "type": "transfer",
       "status": "posted",
       "signal": "life-event",
@@ -5484,7 +5484,7 @@
       "merchant": "RTA Queensland (bond)",
       "category": "Housing",
       "amount": -2400,
-      "balance_after": 1154.6,
+      "balance_after": 1016.81,
       "type": "bpay",
       "status": "posted",
       "signal": "life-event"
@@ -5497,7 +5497,7 @@
       "merchant": "Amazon",
       "category": "Shopping",
       "amount": -24.26,
-      "balance_after": 1130.34,
+      "balance_after": 992.55,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5510,7 +5510,7 @@
       "merchant": "JB Hi-Fi",
       "category": "Shopping",
       "amount": -42.53,
-      "balance_after": 1087.81,
+      "balance_after": 950.02,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5523,7 +5523,7 @@
       "merchant": "Netflix",
       "category": "Subscriptions",
       "amount": -18.99,
-      "balance_after": 1068.82,
+      "balance_after": 931.03,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5536,7 +5536,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -24.28,
-      "balance_after": 1044.54,
+      "balance_after": 906.75,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5549,7 +5549,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -22.34,
-      "balance_after": 1022.2,
+      "balance_after": 884.41,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5562,7 +5562,7 @@
       "merchant": "Brightside Studio (ABN invoice)",
       "category": "Income",
       "amount": 410.0,
-      "balance_after": 1432.2,
+      "balance_after": 1294.41,
       "type": "deposit",
       "status": "posted"
     },
@@ -5574,7 +5574,7 @@
       "merchant": "Ray White Rentals",
       "category": "Housing",
       "amount": -620,
-      "balance_after": 812.2,
+      "balance_after": 674.41,
       "type": "direct_debit",
       "status": "posted",
       "signal": "life-event",
@@ -5587,8 +5587,8 @@
       "description": "WOOLWORTHS METRO ROMA ST",
       "merchant": "Woolworths",
       "category": "Groceries",
-      "amount": -14.92,
-      "balance_after": 797.28,
+      "amount": -2.43,
+      "balance_after": 671.98,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5600,8 +5600,8 @@
       "description": "AMPOL TOOWONG 4066",
       "merchant": "Ampol",
       "category": "Transport",
-      "amount": -47.99,
-      "balance_after": 749.29,
+      "amount": -24.19,
+      "balance_after": 647.79,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5614,7 +5614,7 @@
       "merchant": "Coles",
       "category": "Groceries",
       "amount": -142.3,
-      "balance_after": 606.99,
+      "balance_after": 505.49,
       "type": "card",
       "status": "posted",
       "card_last4": "7089",
@@ -5628,7 +5628,7 @@
       "merchant": "DoorDash",
       "category": "Eating out",
       "amount": -26.63,
-      "balance_after": 580.36,
+      "balance_after": 478.86,
       "type": "card",
       "status": "posted",
       "card_last4": "7089"
@@ -5641,7 +5641,7 @@
       "merchant": "Harbour Health",
       "category": "Income",
       "amount": 2883.24,
-      "balance_after": 3463.6,
+      "balance_after": 3362.1,
       "type": "salary",
       "status": "posted"
     },
@@ -5709,7 +5709,7 @@
       "merchant": "Home deposit",
       "category": "Transfers",
       "amount": -165,
-      "balance_after": 3298.6,
+      "balance_after": 3197.1,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-home"
@@ -5722,7 +5722,7 @@
       "merchant": "Japan trip",
       "category": "Transfers",
       "amount": -139,
-      "balance_after": 3159.6,
+      "balance_after": 3058.1,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "goal-japan"
@@ -5735,7 +5735,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -600,
-      "balance_after": 2559.6,
+      "balance_after": 2458.1,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -5748,7 +5748,7 @@
       "merchant": "Westpac Life",
       "category": "Transfers",
       "amount": -500,
-      "balance_after": 2059.6,
+      "balance_after": 1958.1,
       "type": "transfer",
       "status": "posted",
       "transfer_to": "life"
@@ -5760,8 +5760,8 @@
       "description": "BP CONNECT INDOOROOPILLY",
       "merchant": "BP",
       "category": "Transport",
-      "amount": -46.43,
-      "balance_after": 2013.17,
+      "amount": -23.41,
+      "balance_after": 1934.69,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5774,7 +5774,7 @@
       "merchant": "Menulog",
       "category": "Eating out",
       "amount": -31.01,
-      "balance_after": 1982.16,
+      "balance_after": 1903.68,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5787,7 +5787,7 @@
       "merchant": "Priceline",
       "category": "Health",
       "amount": -13.82,
-      "balance_after": 1968.34,
+      "balance_after": 1889.86,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5800,7 +5800,7 @@
       "merchant": "Priceline",
       "category": "Health",
       "amount": -41.18,
-      "balance_after": 1927.16,
+      "balance_after": 1848.68,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5812,8 +5812,8 @@
       "description": "SECURE PARKING ADELAIDE ST",
       "merchant": "Secure Parking",
       "category": "Transport",
-      "amount": -9.86,
-      "balance_after": 1917.3,
+      "amount": -4.97,
+      "balance_after": 1843.71,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5826,7 +5826,7 @@
       "merchant": "Salon Nine",
       "category": "Personal care",
       "amount": -22.05,
-      "balance_after": 1895.25,
+      "balance_after": 1821.66,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5839,7 +5839,7 @@
       "merchant": "Amazon",
       "category": "Shopping",
       "amount": -44.51,
-      "balance_after": 1850.74,
+      "balance_after": 1777.15,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5852,7 +5852,7 @@
       "merchant": "Amazon Prime",
       "category": "Subscriptions",
       "amount": -9.99,
-      "balance_after": 1840.75,
+      "balance_after": 1767.16,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5865,7 +5865,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -37.26,
-      "balance_after": 1803.49,
+      "balance_after": 1729.9,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5878,7 +5878,7 @@
       "merchant": "Uber Eats",
       "category": "Eating out",
       "amount": -37.34,
-      "balance_after": 1766.15,
+      "balance_after": 1692.56,
       "type": "card",
       "status": "pending",
       "card_last4": "7089"
@@ -5890,7 +5890,7 @@
       "description": "WOOLWORTHS 1234 TOOWONG",
       "merchant": "Woolworths",
       "category": "Groceries",
-      "amount": -87.9,
+      "amount": -14.31,
       "balance_after": 1678.25,
       "type": "card",
       "status": "pending",

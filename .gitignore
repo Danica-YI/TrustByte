@@ -11,3 +11,7 @@
 # Build output
 node_modules/
 dist/
+
+# Python
+.venv/
+__pycache__/

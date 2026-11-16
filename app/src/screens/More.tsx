@@ -8,7 +8,7 @@ export default function More() {
     <>
       <div className="top-bar"><h1>More</h1></div>
       <Card>
-        <Link to="/ask" className="row"><span>✦ Ask Windy</span><span>›</span></Link>
+        <Link to="/chat" className="row"><span>✦ Ask Windy</span><span>›</span></Link>
         <Link to="/consent" className="row"><span>Your data and consent</span><span>›</span></Link>
       </Card>
       <Card>

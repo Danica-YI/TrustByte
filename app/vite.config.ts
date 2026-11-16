@@ -5,5 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // allow importing the generated data in ../data (shared with a future backend)
-  server: { fs: { allow: ['..'] } },
+  server: {
+    fs: { allow: ['..'] },
+    // the Windy chat backend (server/main.py)
+    proxy: { '/api': 'http://localhost:8787' },
+  },
 })
