@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card, Chip, Seg, TopBar, WindyPill } from '../components/ui'
-import type { Recurring, Snapshot } from '../api'
+import type { Recurring, Snapshot, Upcoming } from '../api'
 import { money, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -29,7 +29,7 @@ export default function Payments() {
 
       <Card>
         <div className="muted" style={{ marginTop: 4 }}>Per fortnight</div>
-        <div style={{ fontSize: 28, fontWeight: 800 }}>{money(c.per_fortnight)} <span className="muted">across {c.count} payments</span></div>
+        <div style={{ fontSize: 28, fontWeight: 800 }}>{money(c.per_fortnight)} <span className="muted">across {c.count} regular payments</span></div>
         <p className="small" style={{ marginTop: 6 }}>Includes rent ({c.rent.frequency}) and a share of yearly bills. Already allowed for in your Safe to spend ({money(s.everyday.safe)}).</p>
       </Card>
 
@@ -131,13 +131,103 @@ export default function Payments() {
   )
 }
 
+// ---------------------------------------------------------------- Calendar: the next 5 weeks, week by week
+// Payday is shown, same-day Afterpay instalments and auto-saves fold into one row (tap to open),
+// bills paid from the Bills set-aside are greyed out and left out of the week's total, and each week
+// ends with the forecast's Everyday balance so this lines up with the shortfall warning.
+const WEEKS = 5
+const FOLDED: Record<string, string> = { pay_later: 'Afterpay', auto_save: 'Auto-saves to your goals' }
+const addDays = (iso: string, n: number) => new Date(Date.parse(iso + 'T00:00:00Z') + n * 864e5).toISOString().slice(0, 10)
+
+type Row = { key: string; date: string; label: string; amount: number; setAside: boolean; parts: Upcoming[] }
+
+function scheduleRows(s: Snapshot, from: string, to: string): Row[] {
+  const items = [...s.upcoming, ...s.commitments.yearly.due]
+    .filter((u) => u.date >= from && u.date <= to)
+    .sort((a, b) => a.date.localeCompare(b.date) || (b.amount > 0 ? 1 : 0) - (a.amount > 0 ? 1 : 0))
+  const rows: Row[] = []
+  for (const u of items) {
+    const fold = FOLDED[u.kind]
+    const same = fold && rows.find((r) => r.date === u.date && r.parts[0].kind === u.kind)
+    if (same) {
+      same.parts.push(u)
+      same.amount += u.amount
+      same.label = `${fold} ×${same.parts.length}`
+    } else {
+      rows.push({ key: `${u.date}-${u.kind}-${u.label}`, date: u.date, label: u.label, amount: u.amount, setAside: u.account !== 'everyday', parts: [u] })
+    }
+  }
+  return rows
+}
+
 function Calendar({ s }: { s: Snapshot }) {
-  const items = [...s.upcoming, ...s.commitments.yearly.due].filter((u) => u.kind !== 'pay' && u.kind !== 'auto_save').sort((a, b) => a.date.localeCompare(b.date))
+  const [open, setOpen] = useState<string | null>(null)
+  const balanceOn = (day: string) => [...s.forecast.points].reverse().find((p) => p.date <= day)?.balance
+  const lowestIn = (from: string, to: string) =>
+    s.forecast.points.filter((p) => p.date >= from && p.date <= to).reduce<Snapshot['forecast']['low'] | undefined>(
+      (low, p) => (!low || p.balance < low.balance ? p : low), undefined)
+  const weeks = Array.from({ length: WEEKS }, (_, i) => {
+    const from = addDays(s.today, 1 + 7 * i), to = addDays(s.today, 7 + 7 * i)
+    const rows = scheduleRows(s, from, to)
+    const everyday = rows.filter((r) => !r.setAside)
+    return {
+      from, to, rows,
+      payday: rows.some((r) => r.parts[0].kind === 'pay'),
+      in: everyday.filter((r) => r.amount > 0).reduce((t, r) => t + r.amount, 0),
+      out: everyday.filter((r) => r.amount < 0).reduce((t, r) => t + r.amount, 0),
+      balance: balanceOn(to),
+      low: lowestIn(from, to),
+    }
+  })
+
   return (
     <Card>
       <h3>Next 5 weeks</h3>
-      {items.map((u, i) => (
-        <div key={i} className="row"><span><b>{shortDate(u.date)}</b> · {u.label}</span><span>{money(u.amount, true)}</span></div>
+      <p className="small">Money in and out of Everyday. Grey bills come from your Bills set-aside, not Everyday.</p>
+      {weeks.map((w) => (
+        <div key={w.from} style={{ marginTop: 12 }}>
+          <div className="spread" style={{ borderBottom: '1px solid var(--line)', paddingBottom: 4 }}>
+            <span style={{ whiteSpace: 'nowrap' }}>
+              <b>{shortDate(w.from)} – {shortDate(w.to)}</b>
+              {w.payday && <Chip tone="good">Payday</Chip>}
+            </span>
+            <span className="small" style={{ whiteSpace: 'nowrap' }}>
+              {w.in > 0 && <span style={{ color: 'var(--good)' }}>+{money(w.in)} · </span>}{money(w.out)}
+            </span>
+          </div>
+          {w.rows.map((r) => (
+            <div key={r.key}>
+              <div className="row" style={{ opacity: r.setAside ? 0.55 : 1, cursor: r.parts.length > 1 ? 'pointer' : undefined }}
+                onClick={() => r.parts.length > 1 && setOpen(open === r.key ? null : r.key)}>
+                <span>
+                  <b>{shortDate(r.date)}</b> · {r.label}
+                  {r.parts.length > 1 && <span className="muted"> {open === r.key ? '▾' : '›'}</span>}
+                  {r.setAside && <span className="muted"> · from set-aside</span>}
+                </span>
+                <span style={{ whiteSpace: 'nowrap', color: r.amount > 0 ? 'var(--good)' : undefined, fontWeight: r.amount > 0 ? 700 : undefined }}>
+                  {r.amount > 0 ? '+' : ''}{money(r.amount, true)}
+                </span>
+              </div>
+              {open === r.key && r.parts.map((p) => (
+                <div key={p.label} className="row small" style={{ paddingLeft: 14 }}>
+                  <span className="muted">{p.label}</span><span style={{ whiteSpace: 'nowrap' }}>{money(p.amount, true)}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+          {w.rows.length === 0 && <div className="row small"><span className="muted">Nothing scheduled</span></div>}
+          {w.low && w.low.balance < 0 ? (
+            <div className="row small">
+              <span style={{ color: 'var(--bad)' }}>Everyday dips below $0 around {shortDate(w.low.date)}</span>
+              <b style={{ whiteSpace: 'nowrap', color: 'var(--bad)' }}>about {money(w.low.balance)}</b>
+            </div>
+          ) : w.balance !== undefined && (
+            <div className="row small">
+              <span className="muted">Everyday by {shortDate(w.to)}, after usual spending</span>
+              <b style={{ whiteSpace: 'nowrap' }}>about {money(w.balance)}</b>
+            </div>
+          )}
+        </div>
       ))}
     </Card>
   )
