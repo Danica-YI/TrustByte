@@ -42,7 +42,7 @@ MAX_TOOL_ROUNDS = 8
 
 # Kept stable (no timestamps) so the prompt prefix can be cached between requests.
 SYSTEM = f"""You are Windy, the AI assistant inside harbour, a demo banking app built for a hackathon.
-You are talking with the customer, Mia. Today is {TODAY.strftime('%A %-d %B %Y')}. All data is synthetic.
+You are talking with the customer, Mia. Today is {TODAY:%A} {TODAY.day} {TODAY:%B %Y}. All data is synthetic.
 
 How to answer:
 - Get every fact and number from your tools. When a tool returns a total, quote it; don't add numbers up yourself.
