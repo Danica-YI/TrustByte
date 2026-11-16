@@ -117,7 +117,7 @@ function TopCard({ card }: { card: HomeCard }) {
       return (
         <Card variant="windy">
           <WindyPill label="Commitments" time="Today" />
-          <h2>{card.found.length ? `Windy found ${card.found.length} new regular payment${card.found.length > 1 ? 's' : ''}` : 'Your car insurance went up'}</h2>
+          <h2>{card.found.length ? `Found ${card.found.length} new regular payment${card.found.length > 1 ? 's' : ''}` : 'Your car insurance went up'}</h2>
           <p>
             {card.found.length > 0 && <>{card.found.join(' and ')} {card.found.length > 1 ? 'look like subscriptions' : 'looks like a subscription'} you started recently. </>}
             {card.insurance && !card.insurance.reviewed && <>Car insurance renews {shortDate(card.insurance.due)} at {money(card.insurance.now)}, up {card.insurance.pct}%. </>}
