@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Card, Chip, Logo, Progress, WindyPill } from '../components/ui'
 import { features, isEnabled, type HomeCardId } from '../features'
 import { money } from '../data/mia'
+import { useConnectedReceipts } from '../data/settings'
 import { everydayBalance, forecast, goals, groceryCheck, lifeEvent, payLaterPlans, safeToSpend, shortDate, yearlyBills } from '../data/analysis'
 
 const GOAL_COLORS: Record<string, string> = { 'goal-japan': '#6d28d9', 'goal-emergency': '#15803d', 'goal-home': '#d4002a', 'goal-bali': '#0e7490' }
@@ -63,6 +64,7 @@ export default function Home() {
 
 function TopCard({ id, onDismiss }: { id: HomeCardId; onDismiss: () => void }) {
   const nav = useNavigate()
+  const connected = useConnectedReceipts()
   switch (id) {
     case 'life-event':
       return (
@@ -128,11 +130,15 @@ function TopCard({ id, onDismiss }: { id: HomeCardId; onDismiss: () => void }) {
         <Card variant="windy">
           <WindyPill label="Spending check" time="Just now" />
           <h2>Bigger grocery shop than usual</h2>
-          <p>{groceryCheck().shop.merchant} on {shortDate(groceryCheck().shop.date)} was {money(groceryCheck().amount, true)}. Your usual shop is about {money(groceryCheck().usual)}. Want to see where it went? Only you can see this.</p>
+          <p>{groceryCheck().shop.merchant} on {shortDate(groceryCheck().shop.date)} was {money(groceryCheck().amount, true)}. Your usual shop is about {money(groceryCheck().usual)}.
+            {connected ? <> {groceryCheck().shop.merchant} sent the itemised receipt, so I can show you where it went.</> : <> Want to see where it went?</>} Only you can see this.</p>
           <div className="hstack">
-            <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/receipt')}>Scan receipt</button>
+            {connected
+              ? <button className="btn primary" style={{ flex: 1 }} onClick={() => nav(`/receipt/${groceryCheck().shop.receipt_id}`)}>See what was in it</button>
+              : <button className="btn primary" style={{ flex: 1 }} onClick={() => nav(`/receipt/${groceryCheck().shop.receipt_id}?source=scan`)}>Scan receipt</button>}
             <button className="btn outline" onClick={() => nav('/receipt/quick-split')}>Quick split</button>
           </div>
+          {!connected && <button className="link" style={{ marginTop: 10 }} onClick={() => nav('/receipt/settings')}>Get receipts automatically ›</button>}
         </Card>
       )
     case 'commitments': {

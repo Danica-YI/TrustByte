@@ -25,6 +25,7 @@ import PayLater from './screens/PayLater'
 import QuickSplit from './screens/QuickSplit'
 import JapanSooner from './screens/JapanSooner'
 import JapanReview from './screens/JapanReview'
+import ReceiptSettings from './screens/ReceiptSettings'
 
 export default function App() {
   const loc = useLocation()
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="/payments" element={<Payments />} />
           <Route path="/receipt" element={<Receipt />} />
           <Route path="/receipt/quick-split" element={<QuickSplit />} />
+          <Route path="/receipt/settings" element={<ReceiptSettings />} />
           <Route path="/receipt/:id" element={<Receipt />} />
           <Route path="/pay-later" element={<PayLater />} />
           <Route path="/goals/japan-sooner" element={<JapanSooner />} />

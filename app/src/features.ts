@@ -84,7 +84,7 @@ export const features: Feature[] = [
     id: 'receipt-lens',
     idea: '10',
     name: 'Receipt Lens',
-    pitch: 'Sees what was in a big shop (receipt or quick tick list), grouped by money, never health or diet.',
+    pitch: 'Sees what was in a big shop (connected receipt, photo, or quick tick list), grouped by money, never health or diet.',
     enabled: true,
     hero: true,
     homeCard: 'grocery-check',
@@ -92,6 +92,7 @@ export const features: Feature[] = [
       { path: '/?card=grocery-check', label: 'Home · Grocery check', figma: 'RL-01' },
       { path: '/receipt', label: 'Receipt breakdown', figma: 'RL-02' },
       { path: '/receipt/quick-split', label: 'Tick what you bought', figma: 'RL-03' },
+      { path: '/receipt/settings', label: 'Connected receipts (setting)', figma: 'new' },
     ],
   },
   {

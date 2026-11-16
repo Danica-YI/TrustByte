@@ -74,9 +74,24 @@ off in `features.ts` but still open from the navigator for preview.
 | 3 | Dream Nudge | LP-07 `/?card=dream-nudge` | no (same copy for everyone by design) |
 | 4 | Shortfall Early Warning | Harbour 03 `/forecast`, home card | yes: scheduled items + usual spending; fixes re-run the projection |
 | 9+15 | Commitments Watch | home card `/?card=commitments`, R-02 `/payments?found=spotify`, R-03 `/payments?found=insurance`, **pay-later** `/pay-later` | yes: recurring payments detected from history, price rises, yearly bills set-aside, Afterpay plans |
-| 10 | Receipt Lens | RL-01 `/?card=grocery-check`, RL-02 `/receipt[/:id]`, **RL-03** `/receipt/quick-split` | yes: receipts, usual shop size |
+| 10 | Receipt Lens | RL-01 `/?card=grocery-check`, RL-02 `/receipt[/:id]`, **RL-03** `/receipt/quick-split`, **Connected receipts setting** `/receipt/settings` | yes: receipts, usual shop size |
 
 Calculations live in `app/src/data/analysis.ts` (the chat backend has the same logic in `server/tools.py`).
+
+### Connected receipts (Idea 10)
+
+We don't build a connector to Coles or Woolworths (no public API; that's a business deal). The pitch is that
+Westpac plugs into receipt networks that already exist (e.g. Slyp, card-network digital receipts); see
+`docs/share/LifePilot-Connected-Receipts` in the planning repo. In the demo:
+
+- `/receipt/settings` has the **Connected merchant receipts** switch, **off by default** (saved in the browser).
+- Off: RL-01 offers *Scan receipt* (simulated photo read, `?source=scan`) or *Quick split* (RL-03); opening a
+  receipt shows "Connected receipts are off" with those options instead of the items.
+- On: RL-01 says the store sent the receipt; RL-02 is labelled "Sent by Coles · connected receipts"; the
+  Accounts list shows a Receipt chip on linked payments.
+- Receipts are the synthetic ones in `data/mia/receipts.json`, linked to card payments by `receipt_id`.
+- For the video: start with it off, turn it on in the setting, then open the receipt. To reset, turn it off
+  (or clear site data).
 
 ## Fake bank data
 

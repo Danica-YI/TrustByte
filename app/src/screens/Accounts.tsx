@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Card, Chip, Progress, TopBar } from '../components/ui'
 import { accounts, fmtDate, txFor } from '../data/bank'
 import { money } from '../data/mia'
+import { useConnectedReceipts } from '../data/settings'
 
 export function AccountList() {
   return (
@@ -26,6 +27,7 @@ export function AccountList() {
 }
 
 export function AccountDetail() {
+  const connected = useConnectedReceipts()
   const { id = 'everyday' } = useParams()
   const account = accounts.find((a) => a.id === id) ?? accounts[0]
   const all = useMemo(() => txFor(account.id), [account.id])
@@ -76,7 +78,7 @@ export function AccountDetail() {
                     <Chip>{t.category}</Chip>
                     {t.status === 'pending' && <Chip tone="warn">Pending</Chip>}
                     {t.signal && <Chip tone="windy">✦ {t.signal}</Chip>}
-                    {t.receipt_id && <Link to="/receipt"><Chip tone="good">Receipt</Chip></Link>}
+                    {t.receipt_id && connected && <Link to={`/receipt/${t.receipt_id}`}><Chip tone="good">Receipt</Chip></Link>}
                   </div>
                 </div>
                 <b style={{ color: t.amount > 0 ? 'var(--good)' : undefined, whiteSpace: 'nowrap' }}>
