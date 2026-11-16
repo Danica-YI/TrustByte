@@ -3,7 +3,7 @@
 // Nothing changes until Mia taps Approve; then only her simulated plan is updated (and she can undo it).
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Card, Chip, Lock, TopBar } from '../components/ui'
+import { Card, Chip, Lock, Mark, TopBar } from '../components/ui'
 import { useApp } from '../store'
 
 export default function Review() {
@@ -66,7 +66,7 @@ export default function Review() {
       )}
 
       <Card variant="windy">
-        <div className="spread"><h3>Why Windy suggests this</h3><Chip tone="windy">{p.explanation_source === 'claude' ? '✦ AI explained' : '✦ Windy template'}</Chip></div>
+        <div className="spread"><h3>Why Windy suggests this</h3><Chip tone="windy"><Mark /> {p.explanation_source === 'claude' ? 'AI explained' : 'Windy template'}</Chip></div>
         <p style={{ marginTop: 6 }}>{p.explanation}</p>
         <div className="pipeline">
           <Chip tone="good">✓ {passed} of {p.checks.length} checks passed</Chip>

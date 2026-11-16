@@ -2,7 +2,7 @@
 // once she deals with one (confirms the move, fixes the shortfall, saves the receipt) it goes away for good.
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { Card, Logo, Progress, WindyPill } from '../components/ui'
+import { Card, Logo, Mark, Progress, WindyPill } from '../components/ui'
 import type { Card as HomeCard } from '../api'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
@@ -22,7 +22,7 @@ export default function Home() {
         <div className="balance">{money(s.everyday.balance, true)}</div>
         <div className="sub">Everyday · Safe to spend <b>{money(s.everyday.safe)}</b> until payday {shortDate(s.everyday.next_payday)}</div>
         <form className="ask-windy" onSubmit={(e) => { e.preventDefault(); nav('/chat', { state: { q: ask.trim() } }) }}>
-          <span aria-hidden>✦</span>
+          <Mark />
           <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="Ask Windy anything…" aria-label="Ask Windy" />
           <button type="submit">Ask</button>
         </form>

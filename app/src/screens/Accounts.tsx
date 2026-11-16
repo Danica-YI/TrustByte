@@ -2,7 +2,7 @@
 // (and the video) can see the raw history Windy works from.
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Card, Chip, Progress, TopBar } from '../components/ui'
+import { Card, Chip, Mark, Progress, TopBar } from '../components/ui'
 import { fmtDate, txFor } from '../data/bank'
 import { money } from '../format'
 import { useSnap } from '../store'
@@ -80,7 +80,7 @@ export function AccountDetail() {
                   <div className="hstack" style={{ marginTop: 3, gap: 4 }}>
                     <Chip>{t.category}</Chip>
                     {t.status === 'pending' && <Chip tone="warn">Pending</Chip>}
-                    {t.signal && <Chip tone="windy">✦ {t.signal}</Chip>}
+                    {t.signal && <Chip tone="windy"><Mark /> {t.signal}</Chip>}
                     {t.receipt_id && connected && <Link to={`/receipt/${t.receipt_id}`}><Chip tone="good">Receipt</Chip></Link>}
                   </div>
                 </div>

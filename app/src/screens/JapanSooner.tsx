@@ -2,7 +2,7 @@
 // number comes from the engine. Tapping "Review" asks the backend for a full proposal (guardrails, AI, checks).
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, TopBar } from '../components/ui'
+import { Card, Mark, TopBar } from '../components/ui'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -24,7 +24,7 @@ export default function JapanSooner() {
       <>
         <TopBar title="Windy" fallback="/" />
         <div className="bubble ai">
-          <div className="pill" style={{ marginBottom: 6 }}>✦ Windy</div>
+          <div className="pill" style={{ marginBottom: 6 }}><Mark /> Windy</div>
           You’re on track: {s.plan_choice.name}. Japan has {money(jp.saved)} of {money(jp.target)}, with {money(jp.per_payday)} going in each payday, so you reach it in {monthYear(jp.reached)}.
         </div>
         <button className="btn outline block" onClick={() => nav('/plan')}>See or undo this plan</button>
@@ -37,7 +37,7 @@ export default function JapanSooner() {
       <TopBar title="Windy" fallback="/" />
       <div className="bubble me">I want to go to Japan in the next 3 months. Can you plan the budget?</div>
       <div className="bubble ai">
-        <div className="pill" style={{ marginBottom: 6 }}>✦ Windy</div>
+        <div className="pill" style={{ marginBottom: 6 }}><Mark /> Windy</div>
         <div><b>Yes, with two changes.</b></div>
         <div style={{ marginTop: 4 }}>
           Your Japan goal is {money(a.target)}. At {money(a.per)} a payday you’d add {money(a.keep)} in {a.paydays} paydays, so I looked at money set aside for plans that aren’t due soon.
@@ -51,7 +51,7 @@ export default function JapanSooner() {
       </Card>
 
       <div className="bubble ai">
-        <div><span className="pill" style={{ marginBottom: 6 }}>✦ Windy · Suggested plan</span></div>
+        <div><span className="pill" style={{ marginBottom: 6 }}><Mark /> Windy · Suggested plan</span></div>
         • Keep saving {money(a.per)} a payday: {money(a.keep)}<br />
         {a.from_bali > 0 && <>• Move {money(a.from_bali)} from your Bali 2027 fund<br /></>}
         {a.from_home_per > 0 && <>• Redirect {money(a.from_home_per)} a payday from Home deposit for {a.paydays} paydays: {money(a.from_home_per * a.paydays)}<br /></>}
@@ -68,7 +68,7 @@ export default function JapanSooner() {
         <>
           <div className="bubble me">Can we leave the Bali fund alone?</div>
           <div className="bubble ai">
-            <div className="pill" style={{ marginBottom: 6 }}>✦ Windy</div>
+            <div className="pill" style={{ marginBottom: 6 }}><Mark /> Windy</div>
             <div><b>Yes, but it costs more elsewhere.</b></div>
             <div style={{ marginTop: 4 }}>
               I’d redirect {money(b.from_home_per)} a payday from Home deposit

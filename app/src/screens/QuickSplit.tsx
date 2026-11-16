@@ -1,7 +1,7 @@
 // RL-03 · Tick what you bought (Idea 10 · Receipt Lens, no-receipt path). Saved to Mia's plan.
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, TopBar } from '../components/ui'
+import { Card, Mark, TopBar } from '../components/ui'
 import { money, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -39,7 +39,7 @@ export default function QuickSplit() {
       <p className="intro">Tick the types of things you bought. Add an amount if you want more detail, or leave it blank.</p>
 
       <Card variant="windy">
-        <p style={{ margin: 0 }}>✦ Windy asked because this shop was about {money(g.above)} above your usual {money(g.usual)}. Skip it any time.</p>
+        <p style={{ margin: 0 }}><Mark /> Windy asked because this shop was about {money(g.above)} above your usual {money(g.usual)}. Skip it any time.</p>
       </Card>
 
       <Card>

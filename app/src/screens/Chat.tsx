@@ -2,7 +2,7 @@
 // Answers come from tools that compute over Mia's data; each tool Windy used is shown under its reply.
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { TopBar } from '../components/ui'
+import { Mark, TopBar } from '../components/ui'
 
 type ToolCall = { name: string; input: Record<string, unknown> }
 type Msg = { role: 'user' | 'assistant'; text: string; tools: ToolCall[]; error?: string }
@@ -111,7 +111,7 @@ export default function Chat() {
       {msgs.length === 0 && (
         <>
           <div className="bubble ai">
-            <div className="pill" style={{ marginBottom: 6 }}>✦ Windy</div>
+            <div className="pill" style={{ marginBottom: 6 }}><Mark /> Windy</div>
             Hi Mia. Ask me about your spending, bills, balances or goals. I work from your own transactions and
             show you what I looked at.
           </div>
@@ -131,7 +131,7 @@ export default function Chat() {
             {m.tools.length > 0 && (
               <div className="hstack" style={{ gap: 4, marginBottom: 6 }}>
                 {m.tools.map((t, j) => (
-                  <span key={j} className="chip windy" title={JSON.stringify(t.input)}>✦ {TOOL_LABELS[t.name] ?? t.name}</span>
+                  <span key={j} className="chip windy" title={JSON.stringify(t.input)}><Mark /> {TOOL_LABELS[t.name] ?? t.name}</span>
                 ))}
               </div>
             )}

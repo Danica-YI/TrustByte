@@ -2,8 +2,8 @@
 :root {
   --brand: #d4002a;
   --brand-dark: #a8001f;
-  --windy: #6d28d9;
-  --windy-soft: #efe9fb;
+  --windy: #d4002a;
+  --windy-soft: #fde4e8;
   --good: #15803d;
   --good-soft: #e3f5e8;
   --warn: #b45309;
@@ -112,7 +112,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- Shared cards and controls ---------- */
 .card { background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin-bottom: 12px; }
-.card.windy { border: 1.5px solid #a78bfa; }
+.card.windy { border: 1.5px solid #f3a0b0; }
 .card.selected { border: 2px solid var(--brand); }
 .card h2 { font-size: 18px; margin: 8px 0 6px; letter-spacing: -0.3px; }
 .card h3 { font-size: 15px; margin: 0 0 4px; }
@@ -189,3 +189,4 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 10px 0; }
 .bars .bar { width: 100%; border-radius: 6px 6px 0 0; background: #d9d0e6; }
 .bars .bar.now { background: var(--brand); }
 .stacked { display: flex; height: 10px; border-radius: 99px; overflow: hidden; gap: 2px; margin: 8px 0; }
+.windy-mark { display: inline-flex; vertical-align: -0.12em; }
