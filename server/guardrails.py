@@ -234,3 +234,27 @@ def check_explanation(text: str, facts_text: str) -> tuple[bool, list[dict]]:
     checks.append(check("output", "Safe response: no product advice or health talk", not bad,
                         f"Found '{bad.group(0)}'" if bad else "Clean"))
     return ok_len and not unknown and not bad, checks
+
+
+SMALL_COUNTS = 12  # "2 orders", "3 ways", "6 paydays": too common to trace
+
+
+def _values(text: str) -> set[str]:
+    """Every number in the text as a canonical value, so $136.70, 136.7 and 136.70 all match."""
+    out = set()
+    for n in _NUM.findall(text):
+        try:
+            out.add(f"{round(float(n.replace(',', '').rstrip('.')), 2):.2f}")
+        except ValueError:
+            pass
+    return out
+
+
+def check_chat_numbers(answer: str, tool_outputs: list[str], user_text: str = "") -> dict:
+    """Chat answers: every figure must come from what Windy's tools returned (the calculator) or from Mia."""
+    known = _values(" ".join(tool_outputs) + " " + user_text)
+    unknown = sorted(v for v in _values(answer) - known if float(v) > SMALL_COUNTS)
+    shown = ", ".join(v.removesuffix(".00") for v in unknown[:5])
+    return check("output", "Financial check: numbers come from the calculator", not unknown,
+                 "Every figure matches what the tools returned" if not unknown
+                 else f"Windy worked these out itself: {shown}")

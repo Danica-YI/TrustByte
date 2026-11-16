@@ -69,3 +69,13 @@ def test_delete_and_reset():
     assert chats.load("c1") is None and chats.delete("c1") is False
     state.reset()
     assert chats.sessions() == []
+
+
+def test_transcript_hides_suggest_next():
+    chats.save("c1", [
+        {"role": "user", "content": "I keep buying takeaway"},
+        {"role": "assistant", "content": [
+            FakeBlock(type="text", text="Eating out is up."),
+            FakeBlock(type="tool_use", id="t1", name="suggest_next", input={"actions": []})]},
+    ])
+    assert chats.transcript("c1")[1]["tools"] == []
