@@ -26,6 +26,7 @@ import ReceiptSettings from './screens/ReceiptSettings'
 import GoalShare from './screens/GoalShare'
 import GoalDetail from './screens/GoalDetail'
 import Goals from './screens/Goals'
+import Profile from './screens/Profile'
 
 export default function App() {
   const loc = useLocation()
@@ -68,6 +69,7 @@ export default function App() {
             <Route path="/pay-later" element={<PayLater />} />
             <Route path="/plan" element={<Plan />} />
             <Route path="/more" element={<More />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/accounts" element={<AccountList />} />
             <Route path="/accounts/:id" element={<AccountDetail />} />

@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
       <div className="hero">
-        <div className="spread"><div className="brand"><Logo /> Westpac</div><UserAvatar size={36} /></div>
+        <div className="spread"><div className="brand"><Logo /> Westpac</div><Link to="/profile" aria-label="Your profile" style={{ display: 'flex' }}><UserAvatar size={40} /></Link></div>
         <div className="greet">Good evening, {s.user.first_name}</div>
         <div className="balance">{money(s.everyday.balance, true)}</div>
         <div className="sub">Everyday · Safe to spend <b>{money(s.everyday.safe)}</b> until payday {shortDate(s.everyday.next_payday)}</div>
