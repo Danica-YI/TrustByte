@@ -3,13 +3,18 @@
 import { Link } from 'react-router-dom'
 import { Card, TopBar } from '../components/ui'
 
+const LINKS = [
+  ['/chat', '✦ Ask Windy (live AI chat)'],
+  ['/plan', 'Your plan and history'],
+  ['/consent', 'Your data and consent'],
+]
+
 export default function More() {
   return (
     <>
       <TopBar title="More" fallback="/" />
       <Card>
-        <Link to="/chat" className="row"><span>✦ Ask Windy (live AI chat)</span><span>›</span></Link>
-        <Link to="/consent" className="row"><span>Your data and consent</span><span>›</span></Link>
+        {LINKS.map(([to, label]) => <Link key={to} to={to} className="row"><span>{label}</span><span>›</span></Link>)}
       </Card>
     </>
   )

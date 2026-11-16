@@ -1,7 +1,6 @@
 // Small components reused across the wireframes. Styling lives in styles.css.
-import { useEffect, useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { askWindy, windyFallback, type WindyTopic } from '../ai/windy'
 
 // Windy mark: one petal from the wireframe logo, turned four ways around its tip (a four-point star / wind rose).
 const PETAL = 'M12.5027 0C13.084 0.972466 13.6925 2.15123 14.2501 3.15419L17.2234 8.55281L12.5057 16.9787C10.8982 14.2127 9.36613 11.3375 7.77292 8.54932C8.39787 7.43412 9.0154 6.31477 9.62548 5.19136C9.8775 4.73138 10.2469 4.00702 10.5134 3.58061C10.6109 3.40123 10.7489 3.13182 10.8619 2.97237C10.8822 2.92351 10.9046 2.87682 10.9284 2.83088C10.9403 2.8079 10.9525 2.78511 10.965 2.76232C10.9775 2.73953 10.9903 2.71673 11.0032 2.69376C11.4439 1.91063 11.8718 1.1184 12.3129 0.335103C12.3759 0.223206 12.4391 0.11148 12.5027 0Z'
@@ -90,12 +89,12 @@ export function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) =
       onClick={() => onChange(!on)}
       aria-pressed={on}
       style={{
-        width: 44, height: 26, borderRadius: 99, border: 'none', padding: 3,
-        background: on ? 'var(--good)' : '#d6d0dd', display: 'flex',
+        width: 44, height: 26, flexShrink: 0, borderRadius: 99, border: 'none', padding: 3,
+        background: on ? 'var(--good)' : '#a9a1b5', display: 'flex',
         justifyContent: on ? 'flex-end' : 'flex-start', transition: 'all .15s',
       }}
     >
-      <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff', display: 'block' }} />
+      <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff', display: 'block', boxShadow: '0 1px 3px rgba(0,0,0,.25)' }} />
     </button>
   )
 }
@@ -155,16 +154,4 @@ export function BottomNav() {
       ))}
     </nav>
   )
-}
-
-/** Windy's explanation text: shows the scripted copy first, then the model output if a backend is configured */
-export function useWindy(topic: WindyTopic, context?: Record<string, unknown>) {
-  const [text, setText] = useState(windyFallback[topic])
-  useEffect(() => {
-    let alive = true
-    askWindy(topic, context).then((t) => alive && setText(t))
-    return () => { alive = false }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic])
-  return text
 }

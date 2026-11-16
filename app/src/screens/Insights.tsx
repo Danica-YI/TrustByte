@@ -1,52 +1,62 @@
-// Harbour 02 · Insights
-import { useState } from 'react'
-import { Card, Chip, Seg, TopBar, WindyPill } from '../components/ui'
-import { insights, money } from '../data/mia'
+// Harbour 02 · Insights (Ideas 5+6 · Spending Behaviour Coach). Real figures from 12 months of history,
+// compared fairly (same days of earlier months). Setting a limit goes through review and approve,
+// and then lowers the usual spending the forecast plans for.
+import { useNavigate } from 'react-router-dom'
+import { Card, Chip, TopBar, WindyPill } from '../components/ui'
+import { money } from '../format'
+import { useApp, useSnap } from '../store'
 
 export default function Insights() {
-  const [range, setRange] = useState<'This month' | '6 months' | 'Year'>('6 months')
-  const max = Math.max(...insights.months.map((m) => m.v))
+  const s = useSnap()
+  const nav = useNavigate()
+  const { propose, busy } = useApp()
+  const ins = s.insights
+  const max = Math.max(...ins.months.map((m) => m.v))
+  const limit = ins.budgets['Eating out']
+
+  if (!s.consent.spending_insights) {
+    return <><TopBar title="Insights" fallback="/" /><Card><p>Spending coaching is off in Your data and consent.</p></Card></>
+  }
 
   return (
     <>
       <TopBar title="Insights" fallback="/" />
-      <Seg options={['This month', '6 months', 'Year']} value={range} onChange={setRange} />
-
       <Card>
-        <div className="muted" style={{ marginTop: 4 }}>Spent in November so far</div>
+        <div className="muted" style={{ marginTop: 4 }}>Spent in November so far ({ins.days_counted} days)</div>
         <div className="spread">
-          <div style={{ fontSize: 28, fontWeight: 800 }}>{money(insights.spentThisMonth)}</div>
-          <Chip tone="bad">+{money(insights.vsAverage)} vs average</Chip>
+          <div style={{ fontSize: 28, fontWeight: 800 }}>{money(ins.spent)}</div>
+          <Chip tone={ins.vs_same_days > 0 ? 'bad' : 'good'}>{ins.vs_same_days > 0 ? '+' : ''}{money(ins.vs_same_days)} vs usual by now</Chip>
         </div>
         <div className="bars">
-          {insights.months.map((m, i) => (
-            <div key={m.m}>
-              <div className={`bar ${i === insights.months.length - 1 ? 'now' : ''}`} style={{ height: `${(m.v / max) * 90}px` }} />
-              {m.m}
-            </div>
+          {ins.months.map((m) => (
+            <div key={m.m}><div className={`bar ${m.partial ? 'now' : ''}`} style={{ height: `${(m.v / max) * 90}px` }} />{m.m}</div>
           ))}
         </div>
-        <div className="small">avg {money(insights.average)}</div>
+        <div className="small">Full-month average {money(ins.avg_full)} · six spending categories, Everyday only</div>
       </Card>
 
       <Card variant="windy">
         <WindyPill label="Money Coach" />
-        <p style={{ marginTop: 8 }}>Eating out (+$176) and Shopping (+$130) drive the jump. 14 food delivery orders this month, your usual is 8. Groceries and bills are under average.</p>
-        <button className="btn outline">Set an Eating out budget</button>
+        <p style={{ marginTop: 8 }}>{ins.coach}</p>
+        {limit
+          ? <div className="plan-strip" style={{ marginBottom: 0 }}>✓ Eating out limit: {money(limit)} a week. Your forecast plans for it.</div>
+          : <button className="btn outline" disabled={busy} onClick={async () => { const p = await propose('budget', { category: 'Eating out', weekly: 60 }); if (p) nav(`/review/${p.id}`) }}>
+              Set a {money(60)} a week Eating out limit
+            </button>}
       </Card>
 
       <Card>
-        <h3>By category vs your average</h3>
-        {insights.categories.map((c) => {
-          const pct = Math.round(((c.spent - c.avg) / c.avg) * 100)
+        <h3>By category vs the same days of earlier months</h3>
+        {ins.categories.map((c) => {
+          const pct = Math.round((c.diff_vs_same_days / c.avg_same_days) * 100)
           return (
-            <div key={c.name} className="row">
-              <div><div>{c.name}</div><div className="muted">{money(c.spent)} · avg {money(c.avg)}</div></div>
-              <Chip tone={pct > 20 ? 'bad' : pct > 0 ? 'warn' : 'good'}>{pct === 0 ? 'On track' : `${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`}</Chip>
+            <div key={c.category} className="row">
+              <div><div>{c.category}</div><div className="muted">{money(c.this_month)} · usual by now {money(c.avg_same_days)}</div></div>
+              <Chip tone={pct > 20 ? 'bad' : pct > 0 ? 'warn' : 'good'}>{Math.abs(pct) < 3 ? 'On track' : `${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`}</Chip>
             </div>
           )
         })}
-        <p className="small" style={{ marginTop: 8 }}>Transactions are recorded and categorised automatically. Tap a category to fix one.</p>
+        <p className="small" style={{ marginTop: 8 }}>Compared with days 1 to {ins.days_counted} of earlier months, so a month that isn’t over is compared fairly.</p>
       </Card>
     </>
   )

@@ -1,22 +1,19 @@
-// Routes: roughly one wireframe = one page. To add a page: create a file in screens/ → add a line here → register it in features.ts.
+// Routes. Every screen reads the live snapshot from the backend (see store.tsx), so a change approved on one
+// screen shows up everywhere, and going back to Home never resets anything.
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
-import { DemoShell } from './components/DemoShell'
+import { Shell } from './components/Shell'
 import { BottomNav } from './components/ui'
+import { useApp } from './store'
 import Home from './screens/Home'
 import LifeEventConfirm from './screens/LifeEventConfirm'
 import GoalOptions from './screens/GoalOptions'
-import GoalReview from './screens/GoalReview'
+import Review from './screens/Review'
 import Forecast from './screens/Forecast'
 import Insights from './screens/Insights'
 import Consent from './screens/Consent'
-import BudgetIncome from './screens/BudgetIncome'
-import BudgetCreated from './screens/BudgetCreated'
 import Payments from './screens/Payments'
 import Receipt from './screens/Receipt'
-import LoanReadiness from './screens/LoanReadiness'
-import FeatureFinder from './screens/FeatureFinder'
-import HomeLoanApply from './screens/HomeLoanApply'
 import More from './screens/More'
 import Placeholder from './screens/Placeholder'
 import { AccountDetail, AccountList } from './screens/Accounts'
@@ -24,45 +21,56 @@ import Chat from './screens/Chat'
 import PayLater from './screens/PayLater'
 import QuickSplit from './screens/QuickSplit'
 import JapanSooner from './screens/JapanSooner'
-import JapanReview from './screens/JapanReview'
+import Plan from './screens/Plan'
+import ReceiptSettings from './screens/ReceiptSettings'
 
 export default function App() {
   const loc = useLocation()
   const scroller = useRef<HTMLDivElement>(null)
-  // Scroll back to top on page change
+  const { snap, error, toast, reload } = useApp()
   useEffect(() => { scroller.current?.scrollTo(0, 0) }, [loc.pathname])
 
   return (
-    <DemoShell>
+    <Shell>
       <div className="screen" ref={scroller}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/life-event" element={<LifeEventConfirm />} />
-          <Route path="/goals/options" element={<GoalOptions />} />
-          <Route path="/goals/review/:option" element={<GoalReview />} />
-          <Route path="/forecast" element={<Forecast />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/consent" element={<Consent />} />
-          <Route path="/budget/income" element={<BudgetIncome />} />
-          <Route path="/budget" element={<BudgetCreated />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/receipt" element={<Receipt />} />
-          <Route path="/receipt/quick-split" element={<QuickSplit />} />
-          <Route path="/receipt/:id" element={<Receipt />} />
-          <Route path="/pay-later" element={<PayLater />} />
-          <Route path="/goals/japan-sooner" element={<JapanSooner />} />
-          <Route path="/goals/japan-sooner/review" element={<JapanReview />} />
-          <Route path="/loan-readiness" element={<LoanReadiness />} />
-          <Route path="/ask" element={<FeatureFinder />} />
-          <Route path="/home-loan/apply" element={<HomeLoanApply />} />
-          <Route path="/more" element={<More />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/accounts" element={<AccountList />} />
-          <Route path="/accounts/:id" element={<AccountDetail />} />
-          <Route path="*" element={<Placeholder />} />
-        </Routes>
+        {!snap ? (
+          <div className="loading">
+            {error ? (
+              <div>
+                <h3>Windy can’t reach the bank yet</h3>
+                <p>{error}</p>
+                <p className="small">Start the backend in another terminal: <code>cd app && npm run server</code></p>
+                <button className="btn primary" onClick={reload}>Try again</button>
+              </div>
+            ) : 'Loading your accounts…'}
+          </div>
+        ) : (
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/life-event" element={<LifeEventConfirm />} />
+            <Route path="/goals/options" element={<GoalOptions />} />
+            <Route path="/goals/japan-sooner" element={<JapanSooner />} />
+            <Route path="/review/:id" element={<Review />} />
+            <Route path="/forecast" element={<Forecast />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/consent" element={<Consent />} />
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/receipt" element={<Receipt />} />
+            <Route path="/receipt/quick-split" element={<QuickSplit />} />
+            <Route path="/receipt/settings" element={<ReceiptSettings />} />
+            <Route path="/receipt/:id" element={<Receipt />} />
+            <Route path="/pay-later" element={<PayLater />} />
+            <Route path="/plan" element={<Plan />} />
+            <Route path="/more" element={<More />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/accounts" element={<AccountList />} />
+            <Route path="/accounts/:id" element={<AccountDetail />} />
+            <Route path="*" element={<Placeholder />} />
+          </Routes>
+        )}
       </div>
-      <BottomNav />
-    </DemoShell>
+      {toast && <div className="toast">{toast}</div>}
+      {snap && <BottomNav />}
+    </Shell>
   )
 }
