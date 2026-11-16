@@ -204,3 +204,4 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 10px 0; }
 .section-head { display: flex; justify-content: space-between; align-items: baseline; margin: 4px 2px 8px; }
 .section-head h3 { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--ink-2); }
 .card.goal-account { border-left: 5px solid var(--brand); }
+.cat-icon { width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px; background: #f1ecf6; color: var(--ink-2); display: flex; align-items: center; justify-content: center; }

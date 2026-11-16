@@ -2,7 +2,7 @@
 // compared fairly (same days of earlier months). Setting a limit goes through review and approve,
 // and then lowers the usual spending the forecast plans for.
 import { useNavigate } from 'react-router-dom'
-import { Card, Chip, TopBar, WindyPill } from '../components/ui'
+import { Card, CategoryIcon, Chip, TopBar, WindyPill } from '../components/ui'
 import { money } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -51,7 +51,10 @@ export default function Insights() {
           const pct = Math.round((c.diff_vs_same_days / c.avg_same_days) * 100)
           return (
             <div key={c.category} className="row">
-              <div><div>{c.category}</div><div className="muted">{money(c.this_month)} · usual by now {money(c.avg_same_days)}</div></div>
+              <div className="hstack" style={{ flexWrap: 'nowrap', gap: 10 }}>
+                <CategoryIcon name={c.category} />
+                <div><div>{c.category}</div><div className="muted">{money(c.this_month)} · usual by now {money(c.avg_same_days)}</div></div>
+              </div>
               <Chip tone={pct > 20 ? 'bad' : pct > 0 ? 'warn' : 'good'}>{Math.abs(pct) < 3 ? 'On track' : `${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`}</Chip>
             </div>
           )

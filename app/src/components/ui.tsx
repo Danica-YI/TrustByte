@@ -42,6 +42,26 @@ export function UserAvatar({ size = 28 }: { size?: number }) {
   return <img className="avatar" src={miaPhoto} width={size} height={size} alt="Mia" />
 }
 
+// Small line icon for a spending category (Insights). Unknown categories get a plain dot.
+const CATEGORY_PATHS: Record<string, ReactNode> = {
+  'Eating out': <path d="M7 3v7a2 2 0 0 0 2 2v9M5 3v5M9 3v5M17 3c-2 2-3 4.5-3 8h3v10" />,
+  Shopping: <path d="M6 8h12l1 12H5L6 8zM9 8V6.5a3 3 0 0 1 6 0V8" />,
+  Groceries: <><path d="M3 4h2.2l2.3 10.5h10L20 7H6.4" /><circle cx="9" cy="18.5" r="1.3" /><circle cx="16.5" cy="18.5" r="1.3" /></>,
+  Subscriptions: <path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7" />,
+  Transport: <><path d="M5.5 5h13A1.5 1.5 0 0 1 20 6.5V16H4V6.5A1.5 1.5 0 0 1 5.5 5zM4 11h16M7.5 16v2.5M16.5 16v2.5" /><circle cx="8" cy="13.5" r="0.6" /><circle cx="16" cy="13.5" r="0.6" /></>,
+  'Bills and utilities': <path d="M13 3L5.5 13.5H11l-1 7.5 7.5-10.5H12L13 3z" />,
+}
+
+export function CategoryIcon({ name }: { name: string }) {
+  return (
+    <span className="cat-icon" aria-hidden>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {CATEGORY_PATHS[name] ?? <circle cx="12" cy="12" r="3" />}
+      </svg>
+    </span>
+  )
+}
+
 export function Card({ children, variant, onClick }: { children: ReactNode; variant?: 'windy' | 'selected'; onClick?: () => void }) {
   return (
     <div className={`card ${variant ?? ''}`} onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
