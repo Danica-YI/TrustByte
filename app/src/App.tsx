@@ -25,6 +25,7 @@ import Plan from './screens/Plan'
 import ReceiptSettings from './screens/ReceiptSettings'
 import GoalShare from './screens/GoalShare'
 import GoalDetail from './screens/GoalDetail'
+import Goals from './screens/Goals'
 
 export default function App() {
   const loc = useLocation()
@@ -50,6 +51,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/life-event" element={<LifeEventConfirm />} />
+            <Route path="/goals" element={<Goals />} />
             <Route path="/goals/options" element={<GoalOptions />} />
             <Route path="/goals/japan-sooner" element={<JapanSooner />} />
             <Route path="/goals/share/:id" element={<GoalShare />} />

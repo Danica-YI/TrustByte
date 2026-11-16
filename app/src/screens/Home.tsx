@@ -49,7 +49,7 @@ export default function Home() {
         <Card>
           <div className="spread" style={{ marginBottom: 8 }}>
             <h3>Your life goals</h3>
-            <Link to="/goals/options" className="link">Plan ›</Link>
+            <Link to="/goals" className="link">See all ›</Link>
           </div>
           {s.goals.map((g) => (
             <div key={g.id}>

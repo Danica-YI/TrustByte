@@ -12,6 +12,8 @@ export default function GoalDetail() {
   const s = useSnap()
   const { propose, busy } = useApp()
   const g = s.goals.find((x) => x.id === id)
+  // The trade-off screen only matters while a confirmed rent rise still has to be covered
+  const needsChoice = s.life_event.status === 'confirmed' && !s.tradeoff.no_conflict && s.plan_choice?.kind !== 'goal_plan'
   const [amount, setAmount] = useState(g ? String(g.per_payday) : '0')
 
   if (!g) {
@@ -61,7 +63,7 @@ export default function GoalDetail() {
 
       <Card>
         <Link to={`/goals/share/${g.id}`} className="row"><span>{g.members.length ? `Saving with ${g.members.map((m) => m.name).join(', ')}` : 'Save together with someone'}</span><span>›</span></Link>
-        <Link to="/goals/options" className="row"><span>Compare options across goals</span><span>›</span></Link>
+        {needsChoice && <Link to="/goals/options" className="row"><span>Your rent went up: compare options</span><span>›</span></Link>}
         <Link to="/plan" className="row"><span>Plan history and undo</span><span>›</span></Link>
       </Card>
 
