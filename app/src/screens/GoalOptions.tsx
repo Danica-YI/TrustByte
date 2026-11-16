@@ -8,6 +8,11 @@ export default function GoalOptions() {
   const nav = useNavigate()
   const [priority, setPriority] = useState<'Japan' | 'Home' | 'Not sure'>('Not sure')
   const [picked, setPicked] = useState<'A' | 'B' | 'C'>('B')
+  // Choosing a priority highlights the option that matches it; the user can still tap any card
+  const choosePriority = (p: typeof priority) => {
+    setPriority(p)
+    setPicked(p === 'Japan' ? 'A' : p === 'Home' ? 'C' : 'B')
+  }
 
   return (
     <>
@@ -15,7 +20,7 @@ export default function GoalOptions() {
       <p className="intro">Money is tighter after the move, so not every goal fits as planned. Here’s what each choice means. Windy won’t pick for you.</p>
       <div className="hstack" style={{ marginBottom: 12 }}>
         <span className="muted">Your priority:</span>
-        <Seg options={['Japan', 'Home', 'Not sure']} value={priority} onChange={setPriority} />
+        <Seg options={['Japan', 'Home', 'Not sure']} value={priority} onChange={choosePriority} />
       </div>
 
       {planOptions.map((o) => (
