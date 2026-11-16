@@ -1,6 +1,7 @@
 // Small components reused across the wireframes. Styling lives in styles.css.
 import type { ReactNode } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import miaPhoto from '../assets/mia.jpg'
 
 export function Logo({ color = '#fff', size = 22 }: { color?: string; size?: number }) {
   // Brand logo: the crown from the wireframes (same mark as the Home tab).
@@ -34,6 +35,11 @@ export function Mark() {
 // Send arrow for the chat composer (the paper plane from the wireframes), nudged right so it looks centred.
 export function SendIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden style={{ marginLeft: 2 }}><path d="M3 4l18 8-18 8 4-8z" /></svg>
+}
+
+// Profile picture of the demo user (Mia).
+export function UserAvatar({ size = 28 }: { size?: number }) {
+  return <img className="avatar" src={miaPhoto} width={size} height={size} alt="Mia" />
 }
 
 export function Card({ children, variant, onClick }: { children: ReactNode; variant?: 'windy' | 'selected'; onClick?: () => void }) {

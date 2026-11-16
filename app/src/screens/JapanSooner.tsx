@@ -2,7 +2,7 @@
 // number comes from the engine. Tapping "Review" asks the backend for a full proposal (guardrails, AI, checks).
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, Mark, SendIcon, TopBar } from '../components/ui'
+import { Card, Mark, SendIcon, TopBar, UserAvatar } from '../components/ui'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -35,7 +35,7 @@ export default function JapanSooner() {
   return (
     <>
       <TopBar title="Windy" fallback="/" />
-      <div className="bubble me">I want to go to Japan in the next 3 months. Can you plan the budget?</div>
+      <div className="me-row"><div className="bubble me">I want to go to Japan in the next 3 months. Can you plan the budget?</div><UserAvatar /></div>
       <div className="bubble ai">
         <div className="pill" style={{ marginBottom: 6 }}><Mark /> Windy</div>
         <div><b>Yes, with two changes.</b></div>
@@ -66,7 +66,7 @@ export default function JapanSooner() {
 
       {askedAlt && (
         <>
-          <div className="bubble me">Can we leave the Bali fund alone?</div>
+          <div className="me-row"><div className="bubble me">Can we leave the Bali fund alone?</div><UserAvatar /></div>
           <div className="bubble ai">
             <div className="pill" style={{ marginBottom: 6 }}><Mark /> Windy</div>
             <div><b>Yes, but it costs more elsewhere.</b></div>

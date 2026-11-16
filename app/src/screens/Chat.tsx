@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { Check } from '../api'
-import { Mark, SendIcon, TopBar } from '../components/ui'
+import { Mark, SendIcon, TopBar, UserAvatar } from '../components/ui'
 import { useApp } from '../store'
 
 type ToolCall = { name: string; input: Record<string, unknown> }
@@ -212,7 +212,7 @@ export default function Chat() {
 
       {msgs.map((m, i) =>
         m.role === 'user' ? (
-          <div key={i} className="bubble me">{m.text}</div>
+          <div key={i} className="me-row"><div className="bubble me">{m.text}</div><UserAvatar /></div>
         ) : (
           <div key={i} className="bubble ai" style={{ whiteSpace: 'pre-wrap' }}>
             {m.tools.length > 0 && (
