@@ -1,0 +1,138 @@
+{
+  "today": "2026-11-14",
+  "upcoming": [
+    {
+      "date": "2026-11-15",
+      "label": "Bupa health insurance",
+      "amount": -132.4,
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-18",
+      "label": "Rent \u00b7 Ray White",
+      "amount": -620,
+      "source": "detected weekly from 11 Nov",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-22",
+      "label": "iCloud+",
+      "amount": -4.49,
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-24",
+      "label": "Gym \u00b7 Fitness First",
+      "amount": -25,
+      "source": "detected fortnightly",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-24",
+      "label": "Aussie Broadband",
+      "amount": -79,
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-25",
+      "label": "Rent \u00b7 Ray White",
+      "amount": -620,
+      "source": "detected weekly from 11 Nov",
+      "estimate": false
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Salary \u00b7 Harbour Health",
+      "amount": 2883.24,
+      "source": "detected fortnightly",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-02",
+      "label": "Rent \u00b7 Ray White",
+      "amount": -620,
+      "source": "detected weekly from 11 Nov",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-02",
+      "label": "Spotify Premium",
+      "amount": -13.99,
+      "source": "Windy found (not confirmed)",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-03",
+      "label": "Car rego \u00b7 QLD TMR",
+      "amount": -412,
+      "source": "added by customer",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-05",
+      "label": "Telstra",
+      "amount": -98,
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-05",
+      "label": "Car insurance \u00b7 AAMI",
+      "amount": -806,
+      "source": "renewal notice (was $720)",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-08",
+      "label": "Gym \u00b7 Fitness First",
+      "amount": -25,
+      "source": "detected fortnightly",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-09",
+      "label": "Rent \u00b7 Ray White",
+      "amount": -620,
+      "source": "detected weekly from 11 Nov",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-10",
+      "label": "Netflix",
+      "amount": -18.99,
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-11",
+      "label": "Salary \u00b7 Harbour Health",
+      "amount": 2883.24,
+      "source": "detected fortnightly",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-14",
+      "label": "Amazon Prime",
+      "amount": -9.99,
+      "source": "Windy found (not confirmed)",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-15",
+      "label": "Bupa health insurance",
+      "amount": -132.4,
+      "source": "detected monthly",
+      "estimate": false
+    },
+    {
+      "date": "2026-12-16",
+      "label": "Rent \u00b7 Ray White",
+      "amount": -620,
+      "source": "detected weekly from 11 Nov",
+      "estimate": false
+    }
+  ]
+}

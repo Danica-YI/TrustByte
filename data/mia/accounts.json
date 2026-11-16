@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "user": "Mia",
+    "today": "2026-11-14",
+    "from": "2026-06-01",
+    "seed": 20261116,
+    "note": "Synthetic data for a hackathon demo. Not real people or accounts."
+  },
+  "accounts": [
+    {
+      "id": "everyday",
+      "name": "Everyday",
+      "product": "Choice",
+      "closing_balance": 1678.25,
+      "opening_balance": 2446.51,
+      "opening_date": "2026-06-01"
+    },
+    {
+      "id": "life",
+      "name": "Westpac Life",
+      "product": "Savings",
+      "closing_balance": 8112.4,
+      "opening_balance": 1512.4,
+      "opening_date": "2026-06-01"
+    },
+    {
+      "id": "goal-japan",
+      "name": "Japan trip",
+      "product": "Goal saver",
+      "closing_balance": 1140.0,
+      "goal_target": 3500,
+      "opening_balance": 28.0,
+      "opening_date": "2026-06-01"
+    },
+    {
+      "id": "goal-emergency",
+      "name": "Emergency fund",
+      "product": "Goal saver",
+      "closing_balance": 2600.0,
+      "goal_target": 6000,
+      "opening_balance": 2400.0,
+      "opening_date": "2026-06-01"
+    },
+    {
+      "id": "goal-home",
+      "name": "Home deposit",
+      "product": "Goal saver",
+      "closing_balance": 8000.0,
+      "goal_target": 40000,
+      "opening_balance": 6020.0,
+      "opening_date": "2026-06-01"
+    }
+  ]
+}

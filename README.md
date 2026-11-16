@@ -60,6 +60,36 @@ app/src/
 | Feature Finder | `/ask` | FF-01 |
 | Pre-filled home loan | `/home-loan/apply` | PA-01 |
 
+## Fake bank data
+
+`data/generate.py` builds 6 months of Mia's banking history (1 Jun – 14 Nov 2026, ~450 transactions
+across 5 accounts). Python 3, no installs:
+
+```bash
+python3 data/generate.py
+```
+
+It writes `data/mia/`:
+
+| file | what's in it |
+|---|---|
+| `accounts.json` | Everyday, Westpac Life, three goal savers, with opening and closing balances |
+| `transactions.json` / `.csv` | every transaction: raw statement text, cleaned merchant, category, amount, running balance, pending/posted, and tags such as `signal: "life-event"` or `receipt_id` (CSV is for opening in Excel / Sheets) |
+| `receipts.json` | itemised receipts for two grocery shops (Receipt Lens) |
+| `upcoming.json` | bills and pay already known for the next 5 weeks (for the forecast) |
+
+The output is the same on every machine (fixed seed). Don't edit the JSON by hand: change the
+script and rerun. The script ends with checks that fail loudly if the data drifts from the story
+(closing balances, receipt totals, Spotify/Amazon dates, November delivery count, no overdrawn history,
+"safe to spend" close to the wireframe's $180).
+
+Story built into the data: fortnightly salary + ABN side income; moving home in November
+(removalist, IKEA, Bunnings, $500 from savings, $2,400 RTA bond, first $620 rent to Ray White);
+Spotify starting in Sep and Amazon Prime in Oct (for "Windy found 2"); Netflix up $2 in Nov;
+14 food deliveries in Nov vs ~8 usually; a $142.30 Coles shop on 12 Nov with a receipt.
+
+The **Accounts** tab in the app shows this data (search and filter by category).
+
 ## Adding real AI later
 
 See the comment at the top of `app/src/ai/windy.ts`. Short version: put the API key in a small backend,
@@ -71,4 +101,15 @@ never in the frontend, and point `VITE_WINDY_API` at it. If the backend fails, t
 - LP-05 only details option B; options A and C have no breakdown yet (they fall back to B).
 - LP-09 and DC-01 reused the LP-05 template, so some leftover numbers (e.g. "$3,500 →") were dropped.
 - Income is $3,303/fortnight in B-01 but $1,450/fortnight in LP-09.
-- Accounts and More tabs were not designed; they are placeholders.
+- More tab was not designed; it is a placeholder. Accounts shows the generated data.
+- In 2026, 22 Nov is a Sunday (LP-02 says "Sat 22 Nov"). Payday is 27 Nov in most screens but 28 Nov in Harbour 03.
+- Harbour 02 compares November *so far* with full-month averages. With the generated data, Subscriptions
+  and Bills for 1–14 Nov are well below their monthly averages, so a data-driven Insights screen would
+  show November total *below* average. Either compare against the same days of previous months, or use
+  "last 30 days".
+- Generated averages differ slightly from the wireframe: Subscriptions $84 (wireframe $96), Bills $571 ($576).
+  Eating out, Shopping, Transport and Groceries match exactly.
+- B-05 shows savings of $495 a fortnight; the data saves $165 + $139 to goals plus $600 to Westpac Life.
+- Counting known bills only, Everyday's low is +$197 on 25 Nov (that's the "safe to spend"). Add Mia's
+  usual day-to-day spending (~$60 a day) and she dips below $0 *before* the 27 Nov payday, earlier than
+  the wireframe's −$120 on 3 Dec. The forecast needs a spending assumption the team agrees on.

@@ -1,0 +1,194 @@
+{
+  "meta": {
+    "user": "Mia",
+    "today": "2026-11-14",
+    "from": "2026-06-01",
+    "seed": 20261116,
+    "note": "Synthetic data for a hackathon demo. Not real people or accounts."
+  },
+  "receipts": [
+    {
+      "id": "rcpt-coles-20261112",
+      "merchant": "Coles",
+      "store": "Coles Taringa",
+      "date": "2026-11-12",
+      "total": 142.3,
+      "items": [
+        {
+          "name": "Coles Full Cream Milk 3L",
+          "price": 4.65,
+          "group": "Essentials"
+        },
+        {
+          "name": "Helga's Wholemeal Bread 750g",
+          "price": 5.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Free Range Eggs 12pk",
+          "price": 7.2,
+          "group": "Essentials"
+        },
+        {
+          "name": "Chicken Breast Fillets 1kg",
+          "price": 13.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Beef Mince 500g",
+          "price": 8.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Bananas 1kg",
+          "price": 3.9,
+          "group": "Essentials"
+        },
+        {
+          "name": "Broccoli each",
+          "price": 2.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Carrots 1kg",
+          "price": 2.2,
+          "group": "Essentials"
+        },
+        {
+          "name": "Jasmine Rice 5kg",
+          "price": 12.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Greek Yoghurt 1kg",
+          "price": 6.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Tasty Cheese Block 500g",
+          "price": 8.95,
+          "group": "Essentials"
+        },
+        {
+          "name": "Baby Spinach 280g",
+          "price": 5.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Tinned Tomatoes 4pk",
+          "price": 6.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Tim Tam Original",
+          "price": 5.5,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Smith's Chips Party Pack",
+          "price": 9.0,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Ben & Jerry's 458ml",
+          "price": 12.5,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Coca-Cola 10x375ml",
+          "price": 11.2,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Dishwashing Liquid 900ml",
+          "price": 4.2,
+          "group": "Household"
+        },
+        {
+          "name": "Paper Towel 4pk",
+          "price": 6.5,
+          "group": "Household"
+        },
+        {
+          "name": "Laundry Liquid 2L",
+          "price": 7.0,
+          "group": "Household"
+        }
+      ]
+    },
+    {
+      "id": "rcpt-woolies-20261107",
+      "merchant": "Woolworths",
+      "store": "Woolworths Toowong",
+      "date": "2026-11-07",
+      "total": 88.15,
+      "items": [
+        {
+          "name": "Woolworths Milk 2L",
+          "price": 3.1,
+          "group": "Essentials"
+        },
+        {
+          "name": "Sourdough Loaf",
+          "price": 6.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Chicken Thigh Fillets 1kg",
+          "price": 14.0,
+          "group": "Essentials"
+        },
+        {
+          "name": "Salmon Fillets 2pk",
+          "price": 18.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Apples 1kg",
+          "price": 5.9,
+          "group": "Essentials"
+        },
+        {
+          "name": "Tomatoes 500g",
+          "price": 4.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Pasta 500g x2",
+          "price": 3.6,
+          "group": "Essentials"
+        },
+        {
+          "name": "Pasta Sauce 500g",
+          "price": 3.5,
+          "group": "Essentials"
+        },
+        {
+          "name": "Oats 1kg",
+          "price": 3.8,
+          "group": "Essentials"
+        },
+        {
+          "name": "Frozen Peas 1kg",
+          "price": 3.25,
+          "group": "Essentials"
+        },
+        {
+          "name": "Dark Chocolate Block",
+          "price": 5.0,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Sparkling Water 10pk",
+          "price": 7.0,
+          "group": "Extras and snacks"
+        },
+        {
+          "name": "Toilet Paper 12pk",
+          "price": 10.0,
+          "group": "Household"
+        }
+      ]
+    }
+  ]
+}
