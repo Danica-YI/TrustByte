@@ -14,6 +14,7 @@ const STORY: { path: string; label: string; idea?: string }[] = [
   { path: '/goals/options', label: 'Goal trade-off options', idea: '2' },
   { path: '/forecast', label: 'Shortfall forecast and fixes', idea: '4' },
   { path: '/goals/japan-sooner', label: 'Ask: Japan in 3 months', idea: '2' },
+  { path: '/goals/share/goal-japan', label: 'Save together · joint goal' },
   { path: '/payments', label: 'Regular payments', idea: '9+15' },
   { path: '/pay-later', label: 'Pay-later plans', idea: '9+15' },
   { path: '/receipt', label: 'Receipt Lens', idea: '10' },

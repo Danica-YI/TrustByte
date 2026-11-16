@@ -67,6 +67,9 @@ def default_state() -> dict:
         "receipts_reviewed": [],
         "splits": {},
         "dismissed_cards": [],
+        # Joint savings: people Mia invited to save for a goal with her, by goal account id.
+        # Each is {"name", "per_payday", "status": "invited" | "joined"}. Simulated: no message is sent.
+        "shared_goals": {},
         # The trade-off option or Japan plan Mia approved, for the home screen
         "plan_choice": None,
         # Every change, newest last. Each entry keeps the state before it, so it can be undone.

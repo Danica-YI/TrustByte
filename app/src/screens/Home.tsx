@@ -62,6 +62,10 @@ export default function Home() {
                 <span>{g.per_payday > 0 ? `${money(g.per_payday)} a payday` : 'No auto-save'}</span>
                 <span>{g.reached ? `Reached ${monthYear(g.reached)}` : g.reached_label}</span>
               </div>
+              <div className="goal-meta">
+                <span>{g.members.length ? `With ${g.members.map((m) => m.name).join(', ')}` : 'Just you'}</span>
+                <Link to={`/goals/share/${g.id}`} className="link" style={{ fontSize: 12 }}>{g.members.length ? 'Manage ›' : 'Save together ›'}</Link>
+              </div>
             </div>
           ))}
         </Card>

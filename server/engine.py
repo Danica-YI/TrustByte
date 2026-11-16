@@ -261,16 +261,28 @@ def forecast_fixes(s: dict) -> list[dict]:
 
 # ------------------------------------------------------------------ goals (Idea 2)
 
-def goal_date(s: dict, acc_id: str) -> date | None:
+def goal_members(s: dict, acc_id: str) -> list[dict]:
+    """People saving for this goal with Mia (joint savings). Only the ones who joined add money."""
+    return s.get("shared_goals", {}).get(acc_id, [])
+
+
+def partner_per_payday(s: dict, acc_id: str) -> float:
+    return r2(sum(m["per_payday"] for m in goal_members(s, acc_id) if m["status"] == "joined"))
+
+
+def goal_date(s: dict, acc_id: str, solo: bool = False) -> date | None:
+    """When the goal is reached. Joined partners' amounts count unless solo=True (Mia saving alone)."""
     a = account(s, acc_id)
     remaining = a["goal_target"] - a["closing_balance"]
     if remaining <= 0:
         return TODAY
+    partners = 0.0 if solo else partner_per_payday(s, acc_id)
     for k in range(0, 26 * 30):
-        remaining -= autosave_amount(s, acc_id, k)
+        step = autosave_amount(s, acc_id, k) + partners
+        remaining -= step
         if remaining <= 0:
             return payday(k)
-        if k > 30 and autosave_amount(s, acc_id, k) <= 0:
+        if k > 30 and step <= 0:
             return None
     return None
 
@@ -281,7 +293,10 @@ def goals(s: dict) -> list[dict]:
         if not a.get("goal_target"):
             continue
         reached = goal_date(s, a["id"])
-        out.append({"id": a["id"], "name": a["name"], "saved": a["closing_balance"], "target": a["goal_target"],
+        solo = goal_date(s, a["id"], solo=True)
+        out.append({"members": goal_members(s, a["id"]), "partner_per_payday": partner_per_payday(s, a["id"]),
+                    "reached_solo": solo.isoformat() if solo else None,
+                    "id": a["id"], "name": a["name"], "saved": a["closing_balance"], "target": a["goal_target"],
                     "per_payday": autosave_amount(s, a["id"], 0), "reached": reached.isoformat() if reached else None,
                     "reached_label": month_year(reached) if reached else "No regular saving",
                     "color": GOAL_COLORS.get(a["id"], "#6d28d9"), "goal_date": a.get("goal_date")})

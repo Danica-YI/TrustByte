@@ -11,7 +11,11 @@ export type Upcoming = {
 export type Goal = {
   id: string; name: string; saved: number; target: number; per_payday: number
   reached: string | null; reached_label: string; color: string; goal_date?: string
+  // Joint savings: people saving for this goal with Mia, and when she would get there alone
+  members: GoalMember[]; partner_per_payday: number; reached_solo: string | null
 }
+
+export type GoalMember = { name: string; per_payday: number; status: 'invited' | 'joined' }
 
 export type Evidence = { id: string; date: string; merchant: string; category: string; amount: number; note?: string }
 

@@ -23,6 +23,7 @@ import QuickSplit from './screens/QuickSplit'
 import JapanSooner from './screens/JapanSooner'
 import Plan from './screens/Plan'
 import ReceiptSettings from './screens/ReceiptSettings'
+import GoalShare from './screens/GoalShare'
 
 export default function App() {
   const loc = useLocation()
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/life-event" element={<LifeEventConfirm />} />
             <Route path="/goals/options" element={<GoalOptions />} />
             <Route path="/goals/japan-sooner" element={<JapanSooner />} />
+            <Route path="/goals/share/:id" element={<GoalShare />} />
             <Route path="/review/:id" element={<Review />} />
             <Route path="/forecast" element={<Forecast />} />
             <Route path="/insights" element={<Insights />} />

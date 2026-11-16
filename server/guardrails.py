@@ -82,6 +82,17 @@ class Consent(BaseModel):
     on: bool
 
 
+class GoalInvite(BaseModel):
+    goal: str = Field(pattern=r"^goal-[a-z]+$")
+    name: str = Field(min_length=1, max_length=30, pattern=r"^[A-Za-z][A-Za-z .'-]*$")
+    per_payday: float = Field(ge=0, le=2000)
+
+
+class GoalMember(BaseModel):
+    goal: str = Field(pattern=r"^goal-[a-z]+$")
+    name: str = Field(min_length=1, max_length=30)
+
+
 # kind -> (model, consent key needed, needs Mia's approval?)
 PROPOSALS = {
     "goal_plan": (GoalPlan, "goals"),
@@ -99,6 +110,10 @@ ACTIONS = {
     "quick_split": (QuickSplit, "receipts"),
     "dismiss_card": (DismissCard, None),
     "consent": (Consent, None),
+    # Joint savings: invite someone to a goal, (demo) they accept, or remove them
+    "goal_invite": (GoalInvite, "goals"),
+    "goal_member_accept": (GoalMember, "goals"),
+    "goal_member_remove": (GoalMember, "goals"),
 }
 
 

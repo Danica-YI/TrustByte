@@ -131,6 +131,32 @@ def act(kind: str, params: dict) -> dict:
     elif kind == "dismiss_card":
         s["dismissed_cards"].append(parsed.card)
         title, record = f"Hid the {parsed.card.replace('-', ' ')} card", True
+    elif kind in ("goal_invite", "goal_member_accept", "goal_member_remove"):
+        goal = next((g for g in E.goals(s) if g["id"] == parsed.goal), None)
+        if not goal:
+            checks.append(G.check("input", "Input validation", False, f"unknown goal '{parsed.goal}'"))
+            raise G.GuardrailError("That goal doesn't exist.", checks, 422)
+        members = s["shared_goals"].setdefault(parsed.goal, [])
+        who = parsed.name.strip()
+        member = next((m for m in members if m["name"].lower() == who.lower()), None)
+        if kind == "goal_invite":
+            if member or len(members) >= 5:
+                why = f"{who} is already on this goal" if member else "A goal can have up to 5 other people"
+                checks.append(G.check("input", "Input validation", False, why))
+                raise G.GuardrailError(why + ".", checks, 422)
+            members.append({"name": who, "per_payday": E.r2(parsed.per_payday), "status": "invited"})
+            title = f"Invited {who} to save for {goal['name']} together"
+        elif not member:
+            checks.append(G.check("input", "Input validation", False, f"{who} isn't on this goal"))
+            raise G.GuardrailError(f"{who} isn't on this goal.", checks, 422)
+        elif kind == "goal_member_accept":
+            member["status"] = "joined"
+            title = f"{member['name']} joined {goal['name']}"
+        else:
+            members.remove(member)
+            title = f"Removed {member['name']} from {goal['name']}"
+        checks.append(G.check("engine", "Sharing boundary", True,
+                              "They only see this goal. No other account or transaction is shared."))
     elif kind == "consent":
         s["consent"][parsed.key] = parsed.on
         title = f"Turned {S.CONSENT_LABELS[parsed.key].lower()} {'on' if parsed.on else 'off'}"

@@ -190,3 +190,4 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 10px 0; }
 .bars .bar.now { background: var(--brand); }
 .stacked { display: flex; height: 10px; border-radius: 99px; overflow: hidden; gap: 2px; margin: 8px 0; }
 .windy-mark { display: inline-flex; vertical-align: -0.12em; }
+.field { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 14px; color: var(--ink); background: #fff; }
