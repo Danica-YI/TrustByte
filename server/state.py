@@ -4,20 +4,28 @@ This is the "Customer reviews and approves -> only the simulated financial plan 
 architecture. The bank data in data/mia/*.json is never edited. The engine (engine.py) reads the base data
 plus this state and works out what every screen should show.
 
-Saved to server/plan_state.json (gitignored). POST /api/reset puts it back to the start of the demo story.
+Saved in SQLite, server/plan_state.db (gitignored), created on first use. Tables (server/schema.sql):
+  consent        one row per consent switch
+  plan_sections  one row per part of the plan (autosave, life_event, budgets, ...), the value as JSON
+  history        every change Mia approved, with the plan before it (so it can be undone)
+  usage          every time Windy used Mia's data
+Each save is one transaction. POST /api/reset puts it back to the start of the demo story.
 """
 
 from __future__ import annotations
 
 import copy
 import json
+import sqlite3
 import threading
 import uuid
 from datetime import datetime
 from pathlib import Path
 
-PATH = Path(__file__).parent / "plan_state.json"
+DB_PATH = Path(__file__).parent / "plan_state.db"
+SCHEMA = (Path(__file__).parent / "schema.sql").read_text(encoding="utf-8")
 _lock = threading.Lock()
+MAX_USAGE = 200
 
 # Consent keys, shown on the "Your data and consent" screen. Each feature checks its key before it runs.
 CONSENT_LABELS = {
@@ -73,23 +81,58 @@ def _strip(state: dict) -> dict:
     return {k: copy.deepcopy(v) for k, v in state.items() if k not in ("history", "usage")}
 
 
+def _connect() -> sqlite3.Connection:
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    conn.executescript(SCHEMA)
+    return conn
+
+
 def load() -> dict:
+    """Mia's plan as one dict (the shape of default_state). A missing or older plan starts the story fresh."""
     with _lock:
-        if PATH.exists():
-            try:
-                data = json.loads(PATH.read_text())
-                if data.get("version") == default_state()["version"]:
-                    return data
-            except json.JSONDecodeError:
-                pass
-        return default_state()
+        conn = _connect()
+        try:
+            sections = {r["key"]: json.loads(r["value_json"]) for r in conn.execute("SELECT * FROM plan_sections")}
+            if sections.get("version") != default_state()["version"]:
+                return default_state()
+            state = {**default_state(), **sections}
+            state["consent"] = {**state["consent"], **{
+                r["key"]: bool(r["enabled"]) for r in conn.execute("SELECT key, enabled FROM consent")}}
+            state["history"] = [
+                {"id": r["id"], "time": r["time"], "kind": r["kind"], "title": r["title"],
+                 "changes": json.loads(r["changes_json"]), "undoable": bool(r["undoable"]),
+                 "before": json.loads(r["before_json"])}
+                for r in conn.execute("SELECT * FROM history ORDER BY seq")]
+            state["usage"] = [{"time": r["time"], "feature": r["feature"], "what": r["what"]}
+                              for r in conn.execute("SELECT * FROM usage ORDER BY seq")]
+            return state
+        finally:
+            conn.close()
 
 
 def save(state: dict) -> None:
+    """Write the whole plan in one transaction: either all of it is saved or none of it."""
     with _lock:
-        tmp = PATH.with_suffix(".tmp")
-        tmp.write_text(json.dumps(state, indent=1))
-        tmp.replace(PATH)
+        conn = _connect()
+        try:
+            with conn:
+                for table in ("consent", "plan_sections", "history", "usage"):
+                    conn.execute(f"DELETE FROM {table}")
+                conn.executemany("INSERT INTO consent (key, label, enabled) VALUES (?, ?, ?)",
+                                 [(k, CONSENT_LABELS.get(k, k), int(v)) for k, v in state["consent"].items()])
+                conn.executemany("INSERT INTO plan_sections (key, value_json) VALUES (?, ?)",
+                                 [(k, json.dumps(v)) for k, v in state.items()
+                                  if k not in ("consent", "history", "usage")])
+                conn.executemany(
+                    "INSERT INTO history (id, time, kind, title, changes_json, undoable, before_json)"
+                    " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    [(h["id"], h["time"], h["kind"], h["title"], json.dumps(h["changes"]), int(h["undoable"]),
+                      json.dumps(h["before"])) for h in state["history"]])
+                conn.executemany("INSERT INTO usage (time, feature, what) VALUES (?, ?, ?)",
+                                 [(u["time"], u["feature"], u["what"]) for u in state["usage"][-MAX_USAGE:]])
+        finally:
+            conn.close()
 
 
 def reset() -> dict:
@@ -128,7 +171,7 @@ def undo(state: dict, entry_id: str) -> dict:
 
 def log_usage(state: dict, feature: str, what: str) -> None:
     state["usage"].append({"time": datetime.now().isoformat(timespec="seconds"), "feature": feature, "what": what})
-    del state["usage"][:-200]
+    del state["usage"][:-MAX_USAGE]
 
 
 snapshot_before = _strip

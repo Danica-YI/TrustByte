@@ -53,7 +53,7 @@ Harbour web app (React)
   health or diet talk. If a check fails, or there's no key or no network, a safe template is used instead.
 - **Financial checks** on every proposal: emergency fund untouched, no savings account below $0, moves between
   Mia's accounts add up to zero, no negative auto-saves.
-- **Plan state** (`server/plan_state.json`, gitignored): everything Mia approved or confirmed, with history.
+- **Plan state** (SQLite, `server/plan_state.db`, gitignored, created on first run): everything Mia approved or confirmed, with history and the log of what Windy used. Tables: `consent`, `plan_sections`, `history`, `usage` (see `server/state.py`). Tests: `server/.venv/bin/python -m pytest server/tests`.
   Any change can be undone from **Your plan**.
 - **Consent**: each feature checks its switch first. Turn one off and its card disappears and the backend
   refuses to run it.
