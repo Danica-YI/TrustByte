@@ -31,6 +31,11 @@ export function Mark() {
   return <span className="windy-mark"><WindyLogo size="1em" /></span>
 }
 
+// Send arrow for the chat composer (the paper plane from the wireframes), nudged right so it looks centred.
+export function SendIcon() {
+  return <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden style={{ marginLeft: 2 }}><path d="M3 4l18 8-18 8 4-8z" /></svg>
+}
+
 export function Card({ children, variant, onClick }: { children: ReactNode; variant?: 'windy' | 'selected'; onClick?: () => void }) {
   return (
     <div className={`card ${variant ?? ''}`} onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>

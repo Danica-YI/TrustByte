@@ -3,7 +3,7 @@
 // Every chat is saved (server/chats.py): "Past chats" lists them, and opening one carries on that conversation.
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Mark, TopBar } from '../components/ui'
+import { Mark, SendIcon, TopBar } from '../components/ui'
 
 type ToolCall = { name: string; input: Record<string, unknown> }
 type Msg = { role: 'user' | 'assistant'; text: string; tools: ToolCall[]; error?: string }
@@ -197,7 +197,7 @@ export default function Chat() {
 
       <form className="composer" onSubmit={(e) => { e.preventDefault(); send(input) }}>
         <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about your money" disabled={busy} />
-        <button className="btn primary" type="submit" disabled={busy || !input.trim()}>➤</button>
+        <button className="send" type="submit" aria-label="Send" disabled={busy || !input.trim()}><SendIcon /></button>
       </form>
       </>}
     </>

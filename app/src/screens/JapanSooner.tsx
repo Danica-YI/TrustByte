@@ -2,7 +2,7 @@
 // number comes from the engine. Tapping "Review" asks the backend for a full proposal (guardrails, AI, checks).
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, Mark, TopBar } from '../components/ui'
+import { Card, Mark, SendIcon, TopBar } from '../components/ui'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -85,7 +85,7 @@ export default function JapanSooner() {
       <div style={{ height: 70 }} />
       <form className="composer" onSubmit={(e) => { e.preventDefault(); nav('/chat') }}>
         <input placeholder="Type a follow-up… (opens live chat)" />
-        <button className="btn primary" type="submit">➤</button>
+        <button className="send" type="submit" aria-label="Send"><SendIcon /></button>
       </form>
     </>
   )
