@@ -14,6 +14,8 @@ export default function Profile() {
         <div className="stack" style={{ alignItems: 'center', gap: 6, padding: '6px 0' }}>
           <UserAvatar size={88} />
           <h2 style={{ margin: 0 }}>{s.user.first_name}</h2>
+          <div style={{ textAlign: 'center' }}>24 · Software developer at Harbour Health</div>
+          <div className="small" style={{ textAlign: 'center' }}>First full-time job · freelance web work on the side</div>
           <div className="small">Demo customer · synthetic data</div>
         </div>
         <div className="row"><span>Goals</span><b>{s.goals.length}</b></div>
