@@ -15,7 +15,7 @@ export default function Receipt() {
 
   return (
     <>
-      <TopBar title="Receipt breakdown" />
+      <TopBar title="Receipt breakdown" fallback="/?card=grocery-check" />
       <Card>
         <div className="spread"><h3>{receipt.store}</h3><span className="muted">{shortDate(receipt.date)} · {money(receipt.total, true)}</span></div>
         {Object.entries(groups).map(([g, v]) => (

@@ -23,7 +23,7 @@ export default function JapanReview() {
   if (approved) {
     return (
       <>
-        <TopBar title="Plan updated" />
+        <TopBar title="Plan updated" fallback="/" />
         <Card>
           <h2>✓ Japan by {monthYear(p.tripBy)} is now your plan</h2>
           <p>No money has moved yet. Each change happens on payday, and you can undo it before then.</p>
@@ -35,7 +35,7 @@ export default function JapanReview() {
 
   return (
     <>
-      <TopBar title="Review Japan plan" />
+      <TopBar title="Review Japan plan" fallback="/goals/japan-sooner" />
       <span className="chip windy">{p.paydays} paydays · {variant === 'bali' ? 'uses Bali fund' : 'Bali fund untouched'}</span>
 
       <Card>

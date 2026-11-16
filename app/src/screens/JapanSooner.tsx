@@ -15,7 +15,7 @@ export default function JapanSooner() {
 
   return (
     <>
-      <TopBar title="Windy" />
+      <TopBar title="Windy" fallback="/goals/options" />
       <div className="bubble me">I want to go to Japan in the next 3 months. Can you plan the budget?</div>
       <div className="bubble ai">
         <div className="pill" style={{ marginBottom: 6 }}>✦ Windy</div>

@@ -1,6 +1,6 @@
 // Harbour 02 · Insights
 import { useState } from 'react'
-import { Card, Chip, Seg, WindyPill } from '../components/ui'
+import { Card, Chip, Seg, TopBar, WindyPill } from '../components/ui'
 import { insights, money } from '../data/mia'
 
 export default function Insights() {
@@ -9,7 +9,7 @@ export default function Insights() {
 
   return (
     <>
-      <div className="top-bar"><h1>Insights</h1></div>
+      <TopBar title="Insights" fallback="/" />
       <Seg options={['This month', '6 months', 'Year']} value={range} onChange={setRange} />
 
       <Card>

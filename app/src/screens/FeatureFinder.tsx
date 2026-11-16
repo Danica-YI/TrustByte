@@ -11,7 +11,7 @@ export default function FeatureFinder() {
 
   return (
     <>
-      <TopBar title="Windy" />
+      <TopBar title="Windy" fallback="/more" />
       <div className="bubble me">{asked}</div>
       <div className="bubble ai">
         <div className="pill" style={{ marginBottom: 6 }}>✦ Windy</div>

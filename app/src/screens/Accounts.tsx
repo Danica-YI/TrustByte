@@ -9,7 +9,7 @@ import { money } from '../data/mia'
 export function AccountList() {
   return (
     <>
-      <div className="top-bar"><h1>Accounts</h1></div>
+      <TopBar title="Accounts" fallback="/" />
       {accounts.map((a) => (
         <Link key={a.id} to={`/accounts/${a.id}`}>
           <Card>

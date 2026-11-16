@@ -11,7 +11,7 @@ export default function GoalOptions() {
 
   return (
     <>
-      <TopBar title="Your options" />
+      <TopBar title="Your options" fallback="/life-event" />
       <p className="intro">Money is tighter after the move, so not every goal fits as planned. Here’s what each choice means. Windy won’t pick for you.</p>
       <div className="hstack" style={{ marginBottom: 12 }}>
         <span className="muted">Your priority:</span>

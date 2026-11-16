@@ -38,7 +38,7 @@ export default function Payments() {
 
   return (
     <>
-      <TopBar title="Regular payments" right={<span className="link">+ Add</span>} />
+      <TopBar title="Regular payments" fallback="/" right={<span className="link">+ Add</span>} />
       <Seg options={['List', 'Calendar']} value={view} onChange={setView} />
 
       <Card>
@@ -122,6 +122,7 @@ export default function Payments() {
       {sheet && (
         <div className="sheet-backdrop" onClick={close}>
           <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            <button className="sheet-close" onClick={close} aria-label="Close">✕</button>
             {sheet === 'insurance' ? <InsuranceSheet onClose={close} /> : <FoundSheet r={sheet} onClose={close} />}
           </div>
         </div>

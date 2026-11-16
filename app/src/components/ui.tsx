@@ -1,6 +1,6 @@
 // Small components reused across the wireframes. Styling lives in styles.css.
 import { useEffect, useState, type ReactNode } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { askWindy, windyFallback, type WindyTopic } from '../ai/windy'
 
 export function Logo({ color = '#fff', size = 22 }: { color?: string; size?: number }) {
@@ -42,11 +42,25 @@ export function Progress({ value, max, color }: { value: number; max: number; co
   )
 }
 
-export function TopBar({ title, right }: { title: string; right?: ReactNode }) {
+/** One level up from a path: /accounts/everyday → /accounts, /forecast → / */
+const parentOf = (path: string) => path.replace(/\/[^/]*$/, '') || '/'
+
+/**
+ * Page header with a back button. Goes back in the app's history when there is some; when the
+ * page was opened directly (demo navigator, refresh, shared link) it goes to `fallback`, or one
+ * level up the URL.
+ */
+export function TopBar({ title, right, fallback }: { title: string; right?: ReactNode; fallback?: string }) {
   const nav = useNavigate()
+  const { pathname } = useLocation()
+  const back = () => {
+    const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0
+    if (idx > 0) nav(-1)
+    else nav(fallback ?? parentOf(pathname), { replace: true })
+  }
   return (
     <div className="top-bar">
-      <button className="back" onClick={() => nav(-1)} aria-label="Back">‹</button>
+      <button className="back" onClick={back} aria-label="Back">‹</button>
       <h1>{title}</h1>
       {right ?? <Logo color="var(--brand)" />}
     </div>

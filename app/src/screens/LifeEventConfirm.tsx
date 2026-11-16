@@ -13,7 +13,7 @@ export default function LifeEventConfirm() {
 
   return (
     <>
-      <TopBar title="Moving home?" />
+      <TopBar title="Moving home?" fallback="/?card=life-event" />
       <p className="intro">Here’s what Windy noticed. Confirm it so your plan uses the right numbers.</p>
 
       <Card>

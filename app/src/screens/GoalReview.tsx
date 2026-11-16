@@ -15,7 +15,7 @@ export default function GoalReview() {
   if (approved) {
     return (
       <>
-        <TopBar title="Plan updated" />
+        <TopBar title="Plan updated" fallback="/" />
         <Card>
           <h2>✓ Plan {plan.id} · {plan.name} is now your plan</h2>
           <p>No money has moved. Windy will check in on payday.</p>
@@ -27,7 +27,7 @@ export default function GoalReview() {
 
   return (
     <>
-      <TopBar title={`Review plan ${plan.id}`} />
+      <TopBar title={`Review plan ${plan.id}`} fallback="/goals/options" />
       <span className="chip windy">{plan.name}</span>
 
       <Card>

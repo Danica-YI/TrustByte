@@ -82,7 +82,7 @@ export default function Chat() {
 
   return (
     <>
-      <TopBar title="Ask Windy" right={<button className="link" onClick={() => { setMsgs([]); setCid(null) }}>New</button>} />
+      <TopBar title="Ask Windy" fallback="/more" right={<button className="link" onClick={() => { setMsgs([]); setCid(null) }}>New</button>} />
 
       {health === 'offline' && (
         <div className="card" style={{ background: 'var(--warn-soft)' }}>

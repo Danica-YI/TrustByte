@@ -25,7 +25,7 @@ export default function QuickSplit() {
 
   return (
     <>
-      <TopBar title={`${g.shop.merchant} · ${money(g.amount, true)}`} />
+      <TopBar title={`${g.shop.merchant} · ${money(g.amount, true)}`} fallback="/?card=grocery-check" />
       <div className="muted" style={{ marginTop: -6, marginBottom: 10 }}>{shortDate(g.shop.date)} · No receipt</div>
       <h2 style={{ margin: '0 0 6px' }}>What was in this shop?</h2>
       <p className="intro">Tick the types of things you bought. Add an amount if you want more detail, or leave it blank.</p>

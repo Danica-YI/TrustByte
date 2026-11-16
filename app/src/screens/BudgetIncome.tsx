@@ -11,7 +11,7 @@ export default function BudgetIncome() {
 
   return (
     <>
-      <TopBar title="Create a budget" />
+      <TopBar title="Create a budget" fallback="/" />
       <div className="muted">Step 1 of 4</div>
       <h2 style={{ margin: '6px 0' }}>Confirm your income</h2>
       <p className="intro">We found these deposits in the last 3 months. Tick what you can count on each cycle.</p>

@@ -160,7 +160,8 @@ export function payLaterPlans() {
     return {
       id, merchant: paid[0].merchant.replace('Afterpay · ', ''), total: paid[0].plan_total!, instalment,
       paid: paid.length, remaining, owed: r2(instalment * remaining), nextDate: next[0]?.date,
-      dates: [...paid.map((t) => t.date), ...next.map((u) => u.date)],
+      // 4 instalments a fortnight apart from the first one (the last may be beyond upcoming.json's 5 weeks)
+      dates: [0, 1, 2, 3].map((k) => addDays(paid[0].date, 14 * k)),
     }
   })
   const active = plans.filter((p) => p.remaining > 0)

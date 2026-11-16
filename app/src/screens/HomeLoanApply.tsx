@@ -14,7 +14,7 @@ export default function HomeLoanApply() {
 
   return (
     <>
-      <TopBar title="Home loan application" />
+      <TopBar title="Home loan application" fallback="/ask" />
       <p className="intro">We’ve filled in what Westpac already knows. Check it, then add the one thing we can’t see.</p>
 
       <Card>

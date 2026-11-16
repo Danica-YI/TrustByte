@@ -267,6 +267,9 @@ def pay_later_plans() -> dict:
     out = []
     for pid, p in plans.items():
         remaining = 4 - len(p["paid"])
+        first = _d(p["paid"][0])
+        p["all_due_dates"] = [(first + timedelta(days=14 * k)).isoformat() for k in range(4)]  # fortnightly
+        p.pop("upcoming", None)
         out.append({**p, "plan_id": pid, "instalments_left": remaining, "still_owed": _money(p["instalment"] * remaining)})
     active = [p for p in out if p["instalments_left"] > 0]
     last_payday = max(t["date"] for t in TRANSACTIONS if t["merchant"] == "Harbour Health")

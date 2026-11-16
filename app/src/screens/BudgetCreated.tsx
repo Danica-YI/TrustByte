@@ -1,5 +1,5 @@
 // B-05 · Budget created
-import { Card, Progress, WindyPill } from '../components/ui'
+import { Card, Progress, TopBar, WindyPill } from '../components/ui'
 
 const limits = [
   { name: 'Groceries', spent: 0, limit: 300 },
@@ -11,7 +11,7 @@ const limits = [
 export default function BudgetCreated() {
   return (
     <>
-      <div className="top-bar"><h1>Insights & tools</h1></div>
+      <TopBar title="Insights & tools" fallback="/budget/income" />
       <div className="hstack" style={{ marginBottom: 12 }}>
         {['Overview', 'Budget', 'Bills', 'Transactions'].map((t) => (
           <span key={t} className={`chip ${t === 'Budget' ? 'windy' : 'plain'}`}>{t}</span>

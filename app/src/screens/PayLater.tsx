@@ -13,7 +13,7 @@ export default function PayLater() {
 
   return (
     <>
-      <TopBar title="Pay-later plans" />
+      <TopBar title="Pay-later plans" fallback="/payments" />
       <Card variant="windy">
         <WindyPill label="Commitments" />
         <h2>{pl.active.length} plans take {money(pl.lastPaydayTotal)} each payday</h2>
