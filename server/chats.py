@@ -94,6 +94,8 @@ def transcript(conversation_id: str) -> list[dict] | None:
                 out.append({"role": "assistant", "text": "", "tools": []})
             for block in m["content"]:
                 if block.get("type") == "text":
+                    if out[-1]["text"] and not out[-1]["text"][-1].isspace():
+                        out[-1]["text"] += "\n\n"  # text written before and after a tool call
                     out[-1]["text"] += block["text"]
                 elif block.get("type") == "tool_use" and block["name"] != "suggest_next":
                     out[-1]["tools"].append({"name": block["name"], "input": block["input"]})

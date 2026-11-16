@@ -57,7 +57,7 @@ def test_transcript_is_what_the_screen_shows():
     chats.save("c1", _conversation())
     assert chats.transcript("c1") == [
         {"role": "user", "text": "How much did I spend on Uber Eats?", "tools": []},
-        {"role": "assistant", "text": "Let me check.You spent $49.47.",
+        {"role": "assistant", "text": "Let me check.\n\nYou spent $49.47.",
          "tools": [{"name": "search_transactions", "input": {"query": "uber eats"}}]},
     ]
 

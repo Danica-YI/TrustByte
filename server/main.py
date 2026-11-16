@@ -89,6 +89,10 @@ Next steps:
   limit Eating out), offer them as two separate buttons, not one combined change. Name both in your answer
   so she can compare them. Combine fixes into one button only if neither works on its own.
 - Never say a change is made or set up: you can only suggest it. Say she can review it with the button below.
+- After most answers, also give 2 or 3 follow-up questions in suggest_next's questions (things she'd likely
+  ask next that your tools can answer). She taps one to ask it, so don't list them in your text.
+- If her question is unclear (which month? which goal?), ask one short clarifying question in your answer
+  and put its possible answers in questions, instead of guessing.
 
 Memory:
 - When Mia tells you something lasting about herself (a goal, a preference, how she gets paid, how she likes
@@ -293,8 +297,15 @@ def chat(body: ChatIn) -> StreamingResponse:
                     betas=["server-side-fallback-2026-07-01"],
                     fallbacks="default",
                 ) as stream:
+                    first_text = True
                     for event in stream:
                         if event.type == "text":
+                            so_far = "".join(answer)
+                            if first_text and so_far and not so_far[-1].isspace():
+                                # Text written before and after a tool call: keep them apart
+                                answer.append("\n\n")
+                                yield _sse({"type": "text", "text": "\n\n"})
+                            first_text = False
                             answer.append(event.text)
                             yield _sse({"type": "text", "text": event.text})
                     response = stream.get_final_message()
@@ -317,15 +328,16 @@ def chat(body: ChatIn) -> StreamingResponse:
                     if block.name == "suggest_next":
                         # Only suggestions the guardrails accept reach the app, as buttons
                         kept, dropped = suggest.validate(block.input, plan_state.load())
-                        if kept:
-                            yield _sse({"type": "suggestions", "actions": kept})
-                        result_for_windy = {"shown_as_buttons": kept, "dropped": dropped}
+                        questions = suggest.follow_ups(block.input)
+                        if kept or questions:
+                            yield _sse({"type": "suggestions", "actions": kept, "questions": questions})
+                        result_for_windy = {"shown_as_buttons": kept, "dropped": dropped, "quick_replies": questions}
                         if not "".join(answer).strip():
                             # Buttons never replace an answer
                             result_for_windy["next"] = ("The buttons are ready and appear under your reply, but your "
                                                         "reply to Mia is still empty. Write it now: answer her question "
                                                         "in 2 to 5 sentences, then mention she can review the change "
-                                                        "with the button below. Don't call suggest_next again.")
+                                                        "with the button below if there is one. Don't call suggest_next again.")
                         output, is_error = json.dumps(result_for_windy), False
                     else:
                         yield _sse({"type": "tool", "name": block.name, "input": block.input})
