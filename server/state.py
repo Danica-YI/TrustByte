@@ -136,8 +136,17 @@ def save(state: dict) -> None:
 
 
 def reset() -> dict:
+    """Back to the start of the demo story, including Windy's notes and earlier chats (memory.py)."""
     state = default_state()
     save(state)
+    with _lock:
+        conn = _connect()
+        try:
+            with conn:
+                for table in ("memory", "chat_log", "chat_messages", "chat_sessions"):
+                    conn.execute(f"DELETE FROM {table}")
+        finally:
+            conn.close()
     return state
 
 
