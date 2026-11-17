@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card, Chip, Seg, TopBar, WindyPill } from '../components/ui'
 import type { Recurring, Snapshot, Upcoming } from '../api'
-import { money, shortDate } from '../format'
+import { daysBetween, money, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
 const GROUPS: { name: string; match: (r: Recurring) => boolean }[] = [
@@ -35,6 +35,7 @@ export default function Payments() {
 
       {view === 'Calendar' ? <Calendar s={s} /> : (
         <>
+          <PaydayTimeline s={s} />
           {(c.found.length > 0 || (ins && !ins.reviewed)) && (
             <Card variant="windy">
               <WindyPill label={`found ${c.found.length + (ins && !ins.reviewed ? 1 : 0)}`} />
@@ -131,10 +132,66 @@ export default function Payments() {
   )
 }
 
-// ---------------------------------------------------------------- Calendar: the next 5 weeks, week by week
-// Payday is shown, same-day Afterpay instalments and auto-saves fold into one row (tap to open),
-// bills paid from the Bills set-aside are greyed out and left out of the week's total, and each week
-// ends with the forecast's Everyday balance so this lines up with the shortfall warning.
+// ---------------------------------------------------------------- Timeline to payday
+// Coming up on Everyday as a picture: today on the left, payday on the right, one dot per day with
+// payments (bigger dot = more money). Tap a dot to see what goes out that day. These are the payments
+// held back from Safe to spend, so the total below adds up to it.
+function PaydayTimeline({ s }: { s: Snapshot }) {
+  const e = s.everyday
+  const days: { date: string; items: Upcoming[]; total: number }[] = []
+  for (const u of s.safe_items) {
+    const d = days.find((x) => x.date === u.date)
+    if (d) { d.items.push(u); d.total += -u.amount } else days.push({ date: u.date, items: [u], total: -u.amount })
+  }
+  const [pick, setPick] = useState(0)
+  const span = Math.max(1, daysBetween(s.today, e.next_payday))
+  const W = 320, L = 14, R = 306, Y = 34
+  const x = (d: string) => L + ((R - L) * daysBetween(s.today, d)) / span
+  const biggest = Math.max(1, ...days.map((d) => d.total))
+  const r = (t: number) => 4 + 7 * Math.sqrt(t / biggest)
+  const sel = days[Math.min(pick, days.length - 1)]
+
+  return (
+    <Card>
+      <div className="spread"><h3>Coming up on Everyday</h3><Link to="/forecast" className="link">Forecast ›</Link></div>
+      <svg viewBox={`0 0 ${W} 74`} width="100%" style={{ marginTop: 8, overflow: 'visible' }} role="img"
+        aria-label={`${s.safe_items.length} payments before payday on ${shortDate(e.next_payday)}`}>
+        <line x1={L} x2={R} y1={Y} y2={Y} stroke="var(--line)" strokeWidth={3} strokeLinecap="round" />
+        <circle cx={L} cy={Y} r={4} fill="var(--ink)" />
+        <circle cx={R} cy={Y} r={6} fill="var(--good)" />
+        <text x={L - 4} y={Y - 18} fontSize="10" fill="var(--ink-3)">Today {shortDate(s.today)}</text>
+        <text x={R + 4} y={Y - 18} fontSize="10" fill="var(--good)" textAnchor="end" fontWeight="700">Payday {shortDate(e.next_payday)}</text>
+        {days.map((d, i) => (
+          <g key={d.date} onClick={() => setPick(i)} style={{ cursor: 'pointer' }}>
+            <circle cx={x(d.date)} cy={Y} r={r(d.total)} fill={d === sel ? 'var(--brand)' : '#e8a3ad'} stroke="#fff" strokeWidth={2} />
+            <text x={x(d.date)} y={Y + 26} fontSize="10" fill={d === sel ? 'var(--ink)' : 'var(--ink-3)'} textAnchor="middle"
+              fontWeight={d === sel ? 700 : 400}>{shortDate(d.date).split(' ')[0]}</text>
+          </g>
+        ))}
+      </svg>
+
+      {sel ? (
+        <div style={{ background: '#f6f3f9', borderRadius: 12, padding: '8px 12px', marginTop: 4 }}>
+          <div className="muted" style={{ fontWeight: 600 }}>{shortDate(sel.date)} · in {daysBetween(s.today, sel.date)} day{daysBetween(s.today, sel.date) === 1 ? '' : 's'}</div>
+          {sel.items.map((u, i) => (
+            <div key={i} className="row" style={{ padding: '3px 0' }}><span>{u.label}</span><b style={{ whiteSpace: 'nowrap' }}>{money(u.amount, true)}</b></div>
+          ))}
+        </div>
+      ) : <p className="muted">Nothing else comes out before payday.</p>}
+
+      <div className="row" style={{ marginTop: 8 }}>
+        <span>{s.safe_items.length} payment{s.safe_items.length === 1 ? '' : 's'} before payday</span>
+        <b style={{ whiteSpace: 'nowrap' }}>{money(-e.committed, true)}</b>
+      </div>
+      <div className="small">Tap a dot to see what goes out. Safe to spend until payday: {money(e.safe)}.</div>
+    </Card>
+  )
+}
+
+// ---------------------------------------------------------------- Calendar: the next 5 weeks as a grid
+// Each day shows what leaves Everyday (darker red = more) or comes in (green = payday). Tap a day to see
+// exactly what's paid: same-day Afterpay instalments and auto-saves are grouped, bills paid from the Bills
+// set-aside are greyed out and not counted, and the forecast's Everyday balance for that day is shown.
 const WEEKS = 5
 const FOLDED: Record<string, string> = { pay_later: 'Afterpay', auto_save: 'Auto-saves to your goals' }
 const addDays = (iso: string, n: number) => new Date(Date.parse(iso + 'T00:00:00Z') + n * 864e5).toISOString().slice(0, 10)
@@ -161,74 +218,77 @@ function scheduleRows(s: Snapshot, from: string, to: string): Row[] {
 }
 
 function Calendar({ s }: { s: Snapshot }) {
-  const [open, setOpen] = useState<string | null>(null)
+  const first = addDays(s.today, 1), last = addDays(s.today, 7 * WEEKS)
+  // The grid starts on the Monday on or before tomorrow, and runs whole weeks to the end of the 5 weeks
+  const dow = (iso: string) => (new Date(iso + 'T00:00:00Z').getUTCDay() + 6) % 7 // Mon = 0
+  const start = addDays(first, -dow(first))
+  const cells = Array.from({ length: Math.ceil((dow(first) + 7 * WEEKS) / 7) * 7 }, (_, i) => addDays(start, i))
+  const rowsOn = (day: string) => scheduleRows(s, day, day)
+  const net = (day: string) => rowsOn(day).filter((r) => !r.setAside).reduce((t, r) => t + r.amount, 0)
+  const biggest = Math.max(1, ...cells.map((d) => -Math.min(0, net(d))))
+  const [pick, setPick] = useState(() => cells.find((d) => d >= first && rowsOn(d).length > 0) ?? first)
+  const compact = (n: number) => { const a = Math.abs(n); return `${n < 0 ? '−' : '+'}${a >= 1000 ? `${(a / 1000).toFixed(1)}k` : Math.round(a)}` }
   const balanceOn = (day: string) => [...s.forecast.points].reverse().find((p) => p.date <= day)?.balance
-  const lowestIn = (from: string, to: string) =>
-    s.forecast.points.filter((p) => p.date >= from && p.date <= to).reduce<Snapshot['forecast']['low'] | undefined>(
-      (low, p) => (!low || p.balance < low.balance ? p : low), undefined)
-  const weeks = Array.from({ length: WEEKS }, (_, i) => {
-    const from = addDays(s.today, 1 + 7 * i), to = addDays(s.today, 7 + 7 * i)
-    const rows = scheduleRows(s, from, to)
-    const everyday = rows.filter((r) => !r.setAside)
-    return {
-      from, to, rows,
-      payday: rows.some((r) => r.parts[0].kind === 'pay'),
-      in: everyday.filter((r) => r.amount > 0).reduce((t, r) => t + r.amount, 0),
-      out: everyday.filter((r) => r.amount < 0).reduce((t, r) => t + r.amount, 0),
-      balance: balanceOn(to),
-      low: lowestIn(from, to),
-    }
-  })
+  const picked = rowsOn(pick)
+  const pickedNet = net(pick)
+  const after = balanceOn(pick)
 
   return (
     <Card>
-      <h3>Next 5 weeks</h3>
-      <p className="small">Money in and out of Everyday. Grey bills come from your Bills set-aside, not Everyday.</p>
-      {weeks.map((w) => (
-        <div key={w.from} style={{ marginTop: 12 }}>
-          <div className="spread" style={{ borderBottom: '1px solid var(--line)', paddingBottom: 4 }}>
-            <span style={{ whiteSpace: 'nowrap' }}>
-              <b>{shortDate(w.from)} – {shortDate(w.to)}</b>
-              {w.payday && <Chip tone="good">Payday</Chip>}
-            </span>
-            <span className="small" style={{ whiteSpace: 'nowrap' }}>
-              {w.in > 0 && <span style={{ color: 'var(--good)' }}>+{money(w.in)} · </span>}{money(w.out)}
-            </span>
+      <div className="spread" style={{ background: 'var(--bad-soft)', borderRadius: 10, padding: '8px 12px' }}>
+        <h3 style={{ margin: 0 }}>Next 5 weeks</h3><span style={{ fontWeight: 600, fontSize: 13 }}>{shortDate(first)} – {shortDate(last)}</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginTop: 10 }}>
+        {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((d, i) => <div key={i} className="small center" style={{ fontWeight: 700 }}>{d}</div>)}
+        {cells.map((d) => {
+          const inRange = d >= first && d <= last
+          const n = inRange ? net(d) : 0
+          const has = inRange && rowsOn(d).length > 0
+          const pay = n > 0
+          const shade = n < 0 ? 0.12 + 0.55 * (-n / biggest) : 0
+          const selected = d === pick
+          return (
+            <button key={d} disabled={!inRange} onClick={() => setPick(d)} aria-label={`${shortDate(d)}${has ? `: ${money(n, true)}` : ''}`}
+              style={{ height: 52, borderRadius: 10, padding: '4px 2px', font: 'inherit', cursor: inRange ? 'pointer' : 'default',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
+                border: selected ? '2px solid var(--ink)' : '1px solid var(--line)', opacity: inRange ? 1 : 0.35,
+                background: pay ? 'var(--good-soft, #dcfce7)' : n < 0 ? `rgba(200, 16, 46, ${shade})` : '#fff',
+                color: shade > 0.45 ? '#fff' : 'var(--ink)' }}>
+              <span style={{ fontSize: 12, fontWeight: 600 }}>{Number(d.slice(8))}{d.slice(8) === '01' && <span style={{ fontWeight: 400 }}> {shortDate(d).split(' ')[1]}</span>}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: pay ? 'var(--good)' : undefined }}>
+                {has && n !== 0 ? compact(n) : has ? '•' : ''}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+      <div className="small" style={{ marginTop: 8 }}>Darker red = more going out. Green = payday. Tap a day.</div>
+
+      <div style={{ background: '#f6f3f9', borderRadius: 12, padding: '10px 12px', marginTop: 10 }}>
+        <div className="spread"><b>{shortDate(pick)}</b><span className="muted">in {daysBetween(s.today, pick)} day{daysBetween(s.today, pick) === 1 ? '' : 's'}</span></div>
+        {picked.length === 0 && <div className="muted" style={{ marginTop: 4 }}>Nothing scheduled this day.</div>}
+        {picked.map((r) => (
+          <div key={r.key}>
+            <div className="row" style={{ opacity: r.setAside ? 0.55 : 1 }}>
+              <span>{r.label}{r.setAside && <span className="muted"> · from set-aside</span>}</span>
+              <b style={{ whiteSpace: 'nowrap', color: r.amount > 0 ? 'var(--good)' : undefined }}>{r.amount > 0 ? '+' : ''}{money(r.amount, true)}</b>
+            </div>
+            {r.parts.length > 1 && r.parts.map((p) => (
+              <div key={p.label} className="row small" style={{ paddingLeft: 12 }}><span className="muted">{p.label}</span><span style={{ whiteSpace: 'nowrap' }}>{money(p.amount, true)}</span></div>
+            ))}
           </div>
-          {w.rows.map((r) => (
-            <div key={r.key}>
-              <div className="row" style={{ opacity: r.setAside ? 0.55 : 1, cursor: r.parts.length > 1 ? 'pointer' : undefined }}
-                onClick={() => r.parts.length > 1 && setOpen(open === r.key ? null : r.key)}>
-                <span>
-                  <b>{shortDate(r.date)}</b> · {r.label}
-                  {r.parts.length > 1 && <span className="muted"> {open === r.key ? '▾' : '›'}</span>}
-                  {r.setAside && <span className="muted"> · from set-aside</span>}
-                </span>
-                <span style={{ whiteSpace: 'nowrap', color: r.amount > 0 ? 'var(--good)' : undefined, fontWeight: r.amount > 0 ? 700 : undefined }}>
-                  {r.amount > 0 ? '+' : ''}{money(r.amount, true)}
-                </span>
-              </div>
-              {open === r.key && r.parts.map((p) => (
-                <div key={p.label} className="row small" style={{ paddingLeft: 14 }}>
-                  <span className="muted">{p.label}</span><span style={{ whiteSpace: 'nowrap' }}>{money(p.amount, true)}</span>
-                </div>
-              ))}
-            </div>
-          ))}
-          {w.rows.length === 0 && <div className="row small"><span className="muted">Nothing scheduled</span></div>}
-          {w.low && w.low.balance < 0 ? (
-            <div className="row small">
-              <span style={{ color: 'var(--bad)' }}>Everyday dips below $0 around {shortDate(w.low.date)}</span>
-              <b style={{ whiteSpace: 'nowrap', color: 'var(--bad)' }}>about {money(w.low.balance)}</b>
-            </div>
-          ) : w.balance !== undefined && (
-            <div className="row small">
-              <span className="muted">Everyday by {shortDate(w.to)}, after usual spending</span>
-              <b style={{ whiteSpace: 'nowrap' }}>about {money(w.balance)}</b>
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
+        {picked.length > 0 && (
+          <>
+            <hr className="sep" />
+            <div className="row"><span>{pickedNet >= 0 ? 'In to Everyday' : 'Out of Everyday'} this day</span><b style={{ whiteSpace: 'nowrap', color: pickedNet > 0 ? 'var(--good)' : undefined }}>{pickedNet > 0 ? '+' : ''}{money(pickedNet, true)}</b></div>
+            {after !== undefined && (
+              <div className="row small"><span className="muted">Everyday by the end of the day, after usual spending</span>
+                <b style={{ whiteSpace: 'nowrap', color: after < 0 ? 'var(--bad)' : undefined }}>about {money(after)}</b></div>
+            )}
+          </>
+        )}
+      </div>
     </Card>
   )
 }
