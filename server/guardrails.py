@@ -21,7 +21,7 @@ import math
 import re
 from typing import Literal
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
 # ------------------------------------------------------------------ input: request shapes
@@ -96,15 +96,65 @@ class Consent(BaseModel):
     on: bool
 
 
+_EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+def payid_kind(value: str) -> tuple[str, str] | None:
+    """('email' | 'mobile' | 'abn', normalised value) for a valid Australian PayID, else None."""
+    v = value.strip()
+    if _EMAIL.match(v):
+        return "email", v.lower()
+    digits = re.sub(r"[\s()-]", "", v)
+    if digits.startswith("+61"):
+        digits = "0" + digits[3:]
+    if re.fullmatch(r"04\d{8}", digits):
+        return "mobile", digits
+    if re.fullmatch(r"\d{11}", digits):
+        return "abn", digits
+    return None
+
+
+def _digits(value: str | None) -> str:
+    return re.sub(r"[\s-]", "", value or "")
+
+
 class GoalInvite(BaseModel):
+    """Who to invite to a goal: a PayID, or a BSB and account number. Only a masked version is kept."""
     goal: str = Field(pattern=r"^goal-[a-z]+$")
-    name: str = Field(min_length=1, max_length=30, pattern=r"^[A-Za-z][A-Za-z .'-]*$")
+    method: Literal["payid", "account"]
+    payid: str | None = Field(default=None, max_length=254)
+    bsb: str | None = Field(default=None, max_length=10)
+    account: str | None = Field(default=None, max_length=15)
     per_payday: float = Field(ge=0, le=2000)
+
+    @model_validator(mode="after")
+    def _details(self) -> "GoalInvite":
+        # Messages never repeat what was typed, so the details don't end up in logs
+        if self.method == "payid":
+            if payid_kind(self.payid or "") is None:
+                raise ValueError("enter an email, Australian mobile or ABN as the PayID")
+        else:
+            if not re.fullmatch(r"\d{6}", _digits(self.bsb)):
+                raise ValueError("a BSB has 6 digits")
+            if not re.fullmatch(r"\d{6,9}", _digits(self.account)):
+                raise ValueError("an account number has 6 to 9 digits")
+        return self
+
+
+def masked_payee(invite: GoalInvite) -> str:
+    """How an invited person is shown and stored, e.g. 'PayID a•••@gmail.com' or 'BSB 032-••• · Acct ••••5678'."""
+    if invite.method == "account":
+        return f"BSB {_digits(invite.bsb)[:3]}-••• · Acct ••••{_digits(invite.account)[-4:]}"
+    kind, v = payid_kind(invite.payid or "")
+    if kind == "email":
+        local, domain = v.split("@", 1)
+        return f"PayID {local[0]}•••@{domain}"[:60]
+    return f"PayID mobile ••• ••• {v[-3:]}" if kind == "mobile" else f"PayID ABN ••• {v[-3:]}"
 
 
 class GoalMember(BaseModel):
     goal: str = Field(pattern=r"^goal-[a-z]+$")
-    name: str = Field(min_length=1, max_length=30)
+    name: str = Field(min_length=1, max_length=60)  # the masked label shown in the list
 
 
 # kind -> (model, consent key needed, needs Mia's approval?)

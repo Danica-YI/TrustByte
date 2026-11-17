@@ -24,7 +24,7 @@ export default function Payments() {
 
   return (
     <>
-      <TopBar title="Regular payments" fallback="/" />
+      <TopBar title="Regular payments" back={false} />
       <div style={{ marginBottom: 14 }}><Seg options={['List', 'Calendar']} value={view} onChange={setView} /></div>
 
       <Card>

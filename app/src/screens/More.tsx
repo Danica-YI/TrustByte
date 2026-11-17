@@ -12,7 +12,7 @@ const LINKS = [
 export default function More() {
   return (
     <>
-      <TopBar title="More" fallback="/" />
+      <TopBar title="More" back={false} />
       <Card>
         {LINKS.map(([to, label]) => <Link key={to} to={to} className="row"><span>{to === '/chat' && <><Mark /> </>}{label}</span><span>›</span></Link>)}
       </Card>

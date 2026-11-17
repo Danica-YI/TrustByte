@@ -16,7 +16,7 @@ export function AccountList() {
   const total = (list: typeof s.accounts) => list.reduce((t, a) => t + a.balance, 0)
   return (
     <>
-      <TopBar title="Accounts" fallback="/" />
+      <TopBar title="Accounts" back={false} />
 
       <div className="section-head"><h3>Everyday and savings</h3><span className="muted">{money(total(everyday), true)}</span></div>
       {everyday.map((a) => (
