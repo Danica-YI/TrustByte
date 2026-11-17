@@ -46,8 +46,8 @@ export default function WhatIfGame() {
             <div className="muted">{i.note}</div>
             {!done ? (
               <div className="hstack" style={{ marginTop: 10 }}>
-                <button className="btn outline" style={{ flex: 1 }} onClick={() => setGuess({ ...guess, [i.id]: true })}>Helps</button>
-                <button className="btn outline" style={{ flex: 1 }} onClick={() => setGuess({ ...guess, [i.id]: false })}>Hurts</button>
+                <button className="btn outline compact" onClick={() => setGuess({ ...guess, [i.id]: true })}>Helps</button>
+                <button className="btn outline compact" onClick={() => setGuess({ ...guess, [i.id]: false })}>Hurts</button>
               </div>
             ) : (
               <div className="change-list">

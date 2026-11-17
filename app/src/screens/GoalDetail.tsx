@@ -3,7 +3,7 @@
 // guardrails -> engine -> review -> approve.
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Card, Chip, Lock, Progress, TopBar } from '../components/ui'
+import { Card, Chip, Lock, Progress, StepIcon, TopBar } from '../components/ui'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -89,9 +89,9 @@ export default function GoalDetail() {
             <div>
               <div style={{ marginBottom: 6 }}>You add each payday ($)</div>
               <div className="hstack" style={{ flexWrap: 'nowrap' }}>
-                <button className="btn outline step" onClick={() => step(-10)} aria-label="Less">−</button>
+                <button className="btn outline step" onClick={() => step(-10)} aria-label="Less"><StepIcon /></button>
                 <input className="field" style={{ textAlign: 'center', fontWeight: 700 }} type="number" min={0} max={2000} value={amount} onChange={(e) => setAmount(e.target.value)} aria-label="Amount each payday" />
-                <button className="btn outline step" onClick={() => step(10)} aria-label="More">+</button>
+                <button className="btn outline step" onClick={() => step(10)} aria-label="More"><StepIcon plus /></button>
               </div>
               {!okAmount && <div className="small" style={{ color: 'var(--bad)', marginTop: 6 }}>Enter an amount from $0 to $2,000.</div>}
             </div>

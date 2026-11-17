@@ -37,6 +37,15 @@ export function SendIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden style={{ marginLeft: 2 }}><path d="M3 4l18 8-18 8 4-8z" /></svg>
 }
 
+// − and + for the round step buttons, drawn as lines so they sit exactly in the middle of the circle.
+export function StepIcon({ plus }: { plus?: boolean }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d={plus ? 'M2 7h10M7 2v10' : 'M2 7h10'} />
+    </svg>
+  )
+}
+
 // Profile picture of the demo user (Mia).
 export function UserAvatar({ size = 28 }: { size?: number }) {
   return <img className="avatar" src={miaPhoto} width={size} height={size} alt="Mia" />

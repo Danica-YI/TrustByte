@@ -1,7 +1,7 @@
 // Goal battle: race a friend to a savings amount. A playful take on Save together.
 // The friend is pretend in this demo. In real use each person would only see the other's percentage.
 import { useState } from 'react'
-import { Card, Lock, Progress, Seg, TopBar, WindyPill } from '../components/ui'
+import { Card, Lock, Progress, Seg, StepIcon, TopBar, WindyPill } from '../components/ui'
 import { money, shortDate } from '../format'
 import { useSnap } from '../store'
 
@@ -62,13 +62,14 @@ export default function GoalBattle() {
             <span>Friend</span>
             <input className="field" style={{ width: 190 }} value={friend} onChange={(e) => setFriend(e.target.value)} maxLength={20} aria-label="Friend’s name" />
           </label>
-          <div className="spread">
-            <span>They save each payday</span>
-            <span className="hstack" style={{ flexWrap: 'nowrap' }}>
-              <button className="btn outline" onClick={() => setTheirs(Math.max(0, theirs - 10))} aria-label="Less">−</button>
-              <b style={{ minWidth: 48, textAlign: 'center' }}>{money(theirs)}</b>
-              <button className="btn outline" onClick={() => setTheirs(Math.min(2000, theirs + 10))} aria-label="More">+</button>
-            </span>
+          <div>
+            <div style={{ marginBottom: 6 }}>They save each payday ($)</div>
+            <div className="hstack" style={{ flexWrap: 'nowrap' }}>
+              <button className="btn outline step" onClick={() => setTheirs(Math.max(0, theirs - 10))} aria-label="Less"><StepIcon /></button>
+              <input className="field" style={{ textAlign: 'center', fontWeight: 700 }} type="number" min={0} max={2000} value={theirs}
+                onChange={(e) => setTheirs(Math.min(2000, Math.max(0, Math.round(Number(e.target.value) || 0))))} aria-label="Friend’s amount each payday" />
+              <button className="btn outline step" onClick={() => setTheirs(Math.min(2000, theirs + 10))} aria-label="More"><StepIcon plus /></button>
+            </div>
           </div>
         </div>
       </Card>
