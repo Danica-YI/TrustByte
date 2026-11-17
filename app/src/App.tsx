@@ -13,6 +13,9 @@ import Forecast from './screens/Forecast'
 import Insights from './screens/Insights'
 import InsightsHub from './screens/InsightsHub'
 import DreamNudge from './screens/DreamNudge'
+import WhatIfGame from './screens/WhatIfGame'
+import TimeMachine from './screens/TimeMachine'
+import GoalBattle from './screens/GoalBattle'
 import Consent from './screens/Consent'
 import Payments from './screens/Payments'
 import Receipt from './screens/Receipt'
@@ -66,6 +69,9 @@ export default function App() {
             <Route path="/insights" element={<Insights />} />
             <Route path="/insights/tools" element={<InsightsHub />} />
             <Route path="/dream" element={<DreamNudge />} />
+            <Route path="/what-if" element={<WhatIfGame />} />
+            <Route path="/time-machine" element={<TimeMachine />} />
+            <Route path="/goals/battle" element={<GoalBattle />} />
             <Route path="/consent" element={<Consent />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/receipt" element={<Receipt />} />

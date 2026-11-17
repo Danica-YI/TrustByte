@@ -67,6 +67,13 @@ export default function InsightsHub() {
         <Tile to="/plan" icon="History" label="Plan history" note={changes ? `${changes} change${changes === 1 ? '' : 's'} saved. Undo any time.` : 'No changes yet.'} />
       </div>
 
+      <div className="section-head" style={{ marginTop: 18 }}><h3>Just for fun</h3></div>
+      <div className="tiles">
+        <Tile to="/what-if" icon="What if" label="What if?" note="A mini game. Guess what a change does to your money." />
+        <Tile to="/time-machine" icon="Time machine" label="Time machine" note="A message from you in 2028, one for each plan." />
+        <Tile to="/goals/battle" icon="Battle" label="Goal battle" note="Race a friend to a savings target. Loser buys dinner." />
+      </div>
+
       <p className="small center" style={{ marginTop: 14 }}>Every Windy feature lives here.</p>
     </>
   )

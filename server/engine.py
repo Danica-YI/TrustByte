@@ -183,6 +183,11 @@ def effective_upcoming(s: dict) -> list[dict]:
             d += timedelta(days=14)
         else:
             d = date(d.year + (d.month == 12), d.month % 12 + 1, d.day)
+    # What-if game only: pretend income or costs on each payday. Never saved to Mia's plan.
+    for x in s.get("what_if_extras", []):
+        for pay in [u for u in BASE_UPCOMING if u["kind"] == "pay"][: x.get("paydays", 99)]:
+            out.append({"date": pay["date"], "label": x["label"], "amount": x["amount"], "account": "everyday",
+                        "kind": "what_if", "source": "what if", "estimate": True})
     out.sort(key=lambda u: (u["date"], u["kind"] != "pay", u["label"]))
     return out
 
@@ -710,6 +715,47 @@ def cut_ideas(s: dict) -> list[dict]:
                           "action": "limit" if category == "Eating out" and "Eating out" not in s["budgets"] else "ask"})
     ideas.sort(key=lambda i: -i["extra"])
     return ideas[:3]
+
+
+# ------------------------------------------------------------------ What if (mini game under Insights, Tools)
+
+def what_ifs(s: dict) -> list[dict]:
+    """A few pretend scenarios and what each does to Everyday and the goals. Nothing is saved.
+
+    The engine recalculates the same forecast and goal dates it uses everywhere else. The dollar
+    assumptions (a cat costs $80 a payday, and so on) are ours and are shown on the card.
+    """
+    if not (s["consent"].get("cash_flow") and s["consent"].get("goals")):
+        return []
+    pay = next(u["amount"] for u in BASE_UPCOMING if u["kind"] == "pay")
+
+    def extra(label: str, amount: float, paydays: int = 99) -> dict:
+        new = copy.deepcopy(s)
+        new.setdefault("what_if_extras", []).append({"label": label, "amount": r2(amount), "paydays": paydays})
+        return new
+
+    def more_japan() -> dict:
+        new = copy.deepcopy(s)
+        new["autosave"]["goal-japan"] = r2(autosave_amount(s, "goal-japan", 0) + 50)
+        return new
+
+    scenarios = [
+        ("pay-rise", "You get a 10% pay rise", f"{money(pay * 0.1)} more each payday", extra("Pay rise", pay * 0.1)),
+        ("cat", "You adopt a cat", "We guessed $80 a payday for food, litter and the vet", extra("Cat", -80)),
+        ("afterpay", "One more Afterpay plan", "$60 a payday for the next 4 paydays", extra("Afterpay", -60, 4)),
+        ("cook", "You cook at home for a month", "Eating out kept under $60 a week", apply_fix(s, "eating-out")),
+        ("japan", "You add $50 a payday to Japan", "On top of what goes in now", more_japan()),
+        ("skip", "You skip one savings transfer", "The next Westpac Life auto-save stays in Everyday", apply_fix(s, "skip-life")),
+    ]
+    base_low = forecast(s)["low"]["balance"]
+    out = []
+    for sid, title, note, new in scenarios:
+        low = forecast(new)["low"]["balance"]
+        changes, _ = diff(s, new)
+        out.append({"id": sid, "title": title, "note": note, "low_before": base_low, "low_after": low,
+                    "helps": low > base_low,
+                    "changes": [c for c in changes if c["label"].endswith("reached") or c["label"].endswith("each payday")][:3]})
+    return out
 
 
 # ------------------------------------------------------------------ home screen

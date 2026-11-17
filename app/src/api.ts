@@ -137,7 +137,13 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
   return data as T
 }
 
+export type WhatIf = {
+  id: string; title: string; note: string; low_before: number; low_after: number; helps: boolean
+  changes: { label: string; from: string; to: string }[]
+}
+
 export const api = {
+  whatIf: () => call<{ scenarios: WhatIf[] }>('/what_if'),
   snapshot: () => call<Snapshot>('/snapshot'),
   propose: (kind: string, params: Record<string, unknown> = {}) => call<Proposal>('/propose', { kind, params }),
   approve: (id: string) => call<{ snapshot: Snapshot; checks: Check[]; entry: HistoryEntry }>(`/approve/${id}`, {}),

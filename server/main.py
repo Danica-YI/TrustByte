@@ -124,6 +124,12 @@ def _snapshot() -> dict:
     return engine.snapshot(plan_state.load())
 
 
+@app.get("/api/what_if")
+def what_if() -> dict:
+    """The What if mini game: pretend scenarios worked out by the engine. Read-only, nothing is saved."""
+    return {"scenarios": engine.what_ifs(plan_state.load())}
+
+
 @app.get("/api/snapshot")
 def snapshot() -> dict:
     return _snapshot()

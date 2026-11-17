@@ -58,6 +58,9 @@ const CATEGORY_PATHS: Record<string, ReactNode> = {
   'Pay later': <><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></>,
   History: <path d="M4 12a8 8 0 1 0 2.5-5.8L4 8.5M4 4v4.5h4.5M12 8v4l3 2" />,
   Dream: <path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4L12 3z" />,
+  'What if': <><circle cx="12" cy="12" r="8.5" /><path d="M9.6 9.6a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9M12 16.8h.01" /></>,
+  'Time machine': <path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9" />,
+  Battle: <path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6" />,
 }
 
 export function CategoryIcon({ name }: { name: string }) {
