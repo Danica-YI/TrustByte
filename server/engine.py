@@ -731,6 +731,9 @@ def home_cards(s: dict) -> list[dict]:
     gc = grocery_check(s)
     if c["receipts"] and not gc["reviewed"] and "grocery-check" not in dismissed:
         cards.append({"id": "grocery-check", "shop": gc["shop"], "usual": gc["usual"]})
+    # Dream Nudge: an invitation, not an alert, so it comes last. It does not read Mia's spending.
+    if c["goals"] and "dream-nudge" not in dismissed:
+        cards.append({"id": "dream-nudge", "weekly": 30})
     return cards
 
 

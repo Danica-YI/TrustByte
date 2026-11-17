@@ -32,6 +32,7 @@ export type Card =
   | { id: 'shortfall'; low: { date: string; balance: number } }
   | { id: 'commitments'; found: string[]; insurance: Insurance | null; pay_later: { count: number; next: number; owed: number } }
   | { id: 'grocery-check'; shop: { merchant: string; date: string; amount: number }; usual: number }
+  | { id: 'dream-nudge'; weekly: number }
 
 export type HistoryEntry = {
   id: string; time: string; kind: string; title: string
