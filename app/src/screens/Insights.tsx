@@ -2,9 +2,10 @@
 // compared fairly (same days of earlier months). Setting a limit goes through review and approve,
 // and then lowers the usual spending the forecast plans for.
 import { useNavigate } from 'react-router-dom'
-import { Card, CategoryIcon, Chip, TopBar, WindyPill } from '../components/ui'
+import { Card, CategoryIcon, Chip, WindyPill } from '../components/ui'
 import { money } from '../format'
 import { useApp, useSnap } from '../store'
+import { InsightsTabs } from './InsightsHub'
 
 export default function Insights() {
   const s = useSnap()
@@ -15,12 +16,12 @@ export default function Insights() {
   const limit = ins.budgets['Eating out']
 
   if (!s.consent.spending_insights) {
-    return <><TopBar title="Spending" fallback="/insights" /><Card><p>Spending coaching is off in Your data and consent.</p></Card></>
+    return <><InsightsTabs /><Card><p>Spending coaching is off in Your data and consent.</p></Card></>
   }
 
   return (
     <>
-      <TopBar title="Spending" fallback="/insights" />
+      <InsightsTabs />
       <Card>
         <div className="muted" style={{ marginTop: 4 }}>Spent in November so far ({ins.days_counted} days)</div>
         <div className="spread" style={{ marginTop: 2 }}>

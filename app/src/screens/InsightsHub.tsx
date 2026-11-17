@@ -1,6 +1,6 @@
 // Insights tab: a home for every Windy feature, so each one is a real page you can come back to,
 // not only a card that appears on Home. The Home cards still surface what needs attention now.
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { CategoryIcon, Chip, TopBar, WindyPill } from '../components/ui'
 import { receipts } from '../data/bank'
@@ -18,6 +18,19 @@ function Tile({ to, icon, label, value, note, flag }: { to: string; icon: string
   )
 }
 
+// The Insights tab has two views with tabs on top: the overview of every tool, and the spending page
+export function InsightsTabs() {
+  return (
+    <>
+      <TopBar title="Insights and tools" back={false} />
+      <div className="tabs">
+        <NavLink to="/insights" end className={({ isActive }) => (isActive ? 'on' : '')}>Overview</NavLink>
+        <NavLink to="/insights/spending" className={({ isActive }) => (isActive ? 'on' : '')}>Spending</NavLink>
+      </div>
+    </>
+  )
+}
+
 export default function InsightsHub() {
   const s = useSnap()
   const fc = s.forecast
@@ -30,7 +43,7 @@ export default function InsightsHub() {
 
   return (
     <>
-      <TopBar title="Insights and tools" back={false} />
+      <InsightsTabs />
 
       {s.cards.length > 0 && (
         <Link to="/" className="plan-strip">
