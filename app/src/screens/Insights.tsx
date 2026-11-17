@@ -15,12 +15,12 @@ export default function Insights() {
   const limit = ins.budgets['Eating out']
 
   if (!s.consent.spending_insights) {
-    return <><TopBar title="Insights" back={false} /><Card><p>Spending coaching is off in Your data and consent.</p></Card></>
+    return <><TopBar title="Spending" fallback="/insights" /><Card><p>Spending coaching is off in Your data and consent.</p></Card></>
   }
 
   return (
     <>
-      <TopBar title="Insights" back={false} />
+      <TopBar title="Spending" fallback="/insights" />
       <Card>
         <div className="muted" style={{ marginTop: 4 }}>Spent in November so far ({ins.days_counted} days)</div>
         <div className="spread" style={{ marginTop: 2 }}>

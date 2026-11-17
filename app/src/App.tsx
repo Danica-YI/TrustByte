@@ -11,6 +11,8 @@ import GoalOptions from './screens/GoalOptions'
 import Review from './screens/Review'
 import Forecast from './screens/Forecast'
 import Insights from './screens/Insights'
+import InsightsHub from './screens/InsightsHub'
+import DreamNudge from './screens/DreamNudge'
 import Consent from './screens/Consent'
 import Payments from './screens/Payments'
 import Receipt from './screens/Receipt'
@@ -61,7 +63,9 @@ export default function App() {
             <Route path="/goals/:id" element={<GoalDetail />} />
             <Route path="/review/:id" element={<Review />} />
             <Route path="/forecast" element={<Forecast />} />
-            <Route path="/insights" element={<Insights />} />
+            <Route path="/insights" element={<InsightsHub />} />
+            <Route path="/insights/spending" element={<Insights />} />
+            <Route path="/dream" element={<DreamNudge />} />
             <Route path="/consent" element={<Consent />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/receipt" element={<Receipt />} />

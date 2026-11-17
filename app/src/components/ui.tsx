@@ -50,6 +50,14 @@ const CATEGORY_PATHS: Record<string, ReactNode> = {
   Subscriptions: <path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7" />,
   Transport: <><path d="M5.5 5h13A1.5 1.5 0 0 1 20 6.5V16H4V6.5A1.5 1.5 0 0 1 5.5 5zM4 11h16M7.5 16v2.5M16.5 16v2.5" /><circle cx="8" cy="13.5" r="0.6" /><circle cx="16" cy="13.5" r="0.6" /></>,
   'Bills and utilities': <path d="M13 3L5.5 13.5H11l-1 7.5 7.5-10.5H12L13 3z" />,
+  // Tool icons for the Insights hub
+  'Cash flow': <path d="M3 17l5-5 4 3 8-8M15 7h5v5" />,
+  Goals: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="0.8" /></>,
+  'Life events': <path d="M4 11l8-7 8 7M6 10v9h12v-9M10 19v-5h4v5" />,
+  Receipts: <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3zM9 8h6M9 12h6" />,
+  'Pay later': <><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></>,
+  History: <path d="M4 12a8 8 0 1 0 2.5-5.8L4 8.5M4 4v4.5h4.5M12 8v4l3 2" />,
+  Dream: <path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4L12 3z" />,
 }
 
 export function CategoryIcon({ name }: { name: string }) {

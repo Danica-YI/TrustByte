@@ -1,7 +1,7 @@
 // Add a savings goal yourself: name, target, an optional date and how much goes in each payday.
 // Same path as every other change: guardrails -> engine -> review (shows what it does to Everyday) -> approve.
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Card, Lock, TopBar } from '../components/ui'
 import { money } from '../format'
 import { useApp, useSnap } from '../store'
@@ -13,10 +13,12 @@ export default function GoalNew() {
   const nav = useNavigate()
   const s = useSnap()
   const { propose, busy } = useApp()
-  const [name, setName] = useState('')
-  const [target, setTarget] = useState('')
+  // Dream Nudge can open this form with a name, target and amount already filled in
+  const start = (useLocation().state ?? {}) as { name?: string; target?: number; amount?: number }
+  const [name, setName] = useState(start.name ?? '')
+  const [target, setTarget] = useState(start.target ? String(start.target) : '')
   const [when, setWhen] = useState('')
-  const [amount, setAmount] = useState('50')
+  const [amount, setAmount] = useState(String(start.amount ?? 50))
 
   const n = Number(amount)
   const t = Number(target)

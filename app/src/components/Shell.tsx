@@ -20,7 +20,7 @@ const STORY: { path: string; label: string; idea?: string }[] = [
   { path: '/payments', label: 'Regular payments', idea: '9+15' },
   { path: '/pay-later', label: 'Pay-later plans', idea: '9+15' },
   { path: '/receipt', label: 'Receipt Lens', idea: '10' },
-  { path: '/insights', label: 'Spending coach', idea: '5+6' },
+  { path: '/insights/spending', label: 'Spending coach', idea: '5+6' },
   { path: '/plan', label: 'Your plan · history and undo' },
   { path: '/consent', label: 'Data and consent' },
   { path: '/chat', label: 'Ask Windy (live AI)' },
