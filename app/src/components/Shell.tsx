@@ -8,19 +8,21 @@ import { Link, useLocation } from 'react-router-dom'
 import type { Check } from '../api'
 import { useApp } from '../store'
 
-const STORY: { path: string; label: string; idea?: string }[] = [
+// `feature` matches the numbering on the pitch deck's "Six features" slide (docs/presentation).
+const STORY: { path: string; label: string; feature?: string }[] = [
   { path: '/', label: 'Home · what Windy noticed' },
-  { path: '/life-event', label: 'Confirm the move', idea: '1' },
-  { path: '/goals/options', label: 'Goal trade-off options', idea: '2' },
-  { path: '/forecast', label: 'Shortfall forecast and fixes', idea: '4' },
-  { path: '/goals/japan-sooner', label: 'Ask: Japan in 3 months', idea: '2' },
+  { path: '/life-event', label: 'Confirm the move', feature: '1' },
+  { path: '/goals/options', label: 'Goal trade-off options', feature: '2' },
+  { path: '/forecast', label: 'Shortfall forecast and fixes', feature: '3' },
+  { path: '/goals/japan-sooner', label: 'Ask: Japan in 3 months', feature: '2' },
   { path: '/goals', label: 'Your goals · one page each' },
   { path: '/goals/goal-japan', label: 'Edit a goal yourself' },
   { path: '/goals/share/goal-japan', label: 'Save together · joint goal' },
-  { path: '/payments', label: 'Regular payments', idea: '9+15' },
-  { path: '/pay-later', label: 'Pay-later plans', idea: '9+15' },
-  { path: '/receipt', label: 'Receipt Lens', idea: '10' },
-  { path: '/insights', label: 'Spending coach', idea: '5+6' },
+  { path: '/payments', label: 'Regular payments', feature: '4' },
+  { path: '/pay-later', label: 'Pay-later plans', feature: '4' },
+  { path: '/receipt', label: 'Receipt Lens', feature: '5' },
+  { path: '/dream', label: 'Dream Nudge', feature: '6' },
+  { path: '/insights', label: 'Spending coach' },
   { path: '/plan', label: 'Your plan · history and undo' },
   { path: '/consent', label: 'Data and consent' },
   { path: '/chat', label: 'Ask Windy (live AI)' },
@@ -61,7 +63,7 @@ function StoryPanel() {
         <Link key={s.path} to={s.path} className={`story-link ${pathname === s.path ? 'active' : ''}`}>
           <span className="num">{i + 1}</span>
           <span style={{ flex: 1 }}>{s.label}</span>
-          {s.idea && <span className="tag">Idea {s.idea}</span>}
+          {s.feature && <span className="tag">Feature {s.feature}</span>}
         </Link>
       ))}
       <button className="reset" onClick={() => { if (confirm('Reset the demo to the start of the story?')) reset() }}>↺ Reset demo</button>
