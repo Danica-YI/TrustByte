@@ -6,7 +6,7 @@ import { Card, Logo, Mark, Progress, UserAvatar, WindyPill } from '../components
 import type { Card as HomeCard } from '../api'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
-import { useConnectedReceipts } from '../data/settings'
+import { ComingUpCard, GroceryCard } from '../components/MoneyCards'
 
 export default function Home() {
   const s = useSnap()
@@ -70,15 +70,7 @@ export default function Home() {
           ))}
         </Card>
 
-        <Card>
-          <div className="spread"><h3>Coming up on Everyday</h3><Link to="/forecast" className="link">Forecast ›</Link></div>
-          {s.upcoming.slice(0, 4).map((u, i) => (
-            <div key={i} className="row">
-              <div><div>{u.label}</div><div className="muted">{shortDate(u.date)} · {u.source}</div></div>
-              <b style={{ color: u.amount > 0 ? 'var(--good)' : undefined }}>{money(u.amount, true)}</b>
-            </div>
-          ))}
-        </Card>
+        <ComingUpCard />
       </div>
     </>
   )
@@ -130,27 +122,6 @@ function TopCard({ card }: { card: HomeCard }) {
         </Card>
       )
     case 'grocery-check':
-      return <GroceryCard card={card} />
+      return <GroceryCard shop={card.shop} usual={card.usual} />
   }
-}
-
-function GroceryCard({ card }: { card: Extract<HomeCard, { id: 'grocery-check' }> }) {
-  const nav = useNavigate()
-  const connected = useConnectedReceipts()
-  const rid = useSnap().grocery.shop.receipt_id
-  return (
-        <Card variant="windy">
-          <WindyPill label="Spending check" time="Just now" />
-          <h2>Bigger grocery shop than usual</h2>
-          <p>{card.shop.merchant} on {shortDate(card.shop.date)} was {money(card.shop.amount, true)}, usually about {money(card.usual)}.
-            {connected ? <> The itemised receipt is ready.</> : <> See where it went?</>}</p>
-          <div className="hstack">
-            {connected
-              ? <button className="btn primary" style={{ flex: 1 }} onClick={() => nav(`/receipt/${rid}`)}>See what was in it</button>
-              : <button className="btn primary" style={{ flex: 1 }} onClick={() => nav(`/receipt/${rid}?source=scan`)}>Scan receipt</button>}
-            <button className="btn outline" onClick={() => nav('/receipt/quick-split')}>Quick split</button>
-          </div>
-          {!connected && <button className="link" style={{ marginTop: 10 }} onClick={() => nav('/receipt/settings')}>Get receipts automatically ›</button>}
-        </Card>
-  )
 }

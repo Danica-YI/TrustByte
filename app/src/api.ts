@@ -91,7 +91,7 @@ export type Snapshot = {
   }[]
   insights: {
     spent: number; avg_same_days: number; vs_same_days: number; avg_full: number; days_counted: number
-    months: { m: string; v: number; partial: boolean }[]
+    months: { m: string; v: number; partial: boolean; start: string; end: string; by_category: Record<string, number> }[]
     categories: { category: string; this_month: number; avg_same_days: number; avg_full_month: number; diff_vs_same_days: number }[]
     coach: string; eating_out_weekly: number; budgets: Record<string, number>
   }
