@@ -242,9 +242,9 @@ export default function Chat() {
             Hi Mia. Ask me about your spending, bills, balances or goals. I work from your own transactions and
             show you what I looked at.
           </div>
-          <div className="stack" style={{ marginTop: 8 }}>
+          <div className="chat-suggest">
             {SUGGESTIONS.map((s) => (
-              <button key={s} className="btn outline" style={{ textAlign: 'left', fontWeight: 600 }} onClick={() => send(s)}>{s}</button>
+              <button key={s} className="btn outline" onClick={() => send(s)}>{s}</button>
             ))}
           </div>
         </>
@@ -326,7 +326,7 @@ export default function Chat() {
           </div>
         ),
       )}
-      <p className="lock">🔒 Windy reads your accounts with your consent and can’t move money.</p>
+      <p className="lock chat-note">🔒 Windy reads your accounts with your consent and can’t move money.</p>
       <div ref={end} style={{ height: 70 }} />
 
       <form className="composer" onSubmit={(e) => { e.preventDefault(); send(input) }}>
