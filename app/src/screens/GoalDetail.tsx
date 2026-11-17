@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Card, Chip, Lock, Progress, StepIcon, TopBar } from '../components/ui'
+import { Card, Chip, Lock, Progress, TopBar, WindyPill } from '../components/ui'
 import { money, monthYear, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -106,6 +107,17 @@ export default function GoalDetail() {
           <button className="btn ghost block" onClick={() => setEditing(false)}>Cancel</button>
         </Card>
       )}
+
+      {s.capsules.filter((c) => c.goal_id === g.id && !c.opened).map((c) => (
+        <Card key={c.id} variant="windy">
+          <WindyPill label="A promise to yourself" />
+          <p style={{ marginTop: 8 }}>You sealed a note about this goal. It opens on <b>{shortDate(c.open_date)} {c.open_date.slice(0, 4)}</b>.</p>
+          <p className="small" style={{ marginTop: 0 }}>
+            {g.reached && g.reached <= c.open_date ? 'On this plan you get there before it opens.' : 'On this plan you get there after it opens. Edit the goal to see what would make it in time.'}
+          </p>
+          <Link to="/time-machine" className="link">Open the time machine ›</Link>
+        </Card>
+      ))}
 
       <Card>
         <Link to={`/goals/share/${g.id}`} className="row"><span>{g.members.length ? `Saving with ${g.members.map((m) => m.name).join(', ')}` : 'Save together with someone'}</span><span>›</span></Link>

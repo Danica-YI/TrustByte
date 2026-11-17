@@ -40,6 +40,10 @@ export default function TimeMachine() {
   const [sealed, setSealed] = useState<{ text: string; when: string; check: NoteCheck | null } | null>(null)
   const [ask, setAsk] = useState<NoteCheck | null>(null) // the year in the note differs from the date: which one?
   const [checking, setChecking] = useState(false)
+  const [revealing, setRevealing] = useState<string | null>(null) // a note that was just opened: show then and now first
+  const openNote = async (id: string, msg: string) => { if (await act('capsule_open', { id }, msg)) setRevealing(id) }
+  // A new goal pre-filled from what Windy found in the note (a name and a dollar figure)
+  const newGoal = (check: NoteCheck | null) => nav('/goals/new', { state: { name: check?.goal_name ?? check?.money?.goal_name ?? undefined, target: check?.amount ?? undefined } })
   const [removing, setRemoving] = useState<string | null>(null) // the note she is about to delete (asks once before it goes)
   const [preview, setPreview] = useState(false) // Windy's 2028 preview is tucked away so it isn't mistaken for a note
   const [replies, setReplies] = useState<Record<string, string>>({}) // what she is typing back, per note
@@ -159,7 +163,7 @@ export default function TimeMachine() {
             <button className="btn primary" style={{ flex: 1 }} onClick={() => plan({ text: sealed.text })}>Plan this with Windy</button>
             {sealed.check.goal
               ? <button className="btn outline" onClick={() => nav(`/goals/${sealed.check!.goal!.id}`)}>Open the goal</button>
-              : <button className="btn outline" onClick={() => nav('/goals/new', { state: { name: sealed.check!.money!.goal_name ?? undefined } })}>Start a goal</button>}
+              : <button className="btn outline" onClick={() => newGoal(sealed.check)}>Start a goal</button>}
           </div>
           <p className="small" style={{ marginTop: 8, marginBottom: 0 }}>Figures are from your own accounts. This is information to plan with, not financial advice.</p>
         </Card>
@@ -205,7 +209,7 @@ export default function TimeMachine() {
           <p className="small" style={{ margin: '2px 0 8px' }}>This sounds like a goal you don’t have yet. Windy can help you plan for it now, so future you has a better answer.</p>
           <div className="hstack">
             <button className="btn primary" style={{ flex: 1 }} onClick={() => plan({ text: sealed.text })}>Help me plan it</button>
-            <button className="btn outline" onClick={() => nav('/goals/new')}>Start a goal</button>
+            <button className="btn outline" onClick={() => newGoal(sealed.check)}>Start a goal</button>
             <button className="btn ghost" onClick={() => setSealed(null)}>Not now</button>
           </div>
         </Card>
@@ -236,13 +240,26 @@ export default function TimeMachine() {
             <>
               <p className="small" style={{ margin: '4px 0 8px' }}>{c.from ? `${c.from} wrote this` : 'Written'} on {full(c.written)}. Opens on {full(c.open_date)}{c.from ? `, the day ${c.from} chose` : ''}. Only you can read it then.</p>
               {c.open_date <= s.today
-                ? <button className="btn primary block" disabled={busy} onClick={() => act('capsule_open', { id: c.id }, 'Your note is open.')}>Open it</button>
-                : <button className="btn outline block" disabled={busy} onClick={() => act('capsule_open', { id: c.id }, `It is ${full(c.open_date)}. Your note is open.`)}>Demo: jump to {full(c.open_date)} and open it</button>}
+                ? <button className="btn primary block" disabled={busy} onClick={() => openNote(c.id, 'Your note is open.')}>Open it</button>
+                : <button className="btn outline block" disabled={busy} onClick={() => openNote(c.id, `It is ${full(c.open_date)}. Your note is open.`)}>Demo: jump to {full(c.open_date)} and open it</button>}
             </>
+          ) : revealing === c.id ? (
+            <div className="reveal">
+              <div className="envelope" aria-hidden>✉</div>
+              <p className="center" style={{ margin: '6px 0 10px' }}>{c.from ? `${c.from} sealed this` : 'You sealed this'} on {full(c.written)}.</p>
+              {typeof c.then_saved === 'number' && (
+                <div className="then-now">
+                  <div><span>Saved then</span><b>{money(c.then_saved)}</b></div>
+                  <div className="arrow">→</div>
+                  <div><span>Saved today</span><b>{money(s.saved_now)}</b></div>
+                </div>
+              )}
+              <button className="btn primary block" style={{ marginTop: 12 }} onClick={() => setRevealing(null)}>Read the note</button>
+            </div>
           ) : (
-            <>
+            <div className="fade-in">
               <p style={{ marginTop: 8 }}>“{c.text}”</p>
-              <p className="small">{c.from ? `${c.from} wrote this` : 'You wrote this'} on {full(c.written)}.</p>
+              <p className="small">{c.from ? `${c.from} wrote this` : 'You wrote this'} on {full(c.written)}.{typeof c.then_saved === 'number' && c.then_saved !== s.saved_now ? ` You had ${money(c.then_saved)} saved then, and ${money(s.saved_now)} today.` : ''}</p>
               {c.goal_id && s.goals.find((g) => g.id === c.goal_id) && (() => {
                 const g = s.goals.find((x) => x.id === c.goal_id)!
                 return <div className="row"><span>{g.name} today</span><b>{money(g.saved)} of {money(g.target)}</b></div>
@@ -319,7 +336,7 @@ export default function TimeMachine() {
                   <button className="link" style={{ color: 'var(--ink-2)' }} onClick={() => setRemoving(c.id)}>Delete note</button>
                 )}
               </div>
-            </>
+            </div>
           )}
         </Card>
       ))}

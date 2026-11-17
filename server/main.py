@@ -147,10 +147,17 @@ def capsule_check(body: NoteCheckIn) -> dict:
     except ValueError:
         raise HTTPException(422, "open_date is not a real date")
     names = {g["id"]: g["name"] for g in engine.goals(s)}
-    ai = windy_ai.classify_note(text, names)
+    # The AI model reads the note first (any language). Its answer is only used where it is valid,
+    # and the plain rules above stay as the fallback and as a cross-check on the year.
+    ai = windy_ai.classify_note(text, names, TODAY.year)
     if ai:
         out["source"] = "claude"
         out["kind"] = ai["kind"]
+        if out["text_year"] is None and ai["year"]:
+            out["text_year"] = ai["year"]
+            out["mismatch"] = ai["year"] != out["open_year"]
+        out["amount"] = out["amount"] or ai["amount"]
+        out["goal_name"] = ai["name"] if ai["kind"] == "goal" and not ai["goal_id"] else None
         if ai["goal_id"] and (not out["goal"] or out["goal"]["id"] != ai["goal_id"]):
             g = next(x for x in engine.goals(s) if x["id"] == ai["goal_id"])
             out["goal"] = {"id": g["id"], "name": g["name"], "saved": g["saved"], "target": g["target"],
