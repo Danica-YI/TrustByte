@@ -99,7 +99,8 @@ const parentOf = (path: string) => path.replace(/\/[^/]*$/, '') || '/'
  * page was opened directly (demo navigator, refresh, shared link) it goes to `fallback`, or one
  * level up the URL.
  */
-export function TopBar({ title, right, fallback }: { title: string; right?: ReactNode; fallback?: string }) {
+// back={false} on the bottom-nav tab pages (Accounts, Payments, Insights, More): nothing to go back to
+export function TopBar({ title, right, fallback, back: showBack = true }: { title: string; right?: ReactNode; fallback?: string; back?: boolean }) {
   const nav = useNavigate()
   const { pathname } = useLocation()
   const back = () => {
@@ -109,7 +110,7 @@ export function TopBar({ title, right, fallback }: { title: string; right?: Reac
   }
   return (
     <div className="top-bar">
-      <button className="back" onClick={back} aria-label="Back">‹</button>
+      {showBack && <button className="back" onClick={back} aria-label="Back">‹</button>}
       <h1>{title}</h1>
       {right ?? <Logo color="var(--brand)" />}
     </div>

@@ -178,7 +178,7 @@ def act(kind: str, params: dict) -> dict:
             checks.append(G.check("input", "Input validation", False, f"unknown goal '{parsed.goal}'"))
             raise G.GuardrailError("That goal doesn't exist.", checks, 422)
         members = s["shared_goals"].setdefault(parsed.goal, [])
-        who = parsed.name.strip()
+        who = G.masked_payee(parsed) if kind == "goal_invite" else parsed.name.strip()
         member = next((m for m in members if m["name"].lower() == who.lower()), None)
         if kind == "goal_invite":
             if member or len(members) >= 5:
