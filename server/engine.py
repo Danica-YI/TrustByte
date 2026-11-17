@@ -765,13 +765,41 @@ def snapshot(s: dict) -> dict:
 # ------------------------------------------------------------------ for the chat tools
 
 def forecast_for_chat(s: dict) -> dict:
+    """The forecast for Ask Windy, with every total already added up.
+
+    The chat's number check only accepts figures that appear in tool output, so anything Windy might
+    want to quote as a sum (what goes out on payday, what's left, a day's bills) is worked out here
+    rather than left for the model to add up.
+    """
     fc = forecast(s)
+    every = [u for u in effective_upcoming(s) if u["account"] == "everyday"]
+    pay = fc["payday"]
+    on_payday = [u for u in every if u["date"] == fc["next_payday"]]
+    by_date: dict[str, dict] = {}
+    for u in every:
+        day = by_date.setdefault(u["date"], {"date": u["date"], "money_in": 0.0, "money_out": 0.0, "items": []})
+        day["money_in" if u["amount"] > 0 else "money_out"] += abs(u["amount"])
+        day["items"].append(u["label"])
     return {"everyday_balance_now": account(s, "everyday")["closing_balance"], "next_payday": fc["next_payday"],
             "safe_to_spend_until_payday": fc["safe"], "typical_daily_spend": fc["daily"],
             "assumption": fc["assumption"], "lowest_point": fc["low"],
-            "ways_to_fix": [{k: f[k] for k in ("label", "gain")} for f in forecast_fixes(s)],
-            "scheduled_everyday_items": [u for u in effective_upcoming(s) if u["account"] == "everyday"],
-            "note": "Includes every plan change Mia has approved."}
+            "next_payday_totals": {
+                "pay_in": pay["pay"],
+                "auto_saves_out": r2(-pay["auto_saves"]),
+                "pay_later_out": r2(-pay["pay_later"]),
+                "left_after_auto_saves_and_pay_later": r2(pay["pay"] + pay["auto_saves"] + pay["pay_later"]),
+                "auto_saves": [{"to": u["label"].replace("Auto-save to ", ""), "amount": r2(-u["amount"])}
+                               for u in on_payday if u["kind"] == "auto_save"],
+            },
+            "usual_spending_from_payday_to_lowest_point": fc["usual_after_payday"],
+            "ways_to_fix": [{"label": f["label"], "gain": f["gain"],
+                             "lowest_point_after": r2(fc["low"]["balance"] + f["gain"]),
+                             "covers_the_gap": fc["low"]["balance"] + f["gain"] >= 0}
+                            for f in forecast_fixes(s)],
+            "totals_by_date": [{**d, "money_in": r2(d["money_in"]), "money_out": r2(d["money_out"])}
+                               for d in sorted(by_date.values(), key=lambda d: d["date"])],
+            "scheduled_everyday_items": every,
+            "note": "Includes every plan change Mia has approved. Quote the totals above; don't add items up."}
 
 
 def goal_projection_for_chat(s: dict, goal_id: str, amount_per_payday: float | None = None) -> dict:
