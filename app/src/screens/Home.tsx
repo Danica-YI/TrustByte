@@ -123,7 +123,6 @@ function TopCard({ card }: { card: HomeCard }) {
       )
     case 'grocery-check':
       return <GroceryCard shop={card.shop} usual={card.usual} />
-      return <GroceryCard card={card} />
     case 'dream-nudge':
       return (
         <Card variant="windy">

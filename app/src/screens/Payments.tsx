@@ -3,7 +3,7 @@
 // covering the insurance rise goes through the full review and approve flow.
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Card, Chip, Seg, TopBar, WindyPill } from '../components/ui'
+import { Card, Chip, TopBar, WindyPill } from '../components/ui'
 import type { Recurring, Snapshot, Upcoming } from '../api'
 import { daysBetween, money, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
@@ -25,7 +25,18 @@ export default function Payments() {
   return (
     <>
       <TopBar title="Regular payments" back={false} />
-      <div style={{ marginBottom: 14 }}><Seg options={['List', 'Calendar']} value={view} onChange={setView} /></div>
+      <div className="utabs" role="tablist">
+        {(['List', 'Calendar'] as const).map((v) => (
+          <button key={v} role="tab" aria-selected={view === v} className={view === v ? 'on' : ''} onClick={() => setView(v)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+              {v === 'List'
+                ? <><path d="M9 6h11M9 12h11M9 18h11" /><circle cx="4" cy="6" r="1" fill="currentColor" /><circle cx="4" cy="12" r="1" fill="currentColor" /><circle cx="4" cy="18" r="1" fill="currentColor" /></>
+                : <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></>}
+            </svg>
+            {v}
+          </button>
+        ))}
+      </div>
 
       <Card>
         <div className="muted" style={{ marginTop: 4 }}>Per fortnight</div>
