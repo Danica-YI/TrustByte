@@ -199,14 +199,20 @@ def act(kind: str, params: dict) -> dict:
         checks.append(G.check("engine", "Sharing boundary", True,
                               "They only see this goal. No other account or transaction is shared."))
     elif kind == "capsule_write":
-        if parsed.year <= E.TODAY.year:
-            checks.append(G.check("input", "Input validation", False, "The year has to be in the future"))
-            raise G.GuardrailError("Pick a year in the future.", checks, 422)
+        try:
+            when = E._d(parsed.open_date)
+        except ValueError:
+            when = None
+        if not when or when <= E.TODAY or when.year > E.TODAY.year + 40:
+            checks.append(G.check("input", "Input validation", False, "The opening date has to be in the future"))
+            raise G.GuardrailError("Pick an opening date in the future.", checks, 422)
         text, removed = G._CARD_OR_ACCOUNT.subn("[number removed]", parsed.text.strip())
         checks.append(G.check("input", "Private details", True, f"Removed {removed} card or account numbers" if removed else "No card or account numbers"))
-        s.setdefault("capsules", []).append({"id": uuid.uuid4().hex[:8], "year": parsed.year, "text": text,
-                                             "written": E.TODAY.isoformat(), "opened": False, "answer": None})
-        title = f"Wrote a note to yourself in {parsed.year}"
+        s.setdefault("capsules", []).append({"id": uuid.uuid4().hex[:8], "open_date": when.isoformat(), "year": when.year,
+                                             "text": text, "written": E.TODAY.isoformat(), "opened": False,
+                                             "answer": None, "from": parsed.from_name})
+        title = (f"{parsed.from_name} sent you a note for {E.short_date(when)} {when.year}" if parsed.from_name
+                 else f"Wrote a note to yourself for {E.short_date(when)} {when.year}")
     elif kind in ("capsule_open", "capsule_answer"):
         cap = next((c for c in s.get("capsules", []) if c["id"] == parsed.id), None)
         if not cap:

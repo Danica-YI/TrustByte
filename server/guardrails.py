@@ -153,8 +153,10 @@ def masked_payee(invite: GoalInvite) -> str:
 
 
 class CapsuleWrite(BaseModel):
-    year: int = Field(ge=2027, le=2060)
+    open_date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
     text: str = Field(min_length=3, max_length=280)
+    # A friend's name when the note is from someone else (simulated in the demo)
+    from_name: str | None = Field(default=None, min_length=1, max_length=30, pattern=r"^[A-Za-z][A-Za-z .'-]*$")
 
 
 class CapsuleId(BaseModel):

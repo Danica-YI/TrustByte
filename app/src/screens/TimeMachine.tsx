@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Capsule } from '../api'
 import { Card, Chip, Lock, Seg, TopBar, WindyPill } from '../components/ui'
-import { money } from '../format'
+import { money, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
 
 const OPENERS: Record<string, string> = {
@@ -26,19 +26,25 @@ export default function TimeMachine() {
   const nav = useNavigate()
   const s = useSnap()
   const { act, busy } = useApp()
-  const years = [1, 2, 3, 5, 10].map((n) => s.this_year + n)
-  const [year, setYear] = useState(String(s.this_year + 5))
+  const [when, setWhen] = useState(`${s.this_year + 5}${s.today.slice(4)}`)
+  const [who, setWho] = useState<'Me' | 'A friend'>('Me')
+  const [friend, setFriend] = useState('Danica')
   const [text, setText] = useState('')
+  const full = (iso: string) => `${shortDate(iso)} ${iso.slice(0, 4)}`
+  const okWhen = when > s.today
+  const okFriend = who === 'Me' || friend.trim().length > 0
   const [open, setOpen] = useState<number | null>(null)
   const [justSealed, setJustSealed] = useState<string | null>(null)
-  const byYear = [...new Set(s.capsules.map((c) => c.year))].sort()
+  const byYear = [...new Set(s.capsules.map((c) => c.year))].sort((a, b) => a - b)
   const opts = s.tradeoff.options
   const [pick, setPick] = useState(opts[0]?.name ?? '')
   const o = opts.find((x) => x.name === pick) ?? opts[0]
 
   const seal = async () => {
     const t = text.trim()
-    if (await act('capsule_write', { year: Number(year), text: t }, `Sealed until ${year}`)) { setJustSealed(t); setText(''); setOpen(Number(year)) }
+    const params: Record<string, unknown> = { open_date: when, text: t }
+    if (who === 'A friend') params.from_name = friend.trim()
+    if (await act('capsule_write', params, `Sealed until ${full(when)}`)) { setJustSealed(who === 'Me' ? t : null); setText(''); setOpen(Number(when.slice(0, 4))) }
   }
   const plan = (c: Pick<Capsule, 'text'>) => nav('/chat', { state: { q: `I wrote this to my future self: "${c.text}". Can you help me plan for it?` } })
 
@@ -49,14 +55,25 @@ export default function TimeMachine() {
       <Card variant="windy">
         <WindyPill label="Note to future you" />
         <h2 style={{ marginTop: 8 }}>Ask yourself in a few years</h2>
-        <p>Write a wish or a question. It stays sealed until that year, and only you can open and answer it.</p>
-        <textarea className="field" rows={3} maxLength={280} value={text} onChange={(e) => setText(e.target.value)}
-          placeholder="I want my own place in five years. Will I have made it?" aria-label="Your note" />
-        <div className="spread" style={{ marginTop: 8 }}>
-          <span>Open it in</span>
-          <Seg options={years.map(String)} value={year} onChange={setYear} />
+        <p>Write a wish or a question. It stays sealed until the day you pick, and only you can open and answer it. A friend can send you one too.</p>
+        <div className="spread" style={{ marginBottom: 8 }}>
+          <span>From</span>
+          <Seg options={['Me', 'A friend']} value={who} onChange={setWho} />
         </div>
-        <button className="btn primary block" style={{ marginTop: 10 }} disabled={busy || text.trim().length < 3} onClick={seal}>Seal it</button>
+        {who === 'A friend' && (
+          <label className="spread" style={{ gap: 8, marginBottom: 8 }}>
+            <span>Their name <span className="small">(demo)</span></span>
+            <input className="field" style={{ width: 170 }} value={friend} onChange={(e) => setFriend(e.target.value)} maxLength={30} aria-label="Friend’s name" />
+          </label>
+        )}
+        <textarea className="field" rows={3} maxLength={280} value={text} onChange={(e) => setText(e.target.value)}
+          placeholder={who === 'Me' ? 'I want my own place in five years. Will I have made it?' : 'Did we ever take that trip together?'} aria-label="The note" />
+        <label className="spread" style={{ marginTop: 8, gap: 8 }}>
+          <span>Open it on</span>
+          <input className="field" style={{ width: 170 }} type="date" min={s.today} value={when} onChange={(e) => setWhen(e.target.value)} aria-label="Opening date" />
+        </label>
+        {!okWhen && <div className="small" style={{ color: 'var(--bad)', marginTop: 4 }}>Pick a date in the future.</div>}
+        <button className="btn primary block" style={{ marginTop: 10 }} disabled={busy || text.trim().length < 3 || !okWhen || !okFriend} onClick={seal}>{who === 'Me' ? 'Seal it' : `Seal it from ${friend.trim() || 'a friend'}`}</button>
       </Card>
 
       {justSealed && (
@@ -81,7 +98,7 @@ export default function TimeMachine() {
               return (
                 <button key={y} className={`year-tile ${open === y ? 'on' : ''}`} onClick={() => setOpen(open === y ? null : y)}>
                   <b>{y}</b>
-                  <span>{list.length} note{list.length === 1 ? '' : 's'} · {sealed ? 'sealed' : 'opened'}</span>
+                  <span>{list.length} note{list.length === 1 ? '' : 's'} · {y < s.this_year || (y === s.this_year && !sealed) ? 'past' : sealed ? 'sealed' : 'opened'}</span>
                 </button>
               )
             })}
@@ -91,16 +108,18 @@ export default function TimeMachine() {
 
       {open !== null && s.capsules.filter((c) => c.year === open).map((c) => (
         <Card key={c.id} variant={c.opened ? 'selected' : undefined}>
-          <div className="spread"><h3>To me, in {c.year}</h3><Chip tone={c.opened ? 'good' : 'warn'}>{c.opened ? 'Opened' : 'Sealed'}</Chip></div>
+          <div className="spread"><h3>{c.from ? `From ${c.from}` : 'From me'} · {full(c.open_date)}</h3><Chip tone={c.opened ? 'good' : 'warn'}>{c.opened ? 'Opened' : 'Sealed'}</Chip></div>
           {!c.opened ? (
             <>
-              <p className="small" style={{ margin: '4px 0 8px' }}>Written in {c.written.slice(0, 4)}. Opens in {c.year}. Only you can read it then.</p>
-              <button className="btn outline block" disabled={busy} onClick={() => act('capsule_open', { id: c.id }, `It is ${c.year}. Your note is open.`)}>Demo: jump to {c.year} and open it</button>
+              <p className="small" style={{ margin: '4px 0 8px' }}>{c.from ? `${c.from} wrote this` : 'Written'} on {full(c.written)}. Opens on {full(c.open_date)}{c.from ? `, the day ${c.from} chose` : ''}. Only you can read it then.</p>
+              {c.open_date <= s.today
+                ? <button className="btn primary block" disabled={busy} onClick={() => act('capsule_open', { id: c.id }, 'Your note is open.')}>Open it</button>
+                : <button className="btn outline block" disabled={busy} onClick={() => act('capsule_open', { id: c.id }, `It is ${full(c.open_date)}. Your note is open.`)}>Demo: jump to {full(c.open_date)} and open it</button>}
             </>
           ) : (
             <>
               <p style={{ marginTop: 8 }}>“{c.text}”</p>
-              <p className="small">You wrote this in {c.written.slice(0, 4)}.</p>
+              <p className="small">{c.from ? `${c.from} wrote this` : 'You wrote this'} on {full(c.written)}.</p>
               {c.answer === null ? (
                 <>
                   <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>So, did it happen?</div>

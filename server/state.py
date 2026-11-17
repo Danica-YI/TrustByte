@@ -72,9 +72,13 @@ def default_state() -> dict:
         "shared_goals": {},
         # Goal details Mia edited herself, by goal account id: {"target": amount, "goal_date": "YYYY-MM-DD"}
         "goal_overrides": {},
-        # Time machine: notes Mia wrote to her future self. Each is {"id", "year", "text", "written",
-        # "opened", "answer": None | "done" | "not_yet" | "dropped"}. Only she can read and answer them.
-        "capsules": [],
+        # Time machine: notes to Mia's future self, from her or from a friend. Each is {"id", "open_date",
+        # "year", "text", "written", "opened", "answer": None | "done" | "not_yet" | "dropped", "from"}.
+        # Sealed until open_date. Only she can read and answer them. One sample from last year is included
+        # so the history view has something to show in the demo.
+        "capsules": [{"id": "0a1b2c3d", "open_date": "2026-06-30", "year": 2026, "written": "2025-12-12", "opened": True,
+                      "answer": "done", "from": None,
+                      "text": "Start an emergency fund and keep adding to it every payday. Did I stick with it?"}],
         # Goals Mia added herself: {"id", "name", "target", "goal_date"}; they start at $0
         "new_goals": [],
         # The trade-off option or Japan plan Mia approved, for the home screen

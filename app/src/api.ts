@@ -140,7 +140,7 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
   return data as T
 }
 
-export type Capsule = { id: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped' }
+export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped'; from: string | null }
 
 export type WhatIf = {
   id: string; title: string; note: string; low_before: number; low_after: number; helps: boolean
