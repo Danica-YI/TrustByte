@@ -168,7 +168,9 @@ class CapsuleId(BaseModel):
 
 class CapsuleAnswer(BaseModel):
     id: str = Field(pattern=r"^[a-f0-9]{8}$")
-    answer: Literal["done", "not_yet", "dropped"]
+    answer: Literal["done", "not_yet", "dropped", "yes", "no", "unsure", "answered", "read"]
+    # A few words back to past you (optional for buttons, the answer itself for open questions)
+    reply: str | None = Field(default=None, max_length=280)
 
 
 class GoalMember(BaseModel):
@@ -204,6 +206,7 @@ ACTIONS = {
     "capsule_write": (CapsuleWrite, "goals"),
     "capsule_open": (CapsuleId, "goals"),
     "capsule_answer": (CapsuleAnswer, "goals"),
+    "capsule_delete": (CapsuleId, "goals"),
 }
 
 

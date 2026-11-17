@@ -21,6 +21,9 @@ const CLOSERS: Record<string, string> = {
   C: 'Japan had to wait. It is still on the list, just later.',
 }
 const ANSWERS = { done: 'I did it', not_yet: 'Not yet', dropped: 'I don’t want this any more' } as const
+const LABELS: Record<string, string> = { ...ANSWERS, yes: 'Yes', no: 'No', unsure: 'Not sure yet', answered: 'Answered', read: 'Read' }
+// What kind of answer a question needs: yes or no, an amount, or free text
+const answerType = (t: string) => /^\s*(will|can|could|should|do|does|did|am|is|are|have|has)\b/i.test(t) ? 'yesno' : /^\s*how (much|many)\b/i.test(t) ? 'amount' : 'text'
 
 export default function TimeMachine() {
   const nav = useNavigate()
@@ -37,6 +40,17 @@ export default function TimeMachine() {
   const [sealed, setSealed] = useState<{ text: string; when: string; check: NoteCheck | null } | null>(null)
   const [ask, setAsk] = useState<NoteCheck | null>(null) // the year in the note differs from the date: which one?
   const [checking, setChecking] = useState(false)
+  const [removing, setRemoving] = useState<string | null>(null) // the note she is about to delete (asks once before it goes)
+  const [preview, setPreview] = useState(false) // Windy's 2028 preview is tucked away so it isn't mistaken for a note
+  const [replies, setReplies] = useState<Record<string, string>>({}) // what she is typing back, per note
+  const reply = (id: string) => (replies[id] ?? '').trim()
+  const answer = (id: string, a: string) => act('capsule_answer', { id, answer: a, ...(reply(id) ? { reply: reply(id) } : {}) })
+  const replyBox = (id: string, placeholder: string, rows = 2) => (
+    <textarea className="field" rows={rows} maxLength={280} value={replies[id] ?? ''} placeholder={placeholder} aria-label="Your answer"
+      onChange={(e) => setReplies({ ...replies, [id]: e.target.value })} style={{ marginBottom: 8 }} />
+  )
+  const [confirm, setConfirm] = useState<{ text: string; when: string; check: NoteCheck | null } | null>(null)
+  const KIND = { goal: 'A goal', question: 'A question', message: 'A note' } as const
   // For questions about saving: what her auto-saves add up to in a year, from the engine's payday figures
   const yearly = Math.abs(s.forecast.payday.auto_saves) * 26
   const aboutSaving = (t: string) => /\bsav(e|ed|ing|ings)\b/i.test(t)
@@ -63,10 +77,15 @@ export default function TimeMachine() {
     setChecking(false)
     if (check && check.mismatch && checkYear) { setAsk(check); return }
     setAsk(null)
+    setConfirm({ text: t, when: date, check }) // nothing is sealed until she confirms
+  }
+  const doSeal = async () => {
+    if (!confirm) return
+    const { text: t, when: date, check } = confirm
     const params: Record<string, unknown> = { open_date: date, text: t }
     if (who === 'A friend') params.from_name = friend.trim()
     if (check) { params.kind = check.kind; if (check.goal) params.goal_id = check.goal.id }
-    if (await act('capsule_write', params, `Sealed until ${full(date)}`)) { setSealed(who === 'Me' ? { text: t, when: date, check } : null); setText(''); setOpen(Number(date.slice(0, 4))) }
+    if (await act('capsule_write', params, `Sealed until ${full(date)}`)) { setConfirm(null); setSealed(who === 'Me' ? { text: t, when: date, check } : null); setText(''); setOpen(Number(date.slice(0, 4))) }
   }
   const plan = (c: Pick<Capsule, 'text'>) => nav('/chat', { state: { q: `I wrote this to my future self: "${c.text}". Can you help me plan for it?` } })
 
@@ -76,7 +95,7 @@ export default function TimeMachine() {
 
       <Card variant="windy">
         <WindyPill label="Note to future you" />
-        <h2 style={{ marginTop: 8 }}>Ask yourself in a few years</h2>
+        <h2 style={{ marginTop: 8 }}>Write to yourself in the future</h2>
         <p>Write a wish or a question. It stays sealed until the day you pick, and only you can open and answer it. A friend can send you one too.</p>
         <div className="spread" style={{ marginBottom: 8 }}>
           <span>From</span>
@@ -89,6 +108,7 @@ export default function TimeMachine() {
           </label>
         )}
         <textarea className="field" rows={3} maxLength={280} value={text} onChange={(e) => setText(e.target.value)}
+          disabled={!!confirm || !!ask}
           placeholder={who === 'Me' ? 'I want my own place in five years. Will I have made it?' : 'Did we ever take that trip together?'} aria-label="The note" />
         <label className="spread" style={{ marginTop: 8, gap: 8 }}>
           <span>Open it on</span>
@@ -105,7 +125,20 @@ export default function TimeMachine() {
             </div>
           </div>
         )}
-        {!ask && <button className="btn primary block" style={{ marginTop: 10 }} disabled={busy || checking || text.trim().length < 3 || !okWhen || !okFriend} onClick={seal}>{checking ? 'Windy is reading it…' : who === 'Me' ? 'Seal it' : `Seal it from ${friend.trim() || 'a friend'}`}</button>}
+        {confirm && (
+          <div className="ideas" style={{ margin: '10px 0 0' }}>
+            <b>Seal this {who === 'Me' ? 'note' : `note from ${friend.trim() || 'a friend'}`}?</b>
+            <p style={{ margin: '6px 0' }}>“{confirm.text}”</p>
+            <div className="row"><span>Opens on</span><b>{full(confirm.when)}</b></div>
+            {confirm.check && <div className="row"><span>Windy reads it as</span><b>{KIND[confirm.check.kind]}{confirm.check.goal ? ` · ${confirm.check.goal.name}` : ''}</b></div>}
+            <p className="small" style={{ margin: '6px 0 8px' }}>Once sealed you can’t read or change it until that day. You can still remove it from Plan history.</p>
+            <div className="hstack">
+              <button className="btn primary" style={{ flex: 1 }} disabled={busy} onClick={doSeal}>Yes, seal it</button>
+              <button className="btn outline" disabled={busy} onClick={() => setConfirm(null)}>Edit</button>
+            </div>
+          </div>
+        )}
+        {!ask && !confirm && <button className="btn primary block" style={{ marginTop: 10 }} disabled={busy || checking || text.trim().length < 3 || !okWhen || !okFriend} onClick={seal}>{checking ? 'Windy is reading it…' : who === 'Me' ? 'Seal it' : `Seal it from ${friend.trim() || 'a friend'}`}</button>}
       </Card>
 
       {sealed && sealed.check?.kind === 'message' && (
@@ -198,33 +231,52 @@ export default function TimeMachine() {
                 const g = s.goals.find((x) => x.id === c.goal_id)!
                 return <div className="row"><span>{g.name} today</span><b>{money(g.saved)} of {money(g.target)}</b></div>
               })()}
-              {c.kind === 'message' ? (
-                <p className="small" style={{ marginBottom: 0 }}>Just a note. Nothing to answer.</p>
+              {c.answer !== null && c.kind !== 'goal' ? (
+                <>
+                  <div className="row"><span>Your answer</span><b>{LABELS[c.answer] ?? c.answer}</b></div>
+                  {c.reply && <p style={{ marginBottom: 0 }}>“{c.reply}”</p>}
+                </>
+              ) : c.kind === 'message' ? (
+                <>
+                  <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>Want to write back?</div>
+                  {replyBox(c.id, 'A few words back to past you (optional)')}
+                  <button className="btn outline block" disabled={busy} onClick={() => answer(c.id, 'read')}>{reply(c.id) ? 'Save my reply' : 'Mark as read'}</button>
+                </>
               ) : c.kind === 'question' ? (
                 <>
-                  <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>You asked yourself a question</div>
-                  {aboutSaving(c.text) && <p>On today’s plan your auto-saves add up to about <b>{money(yearly)}</b> a year.</p>}
-                  {c.answer === null ? (
-                    <div className="hstack">
-                      <button className="btn primary" style={{ flex: 1 }} onClick={() => askNow(c.text)}>Ask Windy now</button>
-                      <button className="btn outline" disabled={busy} onClick={() => act('capsule_answer', { id: c.id, answer: 'done' })}>I have my answer</button>
-                    </div>
+                  <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>You asked yourself a question. What is the answer?</div>
+                  {aboutSaving(c.text) && <p>For reference, on today’s plan your auto-saves add up to about <b>{money(yearly)}</b> a year.</p>}
+                  {answerType(c.text) === 'yesno' ? (
+                    <>
+                      {replyBox(c.id, 'Add a few words (optional)')}
+                      <div className="hstack" style={{ marginBottom: 8 }}>
+                        <button className="btn outline" style={{ flex: 1 }} disabled={busy} onClick={() => answer(c.id, 'yes')}>Yes</button>
+                        <button className="btn outline" style={{ flex: 1 }} disabled={busy} onClick={() => answer(c.id, 'no')}>No</button>
+                        <button className="btn outline" style={{ flex: 1 }} disabled={busy} onClick={() => answer(c.id, 'unsure')}>Not sure yet</button>
+                      </div>
+                    </>
                   ) : (
-                    <div className="row"><span>Your answer</span><b>Answered</b></div>
+                    <>
+                      {replyBox(c.id, answerType(c.text) === 'amount' ? 'Your answer, for example: about $8,000' : 'Write your answer', answerType(c.text) === 'amount' ? 1 : 3)}
+                      <button className="btn primary block" style={{ marginBottom: 8 }} disabled={busy || !reply(c.id)} onClick={() => answer(c.id, 'answered')}>Save my answer</button>
+                    </>
                   )}
+                  <button className="btn ghost block" onClick={() => askNow(c.text)}>Not sure? Ask Windy now</button>
                 </>
               ) : c.answer === null ? (
                 <>
                   <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>So, did it happen?</div>
+                  {replyBox(c.id, 'Add a few words (optional)')}
                   <div className="stack" style={{ gap: 6 }}>
                     {(Object.keys(ANSWERS) as (keyof typeof ANSWERS)[]).map((a) => (
-                      <button key={a} className="btn outline block" disabled={busy} onClick={() => act('capsule_answer', { id: c.id, answer: a })}>{ANSWERS[a]}</button>
+                      <button key={a} className="btn outline block" disabled={busy} onClick={() => answer(c.id, a)}>{ANSWERS[a]}</button>
                     ))}
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="row"><span>Your answer</span><b>{ANSWERS[c.answer]}</b></div>
+                  <div className="row"><span>Your answer</span><b>{LABELS[c.answer] ?? c.answer}</b></div>
+                  {c.reply && <p>“{c.reply}”</p>}
                   {c.answer === 'done' && <p style={{ marginBottom: 0 }}>You told yourself you would, and you did. Windy has nothing to add.</p>}
                   {c.answer === 'dropped' && <p style={{ marginBottom: 0 }}>That is fine. Plans change, and you get to decide what still matters.</p>}
                   {c.answer === 'not_yet' && (
@@ -240,14 +292,29 @@ export default function TimeMachine() {
                   )}
                 </>
               )}
+              <div style={{ marginTop: 10, textAlign: 'right' }}>
+                {removing === c.id ? (
+                  <span className="hstack" style={{ justifyContent: 'flex-end' }}>
+                    <span className="small">Delete this note for good?</span>
+                    <button className="link" disabled={busy} onClick={async () => { if (await act('capsule_delete', { id: c.id }, 'Note deleted')) setRemoving(null) }}>Yes, delete</button>
+                    <button className="link" style={{ color: 'var(--ink-2)' }} onClick={() => setRemoving(null)}>Cancel</button>
+                  </span>
+                ) : (
+                  <button className="link" style={{ color: 'var(--ink-2)' }} onClick={() => setRemoving(c.id)}>Delete note</button>
+                )}
+              </div>
             </>
           )}
         </Card>
       ))}
 
-      {!s.tradeoff.no_conflict && o && (
+      {!s.tradeoff.no_conflict && o && !preview && (
+        <button className="btn ghost block" style={{ marginTop: 14 }} onClick={() => setPreview(true)}>See Windy’s preview: how each rent plan could look in 2028</button>
+      )}
+      {!s.tradeoff.no_conflict && o && preview && (
         <>
-          <div className="section-head" style={{ marginTop: 18 }}><h3>A message from 2028</h3></div>
+          <div className="section-head" style={{ marginTop: 18 }}><h3>Windy’s preview · your rent plans in 2028</h3><button className="link" onClick={() => setPreview(false)}>Hide</button></div>
+          <p className="small" style={{ margin: '0 2px 10px' }}>This is not one of your notes and there is nothing to send. Windy wrote it from the three options for covering your rent rise. To write to yourself, use the box at the top.</p>
           <div style={{ marginBottom: 12 }}><Seg options={opts.map((x) => x.name)} value={o.name} onChange={setPick} /></div>
           <Card>
             <WindyPill label={`From you, 2028 · ${o.name}`} />

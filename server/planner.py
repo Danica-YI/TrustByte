@@ -216,6 +216,16 @@ def act(kind: str, params: dict) -> dict:
                                              "goal_id": parsed.goal_id if parsed.kind else (seen["goal"] or {}).get("id")})
         title = (f"{parsed.from_name} sent you a note for {E.short_date(when)} {when.year}" if parsed.from_name
                  else f"Wrote a note to yourself for {E.short_date(when)} {when.year}")
+    elif kind == "capsule_delete":
+        cap = next((c for c in s.get("capsules", []) if c["id"] == parsed.id), None)
+        if not cap:
+            checks.append(G.check("input", "Input validation", False, "No such note"))
+            raise G.GuardrailError("That note doesn't exist.", checks, 422)
+        if not cap["opened"]:
+            checks.append(G.check("input", "Input validation", False, "Sealed notes can't be deleted before they open"))
+            raise G.GuardrailError("You can only delete a note after you've opened it.", checks, 409)
+        s["capsules"].remove(cap)
+        title = f"Deleted your {cap['year']} note"
     elif kind in ("capsule_open", "capsule_answer"):
         cap = next((c for c in s.get("capsules", []) if c["id"] == parsed.id), None)
         if not cap:
@@ -229,6 +239,8 @@ def act(kind: str, params: dict) -> dict:
                 checks.append(G.check("input", "Input validation", False, "The note is still sealed"))
                 raise G.GuardrailError("Open the note first.", checks, 409)
             cap["answer"] = parsed.answer
+            reply = G._CARD_OR_ACCOUNT.sub("[number removed]", (parsed.reply or "").strip())
+            cap["reply"] = reply or None
             title = f"Answered your {cap['year']} note"
     elif kind == "consent":
         s["consent"][parsed.key] = parsed.on
