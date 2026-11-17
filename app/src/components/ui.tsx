@@ -63,9 +63,10 @@ const CATEGORY_PATHS: Record<string, ReactNode> = {
   Battle: <path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6" />,
 }
 
-export function CategoryIcon({ name }: { name: string }) {
+// color: a filled round badge in that colour with a white icon (Insights chart legend); otherwise the soft square
+export function CategoryIcon({ name, color }: { name: string; color?: string }) {
   return (
-    <span className="cat-icon" aria-hidden>
+    <span className="cat-icon" aria-hidden style={color ? { background: color, color: '#fff', borderRadius: '50%' } : undefined}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         {CATEGORY_PATHS[name] ?? <circle cx="12" cy="12" r="3" />}
       </svg>

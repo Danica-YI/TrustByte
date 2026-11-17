@@ -639,8 +639,14 @@ def insights(s: dict) -> dict:
     for _ in range(6):
         first = date(y, m, 1)
         last = date(y + (m == 12), m % 12 + 1, 1) - timedelta(days=1)
-        v = sum(-t["amount"] for t in _everyday_out(first, min(last, TODAY)) if t["category"] in T.INSIGHT_CATEGORIES)
-        months.append({"m": f"{first:%b}", "v": r2(v), "partial": last > TODAY})
+        end = min(last, TODAY)
+        by_cat: dict[str, float] = defaultdict(float)
+        for t in _everyday_out(first, end):
+            if t["category"] in T.INSIGHT_CATEGORIES:
+                by_cat[t["category"]] += -t["amount"]
+        by_cat = {c: r2(by_cat[c]) for c in T.INSIGHT_CATEGORIES if by_cat.get(c)}  # stacked bars, biggest first on screen
+        months.append({"m": f"{first:%b}", "v": r2(sum(by_cat.values())), "partial": last > TODAY,
+                       "start": first.isoformat(), "end": end.isoformat(), "by_category": by_cat})
         y, m = (y, m - 1) if m > 1 else (y - 1, 12)
     months.reverse()
     full = [x["v"] for x in months if not x["partial"]]
