@@ -145,6 +145,8 @@ export type Capsule = { id: string; open_date: string; year: number; text: strin
 // What Windy noticed about a note before it is sealed
 export type NoteCheck = {
   open_year: number; text_year: number | null; mismatch: boolean; kind: 'goal' | 'question' | 'message'; source: 'rules' | 'claude'
+  // How the note connects to her money: the engine's figures and one plain suggestion
+  money: { topic: string; facts: { label: string; value: string }[]; tip: string; goal_name: string | null } | null
   goal: { id: string; name: string; saved: number; target: number; per_payday: number; reached: string | null; reached_label: string; on_time: boolean } | null
 }
 

@@ -748,7 +748,7 @@ def capsule_check(s: dict, text: str, open_date: str) -> dict:
     if m:
         text_year = int(m.group(1))
     else:
-        m = re.search(r"\b(?:in|within)\s+(?:the\s+next\s+)?(\d{1,2}|" + "|".join(_WORD_NUM) + r")\s+years?\b", low)
+        m = re.search(r"\b(?:in|within|next|after)\s+(?:the\s+)?(?:next\s+)?(\d{1,2}|" + "|".join(_WORD_NUM) + r")\s+(?:more\s+)?years?\b", low)
         if m:
             n = int(m.group(1)) if m.group(1).isdigit() else _WORD_NUM[m.group(1)]
             text_year = TODAY.year + n
@@ -774,7 +774,49 @@ def capsule_check(s: dict, text: str, open_date: str) -> dict:
                 kind = "goal"
             break
     return {"open_year": open_year, "text_year": text_year, "mismatch": text_year is not None and text_year != open_year,
-            "kind": kind, "goal": goal, "source": "rules"}
+            "kind": kind, "goal": goal, "money": _money_angle(s, low, goal), "source": "rules"}
+
+
+def _money_angle(s: dict, low: str, goal: dict | None) -> dict | None:
+    """How a note connects to Mia's money, with the engine's own figures and one plain suggestion.
+
+    Not advice on products: it only points at her own numbers and at what a plan would need.
+    """
+    if re.search(r"\b(work|working|job|retire|retirement|quit|career|boss|resign)\b", low):
+        savings = account(s, "life")["closing_balance"] + account(s, "goal-emergency")["closing_balance"]
+        fortnight = commitments(s)["per_fortnight"] + daily_with_budgets(s) * 14
+        months = savings / (fortnight * 26 / 12) if fortnight > 0 else 0
+        return {"topic": "Work and freedom",
+                "facts": [{"label": "Savings you could live on", "value": money(savings)},
+                          {"label": "What you spend a fortnight", "value": money(fortnight)},
+                          {"label": "That covers about", "value": f"{months:.0f} months"}],
+                "tip": ("Whether you still have to work comes down to how long your savings cover your spending. "
+                        "A goal for a few more months of cover is the place to start, and you can see what it needs each payday."),
+                "goal_name": "Freedom fund"}
+    if goal:
+        return {"topic": goal["name"],
+                "facts": [{"label": "Saved so far", "value": f"{money(goal['saved'])} of {money(goal['target'])}"},
+                          {"label": "You add each payday", "value": money(goal["per_payday"])},
+                          {"label": "On your plan", "value": goal["reached_label"]}],
+                "tip": "This is already one of your goals. Changing the amount or the date on the goal shows what it does to Everyday before anything changes.",
+                "goal_name": None}
+    if re.search(r"\bsav(e|ed|ing|ings)\b", low):
+        per = sum(autosave_amount(s, a["id"], 0) for a in effective_accounts(s) if a["id"] != "everyday")
+        return {"topic": "Saving",
+                "facts": [{"label": "Auto-saves each payday", "value": money(per)}, {"label": "That is about", "value": f"{money(per * 26)} a year"}],
+                "tip": "Your auto-saves set the pace. Raising one of them by a small amount is the quickest way to change the yearly figure.",
+                "goal_name": None}
+    if re.search(r"\b(debt|afterpay|pay later|loan|owe|credit)\b", low):
+        pl = pay_later(s)
+        return {"topic": "What you owe",
+                "facts": [{"label": "Pay-later plans", "value": str(len(pl["active"]))}, {"label": "Still to pay", "value": money(pl["owed"])}],
+                "tip": "Pay-later plans finish on their own if no new ones start. The Pay-later page shows when each one ends.",
+                "goal_name": None}
+    if re.search(r"\b(buy|trip|travel|holiday|car|wedding|study|course|business|move|baby|kids?|pet|house|home)\b", low):
+        return {"topic": "Something to save for", "facts": [],
+                "tip": "Give it a rough cost and a date, and Windy can show what it needs each payday and what that does to your other goals.",
+                "goal_name": None}
+    return None
 
 
 # ------------------------------------------------------------------ What if (mini game under Insights, Tools)

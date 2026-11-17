@@ -131,6 +131,7 @@ export default function TimeMachine() {
             <p style={{ margin: '6px 0' }}>“{confirm.text}”</p>
             <div className="row"><span>Opens on</span><b>{full(confirm.when)}</b></div>
             {confirm.check && <div className="row"><span>Windy reads it as</span><b>{KIND[confirm.check.kind]}{confirm.check.goal ? ` · ${confirm.check.goal.name}` : ''}</b></div>}
+            {confirm.check?.money && <div className="row"><span>Money side</span><b>{confirm.check.money.topic}</b></div>}
             <p className="small" style={{ margin: '6px 0 8px' }}>Once sealed you can’t read or change it until that day. You can still remove it from Plan history.</p>
             <div className="hstack">
               <button className="btn primary" style={{ flex: 1 }} disabled={busy} onClick={doSeal}>Yes, seal it</button>
@@ -148,7 +149,22 @@ export default function TimeMachine() {
           <button className="btn ghost block" onClick={() => setSealed(null)}>OK</button>
         </Card>
       )}
-      {sealed && sealed.check?.kind === 'question' && (
+      {sealed && sealed.check?.money && (
+        <Card variant="windy">
+          <WindyPill label={`Money side · ${sealed.check.money.topic}`} />
+          <h3 style={{ marginTop: 8 }}>How this connects to your money</h3>
+          {sealed.check.money.facts.map((f) => <div key={f.label} className="row"><span>{f.label}</span><b>{f.value}</b></div>)}
+          <p style={{ marginTop: 8 }}>{sealed.check.money.tip}</p>
+          <div className="hstack">
+            <button className="btn primary" style={{ flex: 1 }} onClick={() => plan({ text: sealed.text })}>Plan this with Windy</button>
+            {sealed.check.goal
+              ? <button className="btn outline" onClick={() => nav(`/goals/${sealed.check!.goal!.id}`)}>Open the goal</button>
+              : <button className="btn outline" onClick={() => nav('/goals/new', { state: { name: sealed.check!.money!.goal_name ?? undefined } })}>Start a goal</button>}
+          </div>
+          <p className="small" style={{ marginTop: 8, marginBottom: 0 }}>Figures are from your own accounts. This is information to plan with, not financial advice.</p>
+        </Card>
+      )}
+      {sealed && !sealed.check?.money && sealed.check?.kind === 'question' && (
         <Card>
           <h3>Sealed. Windy can answer this now, too</h3>
           {aboutSaving(sealed.text) && <p style={{ marginTop: 6 }}>For a start: your auto-saves add up to about <b>{money(yearly)}</b> a year on today’s plan.</p>}
@@ -159,7 +175,7 @@ export default function TimeMachine() {
           </div>
         </Card>
       )}
-      {sealed && sealed.check?.kind === 'goal' && sealed.check?.goal && (() => {
+      {sealed && !sealed.check?.money && sealed.check?.kind === 'goal' && sealed.check?.goal && (() => {
         const g = sealed.check.goal
         const need = needed(g, sealed.when)
         return (
@@ -183,7 +199,7 @@ export default function TimeMachine() {
           </Card>
         )
       })()}
-      {sealed && (sealed.check === null || (sealed.check.kind === 'goal' && !sealed.check.goal)) && (
+      {sealed && !sealed.check?.money && (sealed.check === null || (sealed.check.kind === 'goal' && !sealed.check.goal)) && (
         <Card>
           <h3>Sealed. Want a head start?</h3>
           <p className="small" style={{ margin: '2px 0 8px' }}>This sounds like a goal you don’t have yet. Windy can help you plan for it now, so future you has a better answer.</p>
