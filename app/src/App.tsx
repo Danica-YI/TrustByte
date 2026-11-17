@@ -63,8 +63,8 @@ export default function App() {
             <Route path="/goals/:id" element={<GoalDetail />} />
             <Route path="/review/:id" element={<Review />} />
             <Route path="/forecast" element={<Forecast />} />
-            <Route path="/insights" element={<InsightsHub />} />
-            <Route path="/insights/spending" element={<Insights />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/insights/tools" element={<InsightsHub />} />
             <Route path="/dream" element={<DreamNudge />} />
             <Route path="/consent" element={<Consent />} />
             <Route path="/payments" element={<Payments />} />

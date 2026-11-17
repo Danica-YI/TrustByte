@@ -18,14 +18,14 @@ function Tile({ to, icon, label, value, note, flag }: { to: string; icon: string
   )
 }
 
-// The Insights tab has two views with tabs on top: the overview of every tool, and the spending page
+// The Insights tab has two views with tabs on top: Spending first, then Tools (a home for every feature)
 export function InsightsTabs() {
   return (
     <>
-      <TopBar title="Insights and tools" back={false} />
+      <TopBar title="Insights" back={false} />
       <div className="tabs">
-        <NavLink to="/insights" end className={({ isActive }) => (isActive ? 'on' : '')}>Overview</NavLink>
-        <NavLink to="/insights/spending" className={({ isActive }) => (isActive ? 'on' : '')}>Spending</NavLink>
+        <NavLink to="/insights" end className={({ isActive }) => (isActive ? 'on' : '')}>Spending</NavLink>
+        <NavLink to="/insights/tools" className={({ isActive }) => (isActive ? 'on' : '')}>Tools</NavLink>
       </div>
     </>
   )
@@ -56,7 +56,7 @@ export default function InsightsHub() {
       <div className="tiles">
         <Tile to="/forecast" icon="Cash flow" label="Cash flow forecast" value={money(fc.low.balance)}
           note={`Lowest point, around ${shortDate(fc.low.date)}`} flag={fc.low.balance < 0 ? <Chip tone="bad">Heads up</Chip> : <Chip tone="good">Fine</Chip>} />
-        <Tile to="/insights/spending" icon="Shopping" label="Spending" value={money(ins.spent)}
+        <Tile to="/insights" icon="Shopping" label="Spending" value={money(ins.spent)}
           note={`This month so far. ${ins.vs_same_days > 0 ? '+' : ''}${money(ins.vs_same_days)} vs usual`} />
         <Tile to="/payments" icon="Subscriptions" label="Regular payments" value={money(c.per_fortnight)}
           note={`A fortnight, ${c.count} payments`} flag={toCheck > 0 ? <Chip tone="windy">{toCheck} to check</Chip> : undefined} />

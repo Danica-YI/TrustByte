@@ -25,12 +25,12 @@ export default function DreamNudge() {
   const start = (name?: string, target?: number) => nav('/goals/new', { state: { name, target, amount: weekly * 2 } })
 
   if (!s.consent.goals) {
-    return <><TopBar title="Dream Nudge" fallback="/insights" /><Card><p>Goal planning is off in Your data and consent.</p></Card></>
+    return <><TopBar title="Dream Nudge" fallback="/insights/tools" /><Card><p>Goal planning is off in Your data and consent.</p></Card></>
   }
 
   return (
     <>
-      <TopBar title="Dream Nudge" fallback="/insights" />
+      <TopBar title="Dream Nudge" fallback="/insights/tools" />
 
       <Card variant="windy">
         <WindyPill label="See what’s possible" />
