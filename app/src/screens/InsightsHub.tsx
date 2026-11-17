@@ -23,9 +23,20 @@ export function InsightsTabs() {
   return (
     <>
       <TopBar title="Insights" back={false} />
-      <div className="tabs">
-        <NavLink to="/insights" end className={({ isActive }) => (isActive ? 'on' : '')}>Spending</NavLink>
-        <NavLink to="/insights/tools" className={({ isActive }) => (isActive ? 'on' : '')}>Tools</NavLink>
+      <div className="utabs">
+        <NavLink to="/insights" end className={({ isActive }) => (isActive ? 'on' : '')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+          </svg>
+          Spending
+        </NavLink>
+        <NavLink to="/insights/tools" className={({ isActive }) => (isActive ? 'on' : '')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" aria-hidden>
+            <rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" />
+            <rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" />
+          </svg>
+          Tools
+        </NavLink>
       </div>
     </>
   )
