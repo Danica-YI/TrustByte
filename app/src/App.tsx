@@ -25,6 +25,7 @@ import Plan from './screens/Plan'
 import ReceiptSettings from './screens/ReceiptSettings'
 import GoalShare from './screens/GoalShare'
 import GoalDetail from './screens/GoalDetail'
+import GoalNew from './screens/GoalNew'
 import Goals from './screens/Goals'
 import Profile from './screens/Profile'
 
@@ -56,6 +57,7 @@ export default function App() {
             <Route path="/goals/options" element={<GoalOptions />} />
             <Route path="/goals/japan-sooner" element={<JapanSooner />} />
             <Route path="/goals/share/:id" element={<GoalShare />} />
+            <Route path="/goals/new" element={<GoalNew />} />
             <Route path="/goals/:id" element={<GoalDetail />} />
             <Route path="/review/:id" element={<Review />} />
             <Route path="/forecast" element={<Forecast />} />

@@ -47,6 +47,8 @@ def template(kind: str, title: str, changes: list[dict], facts: dict) -> str:
         bits.append("Your car insurance renewal went up, so the Bills set-aside needs a little more each payday.")
     if kind == "goal_edit":
         bits.append(f"You edited {facts.get('goal', 'this goal')} yourself.")
+    if kind == "goal_create":
+        bits.append(f"You're adding a new goal, {facts.get('goal', '')}, saving {facts.get('each_payday', '')} each payday.")
     if kind == "budget":
         bits.append("A weekly Eating out limit lowers the usual spending Windy plans for.")
     if "Everyday lowest point" in by:

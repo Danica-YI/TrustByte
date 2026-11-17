@@ -71,14 +71,7 @@ def _build(kind: str, p, s: dict) -> tuple[dict, str, str, dict]:
         if p.target is not None:
             override["target"] = E.r2(p.target)
         if p.goal_date is not None:
-            try:
-                when = E._d(p.goal_date)
-            except ValueError:
-                when = None
-            if not when or when <= E.TODAY or when.year > E.TODAY.year + 30:
-                raise G.GuardrailError("Pick a target date in the future.",
-                                       [G.check("input", "Input validation", False, f"target date '{p.goal_date}' isn't a future date")], 422)
-            override["goal_date"] = when.isoformat()
+            override["goal_date"] = _future_date(p.goal_date)
         if override:
             new["goal_overrides"][p.goal] = override
         # Her own number replaces any temporary change or skipped payday on this goal
@@ -87,7 +80,29 @@ def _build(kind: str, p, s: dict) -> tuple[dict, str, str, dict]:
         new["skips"] = [x for x in new["skips"] if x["account"] != p.goal]
         return (new, f"{goal['name']}: your changes", "You set these yourself",
                 {"goal": goal["name"], "amount_before": E.money(goal["per_payday"]), "amount_now": E.money(p.per_payday)})
+    if kind == "goal_create":
+        # A new goal saver of Mia's own: starts at $0, with an auto-save every payday from Everyday
+        new = copy.deepcopy(s)
+        gid = E.new_goal_id(new, p.name)
+        new.setdefault("new_goals", []).append({
+            "id": gid, "name": p.name.strip(), "target": E.r2(p.target),
+            "goal_date": _future_date(p.goal_date) if p.goal_date else None})
+        new["autosave"][gid] = E.r2(p.per_payday)
+        return (new, f"New goal: {p.name.strip()}", f"{E.money(p.target)} · {E.money(p.per_payday)} each payday",
+                {"goal": p.name.strip(), "target": E.money(p.target), "each_payday": E.money(p.per_payday)})
     raise KeyError(kind)
+
+
+def _future_date(value: str) -> str:
+    """A goal's target date must be a real date after today (and within 30 years)."""
+    try:
+        when = E._d(value)
+    except ValueError:
+        when = None
+    if not when or when <= E.TODAY or when.year > E.TODAY.year + 30:
+        raise G.GuardrailError("Pick a target date in the future.",
+                               [G.check("input", "Input validation", False, f"target date '{value}' isn't a future date")], 422)
+    return when.isoformat()
 
 
 def propose(kind: str, params: dict) -> dict:
