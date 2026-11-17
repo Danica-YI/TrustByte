@@ -365,7 +365,8 @@ TOOLS = [
           "status new/ongoing/stopped, and price changes.", {}, []),
     _tool("cash_flow_forecast",
           "Everything scheduled on Everyday (pay, rent, bills, auto-saves, pay-later), safe-to-spend until next "
-          "payday, and the projected lowest Everyday balance (safe-to-spend before payday, usual spending after).",
+          "payday, and the projected lowest Everyday balance (safe-to-spend before payday, usual spending after). "
+          "Includes ready-made totals (next payday in/out, money in/out per date): quote those instead of adding.",
           {"days_ahead": {"type": "integer", "description": "7 to 35, default 35"}}, []),
     _tool("pay_later_plans", "Afterpay plans: active plans, amount taken each payday, what's still owed, finished plans.",
           {}, []),

@@ -14,7 +14,7 @@ export default function Goals() {
 
   return (
     <>
-      <TopBar title="Your goals" fallback="/" />
+      <TopBar title="Your goals" fallback="/" right={<Link to="/goals/new" className="link" aria-label="Add a goal">+ New goal</Link>} />
 
       {needsChoice && (
         <Card variant="windy">
@@ -42,8 +42,6 @@ export default function Goals() {
           </Card>
         </Link>
       ))}
-
-      <p className="small center">Tap a goal to see its plan and change it.</p>
     </>
   )
 }
