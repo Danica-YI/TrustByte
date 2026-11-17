@@ -72,6 +72,8 @@ def default_state() -> dict:
         "shared_goals": {},
         # Goal details Mia edited herself, by goal account id: {"target": amount, "goal_date": "YYYY-MM-DD"}
         "goal_overrides": {},
+        # Goals Mia added herself: {"id", "name", "target", "goal_date"}; they start at $0
+        "new_goals": [],
         # The trade-off option or Japan plan Mia approved, for the home screen
         "plan_choice": None,
         # Every change, newest last. Each entry keeps the state before it, so it can be undone.

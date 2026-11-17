@@ -26,6 +26,7 @@ BASE_UPCOMING: list[dict] = copy.deepcopy(T.UPCOMING)
 HORIZON_DAYS = 35
 
 GOAL_COLORS = {"goal-japan": "#6d28d9", "goal-emergency": "#15803d", "goal-home": "#d4002a", "goal-bali": "#0e7490"}
+NEW_GOAL_COLORS = ["#b45309", "#be185d", "#4d7c0f", "#1d4ed8", "#7c3aed"]  # goals Mia adds, in turn
 SHORT_NAMES = {"goal-japan": "Japan trip", "goal-emergency": "Emergency fund", "goal-home": "Home deposit",
                "goal-bali": "Bali 2027", "life": "Westpac Life", "bills-saver": "Bills set-aside", "everyday": "Everyday"}
 
@@ -99,6 +100,10 @@ def effective_accounts(s: dict) -> list[dict]:
     for m in s["moves"]:
         by_id[m["from"]]["closing_balance"] = r2(by_id[m["from"]]["closing_balance"] - m["amount"])
         by_id[m["to"]]["closing_balance"] = r2(by_id[m["to"]]["closing_balance"] + m["amount"])
+    for g in s.get("new_goals", []):  # goals Mia added herself start empty
+        accs.append({"id": g["id"], "name": g["name"], "product": "Goal saver", "closing_balance": 0.0,
+                     "opening_balance": 0.0, "goal_target": g["target"], "goal_date": g.get("goal_date")})
+        by_id[g["id"]] = accs[-1]
     for gid, o in s.get("goal_overrides", {}).items():
         if gid in by_id:
             if o.get("target"):
@@ -106,6 +111,22 @@ def effective_accounts(s: dict) -> list[dict]:
             if o.get("goal_date"):
                 by_id[gid]["goal_date"] = o["goal_date"]
     return accs
+
+
+def _new_goal_color(s: dict, acc_id: str) -> str:
+    ids = [g["id"] for g in s.get("new_goals", [])]
+    return NEW_GOAL_COLORS[ids.index(acc_id) % len(NEW_GOAL_COLORS)] if acc_id in ids else "#6d28d9"
+
+
+def new_goal_id(s: dict, name: str) -> str:
+    """An id for a goal Mia adds, from its name (letters only, like the bank's goal ids), never reused."""
+    base = "goal-" + ("".join(ch for ch in name.lower() if "a" <= ch <= "z") or "saver")
+    taken = {a["id"] for a in effective_accounts(s)}
+    gid, n = base, 0
+    while gid in taken:
+        n += 1
+        gid = base + "abcdefghijklmnopqrstuvwxyz"[(n - 1) % 26] * ((n - 1) // 26 + 1)
+    return gid
 
 
 def account(s: dict, acc_id: str) -> dict:
@@ -140,6 +161,15 @@ def effective_upcoming(s: dict) -> list[dict]:
             if amt != BASE_AUTOSAVE.get(u["to_account"]):
                 u["source"] = "your plan"
         out.append(u)
+    # Auto-saves into goals Mia added herself, on every payday in the schedule
+    for pay in [u for u in BASE_UPCOMING if u["kind"] == "pay"]:
+        k = payday_index(_d(pay["date"]))
+        for g in s.get("new_goals", []):
+            amt = autosave_amount(s, g["id"], k if k is not None else 0)
+            if amt > 0:
+                out.append({"date": pay["date"], "label": f"Auto-save to {g['name']}", "amount": -amt,
+                            "account": "everyday", "kind": "auto_save", "source": "your plan",
+                            "estimate": False, "to_account": g["id"]})
     # Rent: one payment seen so far; the frequency comes from what Mia confirmed (LP-02)
     freq = rent_frequency(s)
     d = FIRST_UPCOMING_RENT
@@ -305,7 +335,7 @@ def goals(s: dict) -> list[dict]:
                     "id": a["id"], "name": a["name"], "saved": a["closing_balance"], "target": a["goal_target"],
                     "per_payday": autosave_amount(s, a["id"], 0), "reached": reached.isoformat() if reached else None,
                     "reached_label": month_year(reached) if reached else "No regular saving",
-                    "color": GOAL_COLORS.get(a["id"], "#6d28d9"), "goal_date": a.get("goal_date"),
+                    "color": GOAL_COLORS.get(a["id"]) or _new_goal_color(s, a["id"]), "goal_date": a.get("goal_date"),
                     # With a target date: is the current plan in time for it?
                     "on_track": (reached is not None and reached <= _d(a["goal_date"])) if a.get("goal_date") else None})
     return out
@@ -690,8 +720,11 @@ def diff(before: dict, after: dict) -> tuple[list[dict], list[dict]]:
     mb, ma = metrics(before), metrics(after)
     changes, same = [], []
     for k in mb:
-        if mb[k][1] != ma[k][1]:
+        if k in ma and mb[k][1] != ma[k][1]:
             changes.append({"label": k, "from": mb[k][0], "to": ma[k][0]})
+    for k in ma:
+        if k not in mb and not k.endswith(("balance", "target date")):  # a goal Mia is adding
+            changes.append({"label": k, "from": "None", "to": ma[k][0]})
     for k in ("Emergency fund balance", "Emergency fund each payday", "Safe to spend until payday"):
         if k in mb and mb[k][1] == ma[k][1] and mb[k][1] not in (0, "0.0/0.0"):
             same.append({"label": k, "value": mb[k][0]})
