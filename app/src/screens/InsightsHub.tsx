@@ -2,7 +2,7 @@
 // not only a card that appears on Home. The Home cards still surface what needs attention now.
 import { Link, NavLink } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { CategoryIcon, Chip, TopBar, WindyPill } from '../components/ui'
+import { CategoryIcon, Chip, TopBar } from '../components/ui'
 import { receipts } from '../data/bank'
 import { money, shortDate } from '../format'
 import { useSnap } from '../store'
@@ -45,13 +45,6 @@ export default function InsightsHub() {
     <>
       <InsightsTabs />
 
-      {s.cards.length > 0 && (
-        <Link to="/" className="plan-strip">
-          <span><WindyPill label={`${s.cards.length} to look at`} /></span>
-          <span className="link">On Home ›</span>
-        </Link>
-      )}
-
       <div className="section-head"><h3>Money tools</h3></div>
       <div className="tiles">
         <Tile to="/forecast" icon="Cash flow" label="Cash flow forecast" value={money(fc.low.balance)}
@@ -74,7 +67,7 @@ export default function InsightsHub() {
         <Tile to="/plan" icon="History" label="Plan history" note={changes ? `${changes} change${changes === 1 ? '' : 's'} saved. Undo any time.` : 'No changes yet.'} />
       </div>
 
-      <p className="small center" style={{ marginTop: 14 }}>Cards on Home show what needs you now. Everything lives here.</p>
+      <p className="small center" style={{ marginTop: 14 }}>Every Windy feature lives here.</p>
     </>
   )
 }

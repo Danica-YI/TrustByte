@@ -123,5 +123,18 @@ function TopCard({ card }: { card: HomeCard }) {
       )
     case 'grocery-check':
       return <GroceryCard shop={card.shop} usual={card.usual} />
+      return <GroceryCard card={card} />
+    case 'dream-nudge':
+      return (
+        <Card variant="windy">
+          <WindyPill label="See what’s possible" />
+          <h2>{money(card.weekly)} a week could take you somewhere</h2>
+          <p>No plan yet? Start small and see what it adds up to.</p>
+          <div className="hstack">
+            <button className="btn primary" style={{ flex: 1 }} onClick={() => nav('/dream')}>Show me</button>
+            <button className="btn outline" onClick={() => act('dismiss_card', { card: 'dream-nudge' }, 'Hidden. It stays under Insights, Tools.')}>Not now</button>
+          </div>
+        </Card>
+      )
   }
 }

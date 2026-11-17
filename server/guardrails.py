@@ -88,7 +88,7 @@ class QuickSplit(BaseModel):
 
 
 class DismissCard(BaseModel):
-    card: Literal["life-event", "commitments", "grocery-check"]
+    card: Literal["life-event", "commitments", "grocery-check", "dream-nudge"]
 
 
 class Consent(BaseModel):

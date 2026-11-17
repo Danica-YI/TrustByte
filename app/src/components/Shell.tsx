@@ -9,7 +9,7 @@ import type { Check } from '../api'
 import { useApp } from '../store'
 
 const STORY: { path: string; label: string; idea?: string }[] = [
-  { path: '/', label: 'Home · Windy noticed 4 things' },
+  { path: '/', label: 'Home · what Windy noticed' },
   { path: '/life-event', label: 'Confirm the move', idea: '1' },
   { path: '/goals/options', label: 'Goal trade-off options', idea: '2' },
   { path: '/forecast', label: 'Shortfall forecast and fixes', idea: '4' },
