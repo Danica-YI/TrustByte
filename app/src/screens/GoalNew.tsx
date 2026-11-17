@@ -2,7 +2,7 @@
 // Same path as every other change: guardrails -> engine -> review (shows what it does to Everyday) -> approve.
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Card, Lock, TopBar } from '../components/ui'
+import { Card, Lock, StepIcon, TopBar } from '../components/ui'
 import { money } from '../format'
 import { useApp, useSnap } from '../store'
 
@@ -64,9 +64,9 @@ export default function GoalNew() {
           <div>
             <div style={{ marginBottom: 6 }}>You add each payday ($)</div>
             <div className="hstack" style={{ flexWrap: 'nowrap' }}>
-              <button className="btn outline step" onClick={() => step(-10)} aria-label="Less">−</button>
+              <button className="btn outline step" onClick={() => step(-10)} aria-label="Less"><StepIcon /></button>
               <input className="field" style={{ textAlign: 'center', fontWeight: 700 }} type="number" min={0} max={2000} value={amount} onChange={(e) => setAmount(e.target.value)} aria-label="Amount each payday" />
-              <button className="btn outline step" onClick={() => step(10)} aria-label="More">+</button>
+              <button className="btn outline step" onClick={() => step(10)} aria-label="More"><StepIcon plus /></button>
             </div>
             {!okAmount && <div className="small" style={{ color: 'var(--bad)', marginTop: 6 }}>Enter an amount from $0 to $2,000.</div>}
           </div>
