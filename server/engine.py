@@ -728,7 +728,7 @@ def cut_ideas(s: dict) -> list[dict]:
 
 _WORD_NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
 _GOAL_WORDS = re.compile(r"\b(want|save|saving|saved|buy|own|afford|deposit|trip|travel|house|home|place|flat|apartment|car|debt|"
-                         r"pay off|wedding|fund|goal|holiday|move|study|business|will i|did i|have i|can i)\b|\$", re.I)
+                         r"pay off|wedding|fund|goal|holiday|move|study|business)\b|\$", re.I)
 _GOAL_KEYS = {"goal-home": ("home", "house", "place", "flat", "apartment", "deposit", "property"),
               "goal-japan": ("japan", "tokyo", "osaka", "kyoto"), "goal-bali": ("bali",),
               "goal-emergency": ("emergency", "rainy day", "buffer", "safety net")}
@@ -754,7 +754,15 @@ def capsule_check(s: dict, text: str, open_date: str) -> dict:
             text_year = TODAY.year + n
         elif re.search(r"\bnext year\b", low):
             text_year = TODAY.year + 1
-    kind = "goal" if _GOAL_WORDS.search(low) else "message"
+    # A question to look up ("how much could I save next year"), a goal ("I want my own place"), or just a note
+    if re.match(r"\s*(how|what|when|where|which|why|who)\b", low):
+        kind = "question"
+    elif _GOAL_WORDS.search(low):
+        kind = "goal"
+    elif "?" in low or re.match(r"\s*(can|could|will|should|do|does|did|am|is|are)\b", low):
+        kind = "question"
+    else:
+        kind = "message"
     goal = None
     for g in goals(s):
         keys = _GOAL_KEYS.get(g["id"], ()) + tuple(w for w in g["name"].lower().split() if len(w) > 3 and not w.isdigit())
@@ -762,7 +770,8 @@ def capsule_check(s: dict, text: str, open_date: str) -> dict:
             goal = {"id": g["id"], "name": g["name"], "saved": g["saved"], "target": g["target"], "per_payday": g["per_payday"],
                     "reached": g["reached"], "reached_label": g["reached_label"],
                     "on_time": bool(g["reached"]) and g["reached"] <= open_date}
-            kind = "goal"
+            if kind == "message":
+                kind = "goal"
             break
     return {"open_year": open_year, "text_year": text_year, "mismatch": text_year is not None and text_year != open_year,
             "kind": kind, "goal": goal, "source": "rules"}

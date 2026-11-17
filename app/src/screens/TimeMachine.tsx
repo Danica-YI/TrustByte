@@ -37,6 +37,10 @@ export default function TimeMachine() {
   const [sealed, setSealed] = useState<{ text: string; when: string; check: NoteCheck | null } | null>(null)
   const [ask, setAsk] = useState<NoteCheck | null>(null) // the year in the note differs from the date: which one?
   const [checking, setChecking] = useState(false)
+  // For questions about saving: what her auto-saves add up to in a year, from the engine's payday figures
+  const yearly = Math.abs(s.forecast.payday.auto_saves) * 26
+  const aboutSaving = (t: string) => /\bsav(e|ed|ing|ings)\b/i.test(t)
+  const askNow = (t: string) => nav('/chat', { state: { q: t } })
   const DAY = 864e5
   // Rough guide: what the matched goal would need each payday to be ready by the opening date
   const needed = (g: NonNullable<NoteCheck['goal']>, by: string) => {
@@ -111,7 +115,18 @@ export default function TimeMachine() {
           <button className="btn ghost block" onClick={() => setSealed(null)}>OK</button>
         </Card>
       )}
-      {sealed && sealed.check?.kind !== 'message' && sealed.check?.goal && (() => {
+      {sealed && sealed.check?.kind === 'question' && (
+        <Card>
+          <h3>Sealed. Windy can answer this now, too</h3>
+          {aboutSaving(sealed.text) && <p style={{ marginTop: 6 }}>For a start: your auto-saves add up to about <b>{money(yearly)}</b> a year on today’s plan.</p>}
+          <p className="small" style={{ margin: '2px 0 8px' }}>You asked a question, so there is nothing to tick off later. Future you can compare the answer then with the answer now.</p>
+          <div className="hstack">
+            <button className="btn primary" style={{ flex: 1 }} onClick={() => askNow(sealed.text)}>Ask Windy now</button>
+            <button className="btn ghost" onClick={() => setSealed(null)}>Not now</button>
+          </div>
+        </Card>
+      )}
+      {sealed && sealed.check?.kind === 'goal' && sealed.check?.goal && (() => {
         const g = sealed.check.goal
         const need = needed(g, sealed.when)
         return (
@@ -135,7 +150,7 @@ export default function TimeMachine() {
           </Card>
         )
       })()}
-      {sealed && sealed.check?.kind !== 'message' && !sealed.check?.goal && (
+      {sealed && (sealed.check === null || (sealed.check.kind === 'goal' && !sealed.check.goal)) && (
         <Card>
           <h3>Sealed. Want a head start?</h3>
           <p className="small" style={{ margin: '2px 0 8px' }}>This sounds like a goal you don’t have yet. Windy can help you plan for it now, so future you has a better answer.</p>
@@ -185,6 +200,19 @@ export default function TimeMachine() {
               })()}
               {c.kind === 'message' ? (
                 <p className="small" style={{ marginBottom: 0 }}>Just a note. Nothing to answer.</p>
+              ) : c.kind === 'question' ? (
+                <>
+                  <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>You asked yourself a question</div>
+                  {aboutSaving(c.text) && <p>On today’s plan your auto-saves add up to about <b>{money(yearly)}</b> a year.</p>}
+                  {c.answer === null ? (
+                    <div className="hstack">
+                      <button className="btn primary" style={{ flex: 1 }} onClick={() => askNow(c.text)}>Ask Windy now</button>
+                      <button className="btn outline" disabled={busy} onClick={() => act('capsule_answer', { id: c.id, answer: 'done' })}>I have my answer</button>
+                    </div>
+                  ) : (
+                    <div className="row"><span>Your answer</span><b>Answered</b></div>
+                  )}
+                </>
               ) : c.answer === null ? (
                 <>
                   <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>So, did it happen?</div>

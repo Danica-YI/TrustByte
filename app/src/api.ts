@@ -140,11 +140,11 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
   return data as T
 }
 
-export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped'; from: string | null; kind?: 'goal' | 'message'; goal_id?: string | null }
+export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped'; from: string | null; kind?: 'goal' | 'question' | 'message'; goal_id?: string | null }
 
 // What Windy noticed about a note before it is sealed
 export type NoteCheck = {
-  open_year: number; text_year: number | null; mismatch: boolean; kind: 'goal' | 'message'; source: 'rules' | 'claude'
+  open_year: number; text_year: number | null; mismatch: boolean; kind: 'goal' | 'question' | 'message'; source: 'rules' | 'claude'
   goal: { id: string; name: string; saved: number; target: number; per_payday: number; reached: string | null; reached_label: string; on_time: boolean } | null
 }
 

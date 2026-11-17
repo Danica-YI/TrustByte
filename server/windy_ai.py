@@ -30,9 +30,9 @@ Rules:
 
 
 NOTE_SYSTEM = """You sort short notes that a bank customer writes to her future self. Reply with JSON only:
-{"kind": "goal" or "message", "goal_id": one of the given goal ids or null}
-"goal" means she wants to achieve, buy, save for or become something. "message" is anything else, such as
-encouragement or a memory. Pick a goal_id only if the note is clearly about that existing goal."""
+{"kind": "goal" or "question" or "message", "goal_id": one of the given goal ids or null}
+"goal" means she wants to achieve, buy, save for or become something. "question" means she is asking for a fact
+or a figure, such as how much she could save. "message" is anything else, such as encouragement or a memory. Pick a goal_id only if the note is clearly about that existing goal."""
 
 
 def classify_note(text: str, goal_names: dict[str, str]) -> dict | None:
@@ -48,7 +48,7 @@ def classify_note(text: str, goal_names: dict[str, str]) -> dict | None:
         )
         raw = "".join(b.text for b in resp.content if b.type == "text").strip()
         data = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
-        if data.get("kind") not in ("goal", "message") or data.get("goal_id") not in (None, *goal_names):
+        if data.get("kind") not in ("goal", "question", "message") or data.get("goal_id") not in (None, *goal_names):
             return None
         return {"kind": data["kind"], "goal_id": data.get("goal_id")}
     except Exception:  # network, auth, timeout, odd JSON: the rules answer stands
