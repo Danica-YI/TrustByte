@@ -11,6 +11,7 @@ So when Mia approves a change, every screen and the chat see it at once.
 from __future__ import annotations
 
 import copy
+import re
 import math
 from collections import defaultdict
 from datetime import date, timedelta
@@ -721,6 +722,50 @@ def cut_ideas(s: dict) -> list[dict]:
                           "action": "limit" if category == "Eating out" and "Eating out" not in s["budgets"] else "ask"})
     ideas.sort(key=lambda i: -i["extra"])
     return ideas[:3]
+
+
+# ------------------------------------------------------------------ Time machine: reading a note before it is sealed
+
+_WORD_NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
+_GOAL_WORDS = re.compile(r"\b(want|save|saving|saved|buy|own|afford|deposit|trip|travel|house|home|place|flat|apartment|car|debt|"
+                         r"pay off|wedding|fund|goal|holiday|move|study|business|will i|did i|have i|can i)\b|\$", re.I)
+_GOAL_KEYS = {"goal-home": ("home", "house", "place", "flat", "apartment", "deposit", "property"),
+              "goal-japan": ("japan", "tokyo", "osaka", "kyoto"), "goal-bali": ("bali",),
+              "goal-emergency": ("emergency", "rainy day", "buffer", "safety net")}
+
+
+def capsule_check(s: dict, text: str, open_date: str) -> dict:
+    """What Windy notices about a note to future you, worked out with plain rules.
+
+    1. Does the text name a year (or "in five years") that differs from the chosen opening date?
+    2. Is it a goal ("I want my own place") or just a message ("be kind to yourself")?
+    3. Does it match a goal Mia already has, and is that goal on time for the opening date?
+    """
+    low = text.lower()
+    open_year = _d(open_date).year
+    text_year = None
+    m = re.search(r"\b(20\d{2})\b", low)
+    if m:
+        text_year = int(m.group(1))
+    else:
+        m = re.search(r"\b(?:in|within)\s+(?:the\s+next\s+)?(\d{1,2}|" + "|".join(_WORD_NUM) + r")\s+years?\b", low)
+        if m:
+            n = int(m.group(1)) if m.group(1).isdigit() else _WORD_NUM[m.group(1)]
+            text_year = TODAY.year + n
+        elif re.search(r"\bnext year\b", low):
+            text_year = TODAY.year + 1
+    kind = "goal" if _GOAL_WORDS.search(low) else "message"
+    goal = None
+    for g in goals(s):
+        keys = _GOAL_KEYS.get(g["id"], ()) + tuple(w for w in g["name"].lower().split() if len(w) > 3 and not w.isdigit())
+        if any(k in low for k in keys):
+            goal = {"id": g["id"], "name": g["name"], "saved": g["saved"], "target": g["target"], "per_payday": g["per_payday"],
+                    "reached": g["reached"], "reached_label": g["reached_label"],
+                    "on_time": bool(g["reached"]) and g["reached"] <= open_date}
+            kind = "goal"
+            break
+    return {"open_year": open_year, "text_year": text_year, "mismatch": text_year is not None and text_year != open_year,
+            "kind": kind, "goal": goal, "source": "rules"}
 
 
 # ------------------------------------------------------------------ What if (mini game under Insights, Tools)

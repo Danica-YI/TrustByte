@@ -208,9 +208,12 @@ def act(kind: str, params: dict) -> dict:
             raise G.GuardrailError("Pick an opening date in the future.", checks, 422)
         text, removed = G._CARD_OR_ACCOUNT.subn("[number removed]", parsed.text.strip())
         checks.append(G.check("input", "Private details", True, f"Removed {removed} card or account numbers" if removed else "No card or account numbers"))
+        seen = E.capsule_check(s, text, when.isoformat())  # goal or message, and which goal it is about
         s.setdefault("capsules", []).append({"id": uuid.uuid4().hex[:8], "open_date": when.isoformat(), "year": when.year,
                                              "text": text, "written": E.TODAY.isoformat(), "opened": False,
-                                             "answer": None, "from": parsed.from_name})
+                                             "answer": None, "from": parsed.from_name,
+                                             "kind": parsed.kind or seen["kind"],
+                                             "goal_id": parsed.goal_id if parsed.kind else (seen["goal"] or {}).get("id")})
         title = (f"{parsed.from_name} sent you a note for {E.short_date(when)} {when.year}" if parsed.from_name
                  else f"Wrote a note to yourself for {E.short_date(when)} {when.year}")
     elif kind in ("capsule_open", "capsule_answer"):

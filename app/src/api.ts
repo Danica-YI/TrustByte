@@ -140,7 +140,13 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
   return data as T
 }
 
-export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped'; from: string | null }
+export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped'; from: string | null; kind?: 'goal' | 'message'; goal_id?: string | null }
+
+// What Windy noticed about a note before it is sealed
+export type NoteCheck = {
+  open_year: number; text_year: number | null; mismatch: boolean; kind: 'goal' | 'message'; source: 'rules' | 'claude'
+  goal: { id: string; name: string; saved: number; target: number; per_payday: number; reached: string | null; reached_label: string; on_time: boolean } | null
+}
 
 export type WhatIf = {
   id: string; title: string; note: string; low_before: number; low_after: number; helps: boolean
@@ -149,6 +155,7 @@ export type WhatIf = {
 
 export const api = {
   whatIf: () => call<{ scenarios: WhatIf[] }>('/what_if'),
+  capsuleCheck: (text: string, open_date: string) => call<NoteCheck>('/capsule_check', { text, open_date }),
   snapshot: () => call<Snapshot>('/snapshot'),
   propose: (kind: string, params: Record<string, unknown> = {}) => call<Proposal>('/propose', { kind, params }),
   approve: (id: string) => call<{ snapshot: Snapshot; checks: Check[]; entry: HistoryEntry }>(`/approve/${id}`, {}),

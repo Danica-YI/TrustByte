@@ -29,6 +29,32 @@ Rules:
 - No money moves when she approves; only her plan changes. You may say so."""
 
 
+NOTE_SYSTEM = """You sort short notes that a bank customer writes to her future self. Reply with JSON only:
+{"kind": "goal" or "message", "goal_id": one of the given goal ids or null}
+"goal" means she wants to achieve, buy, save for or become something. "message" is anything else, such as
+encouragement or a memory. Pick a goal_id only if the note is clearly about that existing goal."""
+
+
+def classify_note(text: str, goal_names: dict[str, str]) -> dict | None:
+    """Ask Claude whether a note is a goal and which existing goal it is about. None if unavailable or unclear."""
+    if not _has_key():
+        return None
+    try:
+        client = anthropic.Anthropic(timeout=min(TIMEOUT, 8), max_retries=0)
+        resp = client.messages.create(
+            model=MODEL, max_tokens=100, system=NOTE_SYSTEM,
+            messages=[{"role": "user", "content": json.dumps({"note": text, "goals": goal_names}, ensure_ascii=False)}],
+            output_config={"effort": "low"},
+        )
+        raw = "".join(b.text for b in resp.content if b.type == "text").strip()
+        data = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
+        if data.get("kind") not in ("goal", "message") or data.get("goal_id") not in (None, *goal_names):
+            return None
+        return {"kind": data["kind"], "goal_id": data.get("goal_id")}
+    except Exception:  # network, auth, timeout, odd JSON: the rules answer stands
+        return None
+
+
 def _has_key() -> bool:
     return bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
 

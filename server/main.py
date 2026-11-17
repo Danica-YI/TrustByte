@@ -41,6 +41,7 @@ import planner
 import state as plan_state
 import suggest
 import tools
+import windy_ai
 from tools import TODAY, TOOLS, run_tool
 
 
@@ -122,6 +123,42 @@ def _guardrail_error(_: Request, e: G.GuardrailError) -> JSONResponse:
 
 def _snapshot() -> dict:
     return engine.snapshot(plan_state.load())
+
+
+class NoteCheckIn(BaseModel):
+    text: str = Field(min_length=3, max_length=280)
+    open_date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+
+
+@app.post("/api/capsule_check")
+def capsule_check(body: NoteCheckIn) -> dict:
+    """Time machine: what Windy notices about a note before it is sealed. Read-only.
+
+    The year check is plain code. Whether the note is a goal, and which goal, comes from the rules first.
+    If the AI model is available it gets a second look, and its answer is only used when it is valid.
+    """
+    s = plan_state.load()
+    if not s["consent"].get("goals"):
+        raise G.GuardrailError("You've turned goal planning off in Your data and consent.",
+                               [G.check("input", "Consent", False, "'goals' is off")], 403)
+    text = G._CARD_OR_ACCOUNT.sub("[number removed]", body.text)
+    try:
+        out = engine.capsule_check(s, text, body.open_date)
+    except ValueError:
+        raise HTTPException(422, "open_date is not a real date")
+    names = {g["id"]: g["name"] for g in engine.goals(s)}
+    ai = windy_ai.classify_note(text, names)
+    if ai:
+        out["source"] = "claude"
+        out["kind"] = ai["kind"]
+        if ai["goal_id"] and (not out["goal"] or out["goal"]["id"] != ai["goal_id"]):
+            g = next(x for x in engine.goals(s) if x["id"] == ai["goal_id"])
+            out["goal"] = {"id": g["id"], "name": g["name"], "saved": g["saved"], "target": g["target"],
+                           "per_payday": g["per_payday"], "reached": g["reached"], "reached_label": g["reached_label"],
+                           "on_time": bool(g["reached"]) and g["reached"] <= body.open_date}
+        if ai["kind"] == "message":
+            out["goal"] = None
+    return out
 
 
 @app.get("/api/what_if")

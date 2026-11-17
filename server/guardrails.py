@@ -157,6 +157,9 @@ class CapsuleWrite(BaseModel):
     text: str = Field(min_length=3, max_length=280)
     # A friend's name when the note is from someone else (simulated in the demo)
     from_name: str | None = Field(default=None, min_length=1, max_length=30, pattern=r"^[A-Za-z][A-Za-z .'-]*$")
+    # What Windy's check found, sent back by the app so the sealed note keeps the same reading
+    kind: Literal["goal", "message"] | None = None
+    goal_id: str | None = Field(default=None, pattern=r"^goal-[a-z0-9-]+$")
 
 
 class CapsuleId(BaseModel):

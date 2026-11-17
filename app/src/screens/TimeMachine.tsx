@@ -5,7 +5,7 @@
 // In the demo a sealed note can be opened early so the flow can be shown.
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { Capsule } from '../api'
+import { api, type Capsule, type NoteCheck } from '../api'
 import { Card, Chip, Lock, Seg, TopBar, WindyPill } from '../components/ui'
 import { money, shortDate } from '../format'
 import { useApp, useSnap } from '../store'
@@ -34,7 +34,15 @@ export default function TimeMachine() {
   const okWhen = when > s.today
   const okFriend = who === 'Me' || friend.trim().length > 0
   const [open, setOpen] = useState<number | null>(null)
-  const [justSealed, setJustSealed] = useState<string | null>(null)
+  const [sealed, setSealed] = useState<{ text: string; when: string; check: NoteCheck | null } | null>(null)
+  const [ask, setAsk] = useState<NoteCheck | null>(null) // the year in the note differs from the date: which one?
+  const [checking, setChecking] = useState(false)
+  const DAY = 864e5
+  // Rough guide: what the matched goal would need each payday to be ready by the opening date
+  const needed = (g: NonNullable<NoteCheck['goal']>, by: string) => {
+    const n = Math.floor((Date.parse(by) - Date.parse(s.everyday.next_payday)) / (14 * DAY)) + 1
+    return n > 0 ? Math.ceil(Math.max(0, g.target - g.saved) / n) : null
+  }
   const byYear = [...new Set(s.capsules.map((c) => c.year))].sort((a, b) => a - b)
   const opts = s.tradeoff.options
   const [pick, setPick] = useState(opts[0]?.name ?? '')
@@ -42,9 +50,19 @@ export default function TimeMachine() {
 
   const seal = async () => {
     const t = text.trim()
-    const params: Record<string, unknown> = { open_date: when, text: t }
+    await write(t, when, true)
+  }
+  // Windy reads the note first: is the year right, is it a goal, does it match a goal she has?
+  const write = async (t: string, date: string, checkYear: boolean) => {
+    setChecking(true)
+    const check = await api.capsuleCheck(t, date).catch(() => null)
+    setChecking(false)
+    if (check && check.mismatch && checkYear) { setAsk(check); return }
+    setAsk(null)
+    const params: Record<string, unknown> = { open_date: date, text: t }
     if (who === 'A friend') params.from_name = friend.trim()
-    if (await act('capsule_write', params, `Sealed until ${full(when)}`)) { setJustSealed(who === 'Me' ? t : null); setText(''); setOpen(Number(when.slice(0, 4))) }
+    if (check) { params.kind = check.kind; if (check.goal) params.goal_id = check.goal.id }
+    if (await act('capsule_write', params, `Sealed until ${full(date)}`)) { setSealed(who === 'Me' ? { text: t, when: date, check } : null); setText(''); setOpen(Number(date.slice(0, 4))) }
   }
   const plan = (c: Pick<Capsule, 'text'>) => nav('/chat', { state: { q: `I wrote this to my future self: "${c.text}". Can you help me plan for it?` } })
 
@@ -73,17 +91,58 @@ export default function TimeMachine() {
           <input className="field" style={{ width: 170 }} type="date" min={s.today} value={when} onChange={(e) => setWhen(e.target.value)} aria-label="Opening date" />
         </label>
         {!okWhen && <div className="small" style={{ color: 'var(--bad)', marginTop: 4 }}>Pick a date in the future.</div>}
-        <button className="btn primary block" style={{ marginTop: 10 }} disabled={busy || text.trim().length < 3 || !okWhen || !okFriend} onClick={seal}>{who === 'Me' ? 'Seal it' : `Seal it from ${friend.trim() || 'a friend'}`}</button>
+        {ask && ask.text_year && (
+          <div className="ideas" style={{ margin: '10px 0 0' }}>
+            <b>Which year did you mean?</b>
+            <p className="small" style={{ margin: '4px 0 8px' }}>Your note says {ask.text_year}, but the opening date is in {ask.open_year}.</p>
+            <div className="hstack">
+              <button className="btn outline" style={{ flex: 1 }} disabled={busy || checking} onClick={() => { const d = `${ask.text_year}${when.slice(4)}`; setWhen(d); write(text.trim(), d, false) }}>Open in {ask.text_year}</button>
+              <button className="btn outline" style={{ flex: 1 }} disabled={busy || checking} onClick={() => write(text.trim(), when, false)}>Keep {ask.open_year}</button>
+            </div>
+          </div>
+        )}
+        {!ask && <button className="btn primary block" style={{ marginTop: 10 }} disabled={busy || checking || text.trim().length < 3 || !okWhen || !okFriend} onClick={seal}>{checking ? 'Windy is reading it…' : who === 'Me' ? 'Seal it' : `Seal it from ${friend.trim() || 'a friend'}`}</button>}
       </Card>
 
-      {justSealed && (
+      {sealed && sealed.check?.kind === 'message' && (
+        <Card>
+          <h3>Sealed</h3>
+          <p className="small" style={{ margin: '2px 0 8px' }}>Windy read this as a note, not a goal, so there is nothing to plan. It will be waiting for you on {full(sealed.when)}.</p>
+          <button className="btn ghost block" onClick={() => setSealed(null)}>OK</button>
+        </Card>
+      )}
+      {sealed && sealed.check?.kind !== 'message' && sealed.check?.goal && (() => {
+        const g = sealed.check.goal
+        const need = needed(g, sealed.when)
+        return (
+          <Card>
+            <h3>Sealed. This sounds like your {g.name} goal</h3>
+            <div className="row"><span>Saved so far</span><b>{money(g.saved)} of {money(g.target)}</b></div>
+            <div className="row"><span>On your plan</span><b>{g.reached ? `Reached ${g.reached_label}` : g.reached_label}</b></div>
+            <div className="row"><span>Your note opens</span><b>{full(sealed.when)}</b></div>
+            <p style={{ marginTop: 8 }}>
+              {g.on_time
+                ? 'Your plan gets there before the note opens. Future you should have good news.'
+                : need !== null
+                  ? <>Your plan gets there after the note opens. About <b>{money(need)}</b> a payday would make it in time. You add {money(g.per_payday)} now.</>
+                  : 'Your plan gets there after the note opens.'}
+            </p>
+            <div className="hstack">
+              {!g.on_time && <button className="btn primary" style={{ flex: 1 }} onClick={() => nav(`/goals/${g.id}`)}>Adjust this goal</button>}
+              <button className={g.on_time ? 'btn primary' : 'btn outline'} style={g.on_time ? { flex: 1 } : undefined} onClick={() => plan({ text: sealed.text })}>Ask Windy</button>
+              <button className="btn ghost" onClick={() => setSealed(null)}>Not now</button>
+            </div>
+          </Card>
+        )
+      })()}
+      {sealed && sealed.check?.kind !== 'message' && !sealed.check?.goal && (
         <Card>
           <h3>Sealed. Want a head start?</h3>
-          <p className="small" style={{ margin: '2px 0 8px' }}>Windy can help you plan for it now, so future you has a better answer.</p>
+          <p className="small" style={{ margin: '2px 0 8px' }}>This sounds like a goal you don’t have yet. Windy can help you plan for it now, so future you has a better answer.</p>
           <div className="hstack">
-            <button className="btn primary" style={{ flex: 1 }} onClick={() => plan({ text: justSealed })}>Help me plan it</button>
+            <button className="btn primary" style={{ flex: 1 }} onClick={() => plan({ text: sealed.text })}>Help me plan it</button>
             <button className="btn outline" onClick={() => nav('/goals/new')}>Start a goal</button>
-            <button className="btn ghost" onClick={() => setJustSealed(null)}>Not now</button>
+            <button className="btn ghost" onClick={() => setSealed(null)}>Not now</button>
           </div>
         </Card>
       )}
@@ -120,7 +179,13 @@ export default function TimeMachine() {
             <>
               <p style={{ marginTop: 8 }}>“{c.text}”</p>
               <p className="small">{c.from ? `${c.from} wrote this` : 'You wrote this'} on {full(c.written)}.</p>
-              {c.answer === null ? (
+              {c.goal_id && s.goals.find((g) => g.id === c.goal_id) && (() => {
+                const g = s.goals.find((x) => x.id === c.goal_id)!
+                return <div className="row"><span>{g.name} today</span><b>{money(g.saved)} of {money(g.target)}</b></div>
+              })()}
+              {c.kind === 'message' ? (
+                <p className="small" style={{ marginBottom: 0 }}>Just a note. Nothing to answer.</p>
+              ) : c.answer === null ? (
                 <>
                   <div style={{ margin: '8px 0 6px', fontWeight: 600 }}>So, did it happen?</div>
                   <div className="stack" style={{ gap: 6 }}>
@@ -139,7 +204,9 @@ export default function TimeMachine() {
                       <p>Not yet is not never. Want Windy to help you make a plan for it?</p>
                       <div className="hstack">
                         <button className="btn primary" style={{ flex: 1 }} onClick={() => plan(c)}>Help me plan it</button>
-                        <button className="btn outline" onClick={() => nav('/goals/new')}>Start a goal</button>
+                        {c.goal_id
+                          ? <button className="btn outline" onClick={() => nav(`/goals/${c.goal_id}`)}>Adjust the goal</button>
+                          : <button className="btn outline" onClick={() => nav('/goals/new')}>Start a goal</button>}
                       </div>
                     </>
                   )}

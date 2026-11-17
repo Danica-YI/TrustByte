@@ -77,7 +77,7 @@ def default_state() -> dict:
         # Sealed until open_date. Only she can read and answer them. One sample from last year is included
         # so the history view has something to show in the demo.
         "capsules": [{"id": "0a1b2c3d", "open_date": "2026-06-30", "year": 2026, "written": "2025-12-12", "opened": True,
-                      "answer": "done", "from": None,
+                      "answer": "done", "from": None, "kind": "goal", "goal_id": "goal-emergency",
                       "text": "Start an emergency fund and keep adding to it every payday. Did I stick with it?"}],
         # Goals Mia added herself: {"id", "name", "target", "goal_date"}; they start at $0
         "new_goals": [],
