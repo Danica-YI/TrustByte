@@ -45,6 +45,8 @@ export type Snapshot = {
   everyday: { balance: number; safe: number; committed: number; next_payday: string }
   safe_items: Upcoming[]
   goals: Goal[]
+  // Windy's ideas for next time: optional spending above her usual this month (not part of the forecast)
+  cut_ideas: { id: string; label: string; category: string; count: number; usual_count: number; spent: number; usual: number; extra: number; action: 'limit' | 'ask' }[]
   cards: Card[]
   forecast: {
     points: { date: string; balance: number }[]; low: { date: string; balance: number }; daily: number; safe: number

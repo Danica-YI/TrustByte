@@ -636,6 +636,52 @@ def insights(s: dict) -> dict:
             "days_counted": cm["days_counted"]}
 
 
+# ------------------------------------------------------------------ ideas for next time (shown under the shortfall fixes)
+
+OPTIONAL_CATEGORIES = ("Eating out", "Shopping", "Entertainment")  # choices, not bills, rent, health or groceries
+_DELIVERY = ("uber eats", "menulog", "doordash", "deliveroo")
+
+
+def cut_ideas(s: dict) -> list[dict]:
+    """Optional spending that ran above Mia's usual this month, as ideas she could trim next time.
+
+    Not a fix and not part of the forecast: nothing here changes her plan. Only repeat spending counts
+    (2+ purchases), one-off costs of the move are left out, and it respects the spending-insights consent.
+    """
+    if not s["consent"].get("spending_insights"):
+        return []
+
+    def bucket(t: dict) -> str:
+        return "Food delivery" if any(k in t["merchant"].lower() for k in _DELIVERY) else t["merchant"]
+
+    def totals(a: date, b: date) -> dict[str, list]:
+        out: dict[str, list] = {}
+        for t in _everyday_out(a, b):
+            if t["category"] in OPTIONAL_CATEGORIES and not t.get("signal"):
+                row = out.setdefault(bucket(t), [0, 0.0, t["category"]])
+                row[0] += 1
+                row[1] += -t["amount"]
+        return out
+
+    this = totals(date(TODAY.year, TODAY.month, 1), TODAY)
+    prev, (yy, mm) = [], (TODAY.year, TODAY.month)
+    for _ in range(3):
+        yy, mm = (yy, mm - 1) if mm > 1 else (yy - 1, 12)
+        prev.append(totals(date(yy, mm, 1), date(yy, mm, min(TODAY.day, 28))))
+    ideas = []
+    for name, (count, spent, category) in this.items():
+        usual = sum(p.get(name, [0, 0.0])[1] for p in prev) / len(prev)
+        usual_count = round(sum(p.get(name, [0, 0.0])[0] for p in prev) / len(prev))
+        extra = spent - usual
+        if count >= 2 and extra >= 15:
+            ideas.append({"id": name.lower().replace(" ", "-"), "label": name, "category": category, "count": count,
+                          "usual_count": usual_count, "spent": r2(spent), "usual": r2(usual), "extra": float(round(extra)),
+                          # Windy can act on eating out today (a weekly limit, through review and approve)
+                          "action": "limit" if category == "Eating out" and "Eating out" not in s["budgets"] else "ask"})
+    ideas.sort(key=lambda i: -i["extra"])
+    return ideas[:3]
+
+
 # ------------------------------------------------------------------ home screen
 
 def home_cards(s: dict) -> list[dict]:
@@ -709,6 +755,7 @@ def snapshot(s: dict) -> dict:
         "everyday": {"balance": account(s, "everyday")["closing_balance"], **{k: v for k, v in safe_to_spend(s).items() if k != "items"}},
         "safe_items": safe_to_spend(s)["items"],
         "goals": goals(s),
+        "cut_ideas": cut_ideas(s),
         "cards": home_cards(s),
         "forecast": fc,
         "fixes": forecast_fixes(s),
