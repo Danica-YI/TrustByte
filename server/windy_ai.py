@@ -30,27 +30,33 @@ Rules:
 
 
 NOTE_SYSTEM = """You sort short notes that a bank customer writes to her future self. Reply with JSON only:
-{"kind": "goal" or "question" or "message", "goal_id": one of the given goal ids or null}
+{"kind": "goal" or "question" or "message", "goal_id": one of the given goal ids or null,
+ "year": the calendar year the note is about or null, "amount": a dollar amount named in the note or null,
+ "name": a 1 to 3 word English name for the goal or null}
+The note can be in any language. Today's year is given as "this_year": turn "in three years" into a year.
 "goal" means she wants to achieve, buy, save for or become something. "question" means she is asking for a fact
 or a figure, such as how much she could save. "message" is anything else, such as encouragement or a memory. Pick a goal_id only if the note is clearly about that existing goal."""
 
 
-def classify_note(text: str, goal_names: dict[str, str]) -> dict | None:
+def classify_note(text: str, goal_names: dict[str, str], this_year: int = 2026) -> dict | None:
     """Ask Claude whether a note is a goal and which existing goal it is about. None if unavailable or unclear."""
     if not _has_key():
         return None
     try:
         client = anthropic.Anthropic(timeout=min(TIMEOUT, 8), max_retries=0)
         resp = client.messages.create(
-            model=MODEL, max_tokens=100, system=NOTE_SYSTEM,
-            messages=[{"role": "user", "content": json.dumps({"note": text, "goals": goal_names}, ensure_ascii=False)}],
+            model=MODEL, max_tokens=150, system=NOTE_SYSTEM,
+            messages=[{"role": "user", "content": json.dumps({"note": text, "goals": goal_names, "this_year": this_year}, ensure_ascii=False)}],
             output_config={"effort": "low"},
         )
         raw = "".join(b.text for b in resp.content if b.type == "text").strip()
         data = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
         if data.get("kind") not in ("goal", "question", "message") or data.get("goal_id") not in (None, *goal_names):
             return None
-        return {"kind": data["kind"], "goal_id": data.get("goal_id")}
+        year = data.get("year") if isinstance(data.get("year"), int) and this_year <= data["year"] <= this_year + 40 else None
+        amount = data.get("amount") if isinstance(data.get("amount"), (int, float)) and 50 <= data["amount"] <= 1_000_000 else None
+        name = data.get("name") if isinstance(data.get("name"), str) and 1 <= len(data["name"]) <= 30 else None
+        return {"kind": data["kind"], "goal_id": data.get("goal_id"), "year": year, "amount": amount, "name": name}
     except Exception:  # network, auth, timeout, odd JSON: the rules answer stands
         return None
 

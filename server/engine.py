@@ -726,6 +726,23 @@ def cut_ideas(s: dict) -> list[dict]:
 
 # ------------------------------------------------------------------ Time machine: reading a note before it is sealed
 
+def saved_on(day: str) -> float:
+    """Total in savings and goal accounts at the end of `day`, from the bank history (not the plan)."""
+    total = 0.0
+    for a in BASE_ACCOUNTS:
+        if a["id"] == "everyday":
+            continue
+        if day >= TODAY.isoformat():
+            total += a["closing_balance"]
+            continue
+        last = [t for t in TRANSACTIONS if t["account"] == a["id"] and t["date"] <= day]
+        if last:
+            total += last[-1]["balance_after"]
+        elif a.get("opening_date", "0000") <= day:
+            total += a.get("opening_balance", 0.0)
+    return r2(total)
+
+
 _WORD_NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
 _GOAL_WORDS = re.compile(r"\b(want|save|saving|saved|buy|own|afford|deposit|trip|travel|house|home|place|flat|apartment|car|debt|"
                          r"pay off|wedding|fund|goal|holiday|move|study|business)\b|\$", re.I)
@@ -773,8 +790,14 @@ def capsule_check(s: dict, text: str, open_date: str) -> dict:
             if kind == "message":
                 kind = "goal"
             break
+    am = re.search(r"\$\s?(\d[\d,]*(?:\.\d+)?)\s?(k\b)?", low)
+    amount = None
+    if am:
+        amount = float(am.group(1).replace(",", "")) * (1000 if am.group(2) else 1)
+        amount = amount if 50 <= amount <= 1_000_000 else None
     return {"open_year": open_year, "text_year": text_year, "mismatch": text_year is not None and text_year != open_year,
-            "kind": kind, "goal": goal, "money": _money_angle(s, low, goal), "source": "rules"}
+            "kind": kind, "goal": goal, "money": _money_angle(s, low, goal), "amount": amount, "goal_name": None,
+            "source": "rules"}
 
 
 def _money_angle(s: dict, low: str, goal: dict | None) -> dict | None:
@@ -940,7 +963,9 @@ def snapshot(s: dict) -> dict:
         "safe_items": safe_to_spend(s)["items"],
         "goals": goals(s),
         "cut_ideas": cut_ideas(s),
-        "capsules": s.get("capsules", []),
+        # Each note also carries what she had saved on the day it was written, for the "then and now" reveal
+        "capsules": [dict(c, then_saved=saved_on(c["written"])) for c in s.get("capsules", [])],
+        "saved_now": r2(sum(a["closing_balance"] for a in effective_accounts(s) if a["id"] != "everyday")),
         "this_year": TODAY.year,
         "cards": home_cards(s),
         "forecast": fc,

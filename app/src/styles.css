@@ -234,3 +234,13 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 10px 0; }
 .year-tile b { font-size: 22px; color: var(--ink); letter-spacing: -0.3px; }
 .year-tile.on { border-color: var(--brand); }
 textarea.field { resize: vertical; font-family: inherit; line-height: 1.4; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { transform: scale(0.6) rotate(-8deg); opacity: 0; } 70% { transform: scale(1.12) rotate(3deg); opacity: 1; } 100% { transform: none; } }
+.fade-in { animation: rise 0.5s ease both; }
+.reveal { animation: rise 0.4s ease both; padding-top: 6px; }
+.envelope { width: 64px; height: 64px; margin: 6px auto 0; border-radius: 50%; background: var(--windy-soft); color: var(--brand); display: grid; place-items: center; font-size: 30px; animation: pop 0.6s ease both; }
+.then-now { display: flex; align-items: center; justify-content: center; gap: 14px; animation: rise 0.6s 0.25s ease both; }
+.then-now > div { display: flex; flex-direction: column; align-items: center; font-size: 12px; color: var(--ink-3); }
+.then-now b { font-size: 22px; color: var(--ink); letter-spacing: -0.3px; }
+.then-now .arrow { font-size: 20px; color: var(--brand); }
+@media (prefers-reduced-motion: reduce) { .fade-in, .reveal, .envelope, .then-now { animation: none; } }

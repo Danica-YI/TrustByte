@@ -49,6 +49,7 @@ export type Snapshot = {
   // Windy's ideas for next time: optional spending above her usual this month (not part of the forecast)
   // Time machine: notes to future you, sealed until their year
   capsules: Capsule[]
+  saved_now: number
   this_year: number
   cut_ideas: { id: string; label: string; category: string; count: number; usual_count: number; spent: number; usual: number; extra: number; action: 'limit' | 'ask' }[]
   cards: Card[]
@@ -140,13 +141,14 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
   return data as T
 }
 
-export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped' | 'yes' | 'no' | 'unsure' | 'answered' | 'read'; reply?: string | null; from: string | null; kind?: 'goal' | 'question' | 'message'; goal_id?: string | null }
+export type Capsule = { id: string; open_date: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped' | 'yes' | 'no' | 'unsure' | 'answered' | 'read'; reply?: string | null; then_saved?: number; from: string | null; kind?: 'goal' | 'question' | 'message'; goal_id?: string | null }
 
 // What Windy noticed about a note before it is sealed
 export type NoteCheck = {
   open_year: number; text_year: number | null; mismatch: boolean; kind: 'goal' | 'question' | 'message'; source: 'rules' | 'claude'
   // How the note connects to her money: the engine's figures and one plain suggestion
   money: { topic: string; facts: { label: string; value: string }[]; tip: string; goal_name: string | null } | null
+  amount: number | null; goal_name: string | null // a dollar figure and a short name found in the note, to pre-fill a new goal
   goal: { id: string; name: string; saved: number; target: number; per_payday: number; reached: string | null; reached_label: string; on_time: boolean } | null
 }
 
