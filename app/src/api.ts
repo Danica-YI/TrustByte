@@ -47,6 +47,9 @@ export type Snapshot = {
   safe_items: Upcoming[]
   goals: Goal[]
   // Windy's ideas for next time: optional spending above her usual this month (not part of the forecast)
+  // Time machine: notes to future you, sealed until their year
+  capsules: Capsule[]
+  this_year: number
   cut_ideas: { id: string; label: string; category: string; count: number; usual_count: number; spent: number; usual: number; extra: number; action: 'limit' | 'ask' }[]
   cards: Card[]
   forecast: {
@@ -136,6 +139,8 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
   if (!res.ok) throw new ApiError(data.error ?? data.detail ?? `Server error ${res.status}`, res.status, data.checks ?? [])
   return data as T
 }
+
+export type Capsule = { id: string; year: number; text: string; written: string; opened: boolean; answer: null | 'done' | 'not_yet' | 'dropped' }
 
 export type WhatIf = {
   id: string; title: string; note: string; low_before: number; low_after: number; helps: boolean

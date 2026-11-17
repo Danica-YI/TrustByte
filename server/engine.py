@@ -844,6 +844,8 @@ def snapshot(s: dict) -> dict:
         "safe_items": safe_to_spend(s)["items"],
         "goals": goals(s),
         "cut_ideas": cut_ideas(s),
+        "capsules": s.get("capsules", []),
+        "this_year": TODAY.year,
         "cards": home_cards(s),
         "forecast": fc,
         "fixes": forecast_fixes(s),

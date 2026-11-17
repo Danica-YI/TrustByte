@@ -152,6 +152,20 @@ def masked_payee(invite: GoalInvite) -> str:
     return f"PayID mobile ••• ••• {v[-3:]}" if kind == "mobile" else f"PayID ABN ••• {v[-3:]}"
 
 
+class CapsuleWrite(BaseModel):
+    year: int = Field(ge=2027, le=2060)
+    text: str = Field(min_length=3, max_length=280)
+
+
+class CapsuleId(BaseModel):
+    id: str = Field(pattern=r"^[a-f0-9]{8}$")
+
+
+class CapsuleAnswer(BaseModel):
+    id: str = Field(pattern=r"^[a-f0-9]{8}$")
+    answer: Literal["done", "not_yet", "dropped"]
+
+
 class GoalMember(BaseModel):
     goal: str = Field(pattern=r"^goal-[a-z]+$")
     name: str = Field(min_length=1, max_length=60)  # the masked label shown in the list
@@ -181,6 +195,10 @@ ACTIONS = {
     "goal_invite": (GoalInvite, "goals"),
     "goal_member_accept": (GoalMember, "goals"),
     "goal_member_remove": (GoalMember, "goals"),
+    # Time machine: write a note to future you, open it (demo), answer it
+    "capsule_write": (CapsuleWrite, "goals"),
+    "capsule_open": (CapsuleId, "goals"),
+    "capsule_answer": (CapsuleAnswer, "goals"),
 }
 
 

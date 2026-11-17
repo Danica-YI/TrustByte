@@ -198,6 +198,29 @@ def act(kind: str, params: dict) -> dict:
             title = f"Removed {member['name']} from {goal['name']}"
         checks.append(G.check("engine", "Sharing boundary", True,
                               "They only see this goal. No other account or transaction is shared."))
+    elif kind == "capsule_write":
+        if parsed.year <= E.TODAY.year:
+            checks.append(G.check("input", "Input validation", False, "The year has to be in the future"))
+            raise G.GuardrailError("Pick a year in the future.", checks, 422)
+        text, removed = G._CARD_OR_ACCOUNT.subn("[number removed]", parsed.text.strip())
+        checks.append(G.check("input", "Private details", True, f"Removed {removed} card or account numbers" if removed else "No card or account numbers"))
+        s.setdefault("capsules", []).append({"id": uuid.uuid4().hex[:8], "year": parsed.year, "text": text,
+                                             "written": E.TODAY.isoformat(), "opened": False, "answer": None})
+        title = f"Wrote a note to yourself in {parsed.year}"
+    elif kind in ("capsule_open", "capsule_answer"):
+        cap = next((c for c in s.get("capsules", []) if c["id"] == parsed.id), None)
+        if not cap:
+            checks.append(G.check("input", "Input validation", False, "No such note"))
+            raise G.GuardrailError("That note doesn't exist.", checks, 422)
+        if kind == "capsule_open":
+            cap["opened"] = True
+            title = f"Opened your note for {cap['year']}"
+        else:
+            if not cap["opened"]:
+                checks.append(G.check("input", "Input validation", False, "The note is still sealed"))
+                raise G.GuardrailError("Open the note first.", checks, 409)
+            cap["answer"] = parsed.answer
+            title = f"Answered your {cap['year']} note"
     elif kind == "consent":
         s["consent"][parsed.key] = parsed.on
         title = f"Turned {S.CONSENT_LABELS[parsed.key].lower()} {'on' if parsed.on else 'off'}"

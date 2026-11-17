@@ -72,6 +72,9 @@ def default_state() -> dict:
         "shared_goals": {},
         # Goal details Mia edited herself, by goal account id: {"target": amount, "goal_date": "YYYY-MM-DD"}
         "goal_overrides": {},
+        # Time machine: notes Mia wrote to her future self. Each is {"id", "year", "text", "written",
+        # "opened", "answer": None | "done" | "not_yet" | "dropped"}. Only she can read and answer them.
+        "capsules": [],
         # Goals Mia added herself: {"id", "name", "target", "goal_date"}; they start at $0
         "new_goals": [],
         # The trade-off option or Japan plan Mia approved, for the home screen
