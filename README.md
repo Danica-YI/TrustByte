@@ -86,16 +86,6 @@ Harbour web app (React)
 | | Your plan | `/plan` | History of every change, with undo |
 | | Ask Windy | `/chat` | Live Claude chat; its tools see the approved plan |
 
-### Suggested demo order (about 4 minutes)
-
-1. Home: Windy has noticed 4 things. Point at the right-hand panel.
-2. "Yes, check my plan" → confirm weekly rent → options A/B/C → review B → approve. Watch the checks.
-3. Back on Home: the move card is gone, the December low improved (−$478 → −$318).
-4. Forecast → tick "Skip one Westpac Life auto-save" → review → approve. Home: warning gone.
-5. Regular payments: add Spotify, dismiss Amazon Prime, cover the insurance rise.
-6. Receipt Lens: see the breakdown, save it. Insights: set an Eating out limit.
-7. Your plan: show the history and undo one change. Consent: turn goals off and show the refusal.
-
 ### Connected receipts (Idea 10)
 
 We don't build a connector to Coles or Woolworths (no public API; that's a business deal). The pitch is that
