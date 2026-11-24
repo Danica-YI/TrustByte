@@ -2,7 +2,7 @@
 
 Westpac Innovation and Coding Competition 2026 entry. **Westpac** is a banking web app with **Windy**, an AI
 assistant that notices changes in your money, works out your options with a calculator, explains them, and
-lets you approve a change to your plan. Built from our FigJam board (Draft / Draft 2).
+lets you approve a change to your plan. Built from our Figma board (Draft / Draft 2).
 
 All data is synthetic (demo user **Mia**). No real bank APIs, and no money ever moves: approving only updates
 Mia's simulated plan.
