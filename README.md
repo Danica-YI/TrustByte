@@ -39,7 +39,7 @@ and it survives going back to Home or refreshing the page. **Reset demo** starts
 ## Architecture (how a change flows)
 
 ```
-Harbour web app (React)
+Westpac web app (React)
   -> Input guardrails      consent switch on? allowed action? valid values?      server/guardrails.py
   -> FastAPI backend       coordinates the services                              server/main.py, planner.py
   -> Python engine         works out the new plan, goal dates, 5-week forecast   server/engine.py
@@ -53,10 +53,10 @@ Harbour web app (React)
   health or diet talk. If a check fails, or there's no key or no network, a safe template is used instead.
 - **Financial checks** on every proposal: emergency fund untouched, no savings account below $0, moves between
   Mia's accounts add up to zero, no negative auto-saves.
-- **Plan state** (SQLite, `server/plan_state.db`, gitignored, created on first run): everything Mia approved or confirmed, with history and the log of what Windy used. Tables: `consent`, `plan_sections`, `history`, `usage` (see `server/state.py`). Tests: `server/.venv/bin/python -m pytest server/tests`.
+- **Plan state** (SQLite, `server/plan_state.db`, gitignored, created on first run): everything Mia approved or confirmed, with history and the log of what Windy used. Tables: `consent`, `plan_sections`, `history`, `usage` (see `server/state.py` and `server/schema.sql`). Any change can be undone from **Your plan**. Tests: `server/.venv/bin/python -m pytest server/tests`.
 - **Windy's memory** (same database, `server/memory.py`), read before every answer, even in a new chat: short notes Windy saves by itself when Mia shares something lasting (a goal, a preference; `memory` table), and her questions from earlier chats with the start of each answer (`chat_log` table, latest 10 shown to Windy). `GET /api/memory` lists both, `DELETE /api/memory/{id}` forgets a note, `DELETE /api/memory/chats` clears earlier chats, reset clears everything.
 - **Past chats** (`chat_sessions` and `chat_messages` tables, `server/chats.py`): every conversation is saved whole, including Windy's tool steps. On Ask Windy, **Past chats** lists them; opening one carries on the conversation, even after the backend restarts. `GET /api/chats`, `GET /api/chats/{id}`, `DELETE /api/chats/{id}`.
-  Any change can be undone from **Your plan**.
+- **Next steps under an answer** (`server/suggest.py`): after a reply Windy can offer plan changes as buttons and a few quick follow-up questions. Each plan change goes through the same guardrails as the app's own screens before Mia sees it, and tapping one opens the normal review screen, so nothing is applied without her approval.
 - **Consent**: each feature checks its switch first. Turn one off and its card disappears and the backend
   refuses to run it.
 
@@ -70,7 +70,13 @@ Harbour web app (React)
 | `POST /api/action` `{kind, params}` | small confirmations (rent frequency, "that's a bill", receipt saved, consent) |
 | `POST /api/undo/{id}` | roll back a change (and any after it) |
 | `POST /api/reset` | back to the start of the demo story |
-| `POST /api/chat` | Ask Windy (Claude with tools over the same live plan) |
+| `POST /api/chat` | Ask Windy (Claude with tools over the same live plan); streams the reply and keeps the conversation |
+| `GET /api/chats`, `GET /api/chats/{id}`, `DELETE /api/chats/{id}` | past chats: list, reopen, delete |
+| `GET /api/memory`, `DELETE /api/memory/{id}`, `DELETE /api/memory/chats` | what Windy remembers: list, forget a note, clear earlier chats |
+| `GET /api/what_if` | the What if game's pretend scenarios, worked out by the engine (read-only) |
+| `POST /api/capsule_check` `{text, open_date}` | Time machine: what Windy notices in a note before it is sealed (read-only) |
+| `GET /api/usage` | the log of what Windy used, shown on the consent screen |
+| `GET /api/health` | backend status, and whether an API key is set |
 
 ## Features in the demo
 
@@ -83,8 +89,15 @@ Harbour web app (React)
 | 10 | Receipt Lens | Home card → `/receipt`, `/receipt/quick-split`, `/receipt/settings` | Connected receipts switch (opt-in); saving a breakdown or quick split is recorded and the card goes away |
 | 5+6 | Spending Behaviour Coach | `/insights` | A weekly Eating out limit lowers the spending the forecast plans for |
 | 14 | Your Data and Consent | `/consent` | Switches are enforced by the input guardrails; usage log is real |
+| | Goals: add and edit | `/goals`, `/goals/new`, `/goals/:id` | Adding a goal or changing its target, date or amount goes through guardrails, engine and review, then updates everything |
+| | Save together | `/goals/share/:id` | Invite people to one goal by PayID or BSB and account (only a masked version is kept); invites are simulated |
+| | Goal battle | `/goals/battle` | Playful race to a savings amount against a pretend friend |
+| | Dream Nudge | `/dream` | For people with no plan yet: pick a small weekly amount and see what it adds up to; starts from inspiration, not from spending data |
+| | What if? | `/what-if` | Mini game: guess whether a pretend change helps or hurts Everyday before payday; the engine works out each answer, nothing is saved |
+| | Time machine | `/time-machine` | Notes to future you, sealed until a chosen year (Windy checks the note first), and a message from future you about the rent trade-off |
+| | Insights hub | `/insights/tools` | A home page for every Windy feature, so each is a real page and not only a Home card |
 | | Your plan | `/plan` | History of every change, with undo |
-| | Ask Windy | `/chat` | Live Claude chat; its tools see the approved plan |
+| | Ask Windy | `/chat` | Live Claude chat; its tools see the approved plan; it remembers earlier chats, and **Past chats** reopens them |
 
 ### Connected receipts (Idea 10)
 
@@ -111,13 +124,22 @@ server/
   guardrails.py  input and output guardrails
   windy_ai.py    AI explanations (Claude) with safe template fallback
   state.py       plan state: saved changes, history, undo, consent, usage log
+  schema.sql     SQLite tables (plan state, memory, past chats)
+  memory.py      Windy's notes and earlier-chat log
+  chats.py       past conversations, saved whole
+  suggest.py     next-step buttons under an answer, checked by the guardrails
   tools.py       chat tools (Claude tool use) over the data
+  tests/         pytest suite
+  .env.example   copy to .env for the API key and settings
 app/src/
   api.ts         backend calls and types
   store.tsx      shared app state (snapshot, propose/approve/undo, request log)
-  components/    Shell (panels), ui (Card, Chip, TopBar...)
+  data/          bank and settings data used by the screens
+  components/    Shell (panels), ui (Card, Chip, TopBar...), MoneyCards
   screens/       one file per screen; Review.tsx is the shared review-and-approve screen
 data/            generate.py and the generated JSON
+docs/            presentation (pitch deck, demo script) and design notes
+run.sh           one-command setup and start
 ```
 
 ## Fake bank data
@@ -177,10 +199,12 @@ numbers removed).
 | `life_events` | "Has anything changed?" |
 | `get_receipt` | "What was in my Coles shop?" |
 | `pay_later_plans` | "How much do I owe on Afterpay?" |
+| `remember` | saves a lasting note when Mia shares a goal or preference (see Windy's memory) |
+| `suggest_next` | offers plan-change buttons and follow-up questions after an answer |
 
 `server/.env` is gitignored: **never commit the key**, and never put it in `app/` (anything in the frontend
 ends up in the browser). Settings: `WINDY_MODEL` (default `claude-opus-5-5`), `WINDY_EFFORT` for chat
-(`low` / `medium` / `high`), `WINDY_EXPLAIN_TIMEOUT` (seconds before falling back to the template, default 20).
+(`low` / `medium` / `high`), `WINDY_EXPLAIN_MODEL` (model for the review-screen explanations; defaults to `WINDY_MODEL`), `WINDY_EXPLAIN_TIMEOUT` (seconds before falling back to the template, default 20).
 
 ## Known simplifications
 

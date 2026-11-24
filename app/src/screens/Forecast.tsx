@@ -1,4 +1,4 @@
-// Harbour 03 · Cash flow forecast (Idea 4 · Shortfall Early Warning).
+// Westpac 03 · Cash flow forecast (Idea 4 · Shortfall Early Warning).
 // The projection comes from the engine. Ticking fixes previews their combined effect; "Apply" sends them
 // through the full pipeline for review and approval, and the home warning goes away once Everyday stays above $0.
 import { useState } from 'react'

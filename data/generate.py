@@ -540,7 +540,7 @@ for t in txs:
 for cat, targets in TARGETS.items():
     for y, m in MONTHS:
         check(abs(monthly_cat[(y, m)][cat] - targets[m]) < 0.005, f"{cat} {y}-{m}: {monthly_cat[(y, m)][cat]:.2f}")
-check(delivery[(2026, 11)] == 14, f"Nov delivery orders {delivery[(2026, 11)]} != 14 (Harbour 02)")
+check(delivery[(2026, 11)] == 14, f"Nov delivery orders {delivery[(2026, 11)]} != 14 (Westpac 02)")
 
 everyday = [t for t in txs if t["account"] == "everyday"]
 low = min(everyday, key=lambda t: t["balance_after"])

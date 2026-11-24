@@ -1,6 +1,6 @@
-"""harbour + Windy backend (FastAPI): coordinates the services in the architecture.
+"""Westpac + Windy backend (FastAPI): coordinates the services in the architecture.
 
-  Harbour web app -> input guardrails -> FastAPI -> AI model + Python engine -> output guardrails
+  Westpac web app -> input guardrails -> FastAPI -> AI model + Python engine -> output guardrails
   -> customer reviews and approves -> only the simulated financial plan is updated
 
   GET  /api/snapshot        everything the app shows, worked out by the engine from base data + plan state

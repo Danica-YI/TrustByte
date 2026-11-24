@@ -12,7 +12,7 @@ fi
 if [ ! -d app/node_modules ]; then (cd app && npm install); fi
 (cd app && npm run build)
 echo ""
-echo "  harbour + Windy is running at  http://localhost:8787"
+echo "  Westpac + Windy is running at  http://localhost:8787"
 echo "  (Add ANTHROPIC_API_KEY to server/.env for live AI explanations and chat.)"
 echo ""
 exec server/.venv/bin/uvicorn main:app --app-dir server --port 8787

@@ -1,4 +1,4 @@
-// Harbour 02 · Insights (Ideas 5+6 · Spending Behaviour Coach). Real figures from 12 months of history,
+// Westpac 02 · Insights (Ideas 5+6 · Spending Behaviour Coach). Real figures from 12 months of history,
 // compared fairly (same days of earlier months). Setting a limit goes through review and approve,
 // and then lowers the usual spending the forecast plans for.
 // The chart: one stacked bar per month, coloured by category. Tap a month (or use ‹ ›) to see its
