@@ -1,6 +1,6 @@
 # TrustByte · Windy
 
-Westpac Innovation and Coding Competition 2026 entry. **harbour** is a banking web app with **Windy**, an AI
+Westpac Innovation and Coding Competition 2026 entry. **Westpac** is a banking web app with **Windy**, an AI
 assistant that notices changes in your money, works out your options with a calculator, explains them, and
 lets you approve a change to your plan. Built from our FigJam board (Draft / Draft 2).
 
