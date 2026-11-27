@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windy · an AI money assistant that notices first | Team TrustByte</title>
+<meta name="description" content="Windy is an AI assistant inside a banking app that notices when life changes your money, works out the options with a Python engine, explains them, and lets you decide. Team TrustByte's entry to the Westpac Innovation and Coding Competition 2026.">
+<meta property="og:title" content="Windy · an AI money assistant that notices first">
+<meta property="og:description" content="Code does the maths, the AI explains, the customer decides. A hackathon project by Team TrustByte.">
+<meta property="og:image" content="img/home.png">
+<meta name="theme-color" content="#16151b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23d4002a'/><path d='M16 6l2.4 7.6L26 16l-7.6 2.4L16 26l-2.4-7.6L6 16l7.6-2.4z' fill='white'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16151b; --ink-2:#22202a; --ink-3:#2e2b37;
+  --paper:#fbfaf8; --lav:#f3f0f7; --lav-2:#e9e4f1;
+  --red:#d4002a; --red-2:#a8001f; --rose:#f7c6d0;
+  --green:#1b8a4a; --mint:#3ddc84;
+  --muted:#6b6875; --muted-dark:#a7a3b3;
+  --line:rgba(22,21,27,.1); --line-dark:rgba(255,255,255,.1);
+  --display:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --body:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:22px; --max:1160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--body);color:var(--ink);background:var(--paper);line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;letter-spacing:-.02em;margin:0}
+h2{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800}
+h3{font-size:1.25rem;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:500}
+.dark .eyebrow{color:var(--rose)}
+.lede{font-size:1.15rem;color:var(--muted);max-width:60ch}
+.dark .lede{color:var(--muted-dark)}
+section{padding:110px 0}
+.dark{background:var(--ink);color:#fff}
+.sec-head{display:grid;gap:16px;margin-bottom:56px;max-width:760px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(22,21,27,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line-dark);color:#fff}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:1.2rem}
+.brand small{font-family:var(--body);font-weight:500;font-size:.8rem;color:var(--muted-dark)}
+.spark{width:26px;height:26px;border-radius:8px;background:var(--red);display:grid;place-items:center}
+nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:.92rem}
+nav ul a{text-decoration:none;color:var(--muted-dark);transition:color .2s}
+nav ul a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:.95rem;text-decoration:none;transition:transform .2s, background .2s, border-color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#ec0a35}
+.btn-ghost{border:1.5px solid rgba(255,255,255,.28);color:#fff}
+.btn-ghost:hover{border-color:#fff}
+.btn-sm{padding:8px 16px;font-size:.85rem}
+.btn svg{width:18px;height:18px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:90px 0 0;background:var(--ink);color:#fff}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:780px;height:780px;background:radial-gradient(closest-side,rgba(212,0,42,.45),transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:auto auto -30% -15%;width:700px;height:700px;background:radial-gradient(closest-side,rgba(120,90,200,.22),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end}
+.hero-copy{padding-bottom:110px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line-dark);background:rgba(255,255,255,.04);font-size:.82rem;color:var(--muted-dark)}
+.pill b{color:#fff;font-weight:600}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(61,220,132,.18)}
+.hero h1{font-size:clamp(3.2rem,8vw,6.4rem);font-weight:800;margin:26px 0 22px;letter-spacing:-.035em}
+.hero h1 em{font-style:normal;color:var(--red);position:relative}
+.hero .lede{font-size:1.22rem;margin-bottom:34px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:48px;padding-top:28px;border-top:1px solid var(--line-dark)}
+.hero-meta div{font-size:.85rem;color:var(--muted-dark)}
+.hero-meta b{display:block;font-family:var(--display);font-size:1.7rem;color:#fff;font-weight:700;letter-spacing:-.02em}
+.hero-visual{position:relative;justify-self:center;width:min(390px,100%)}
+.phone{border-radius:44px;background:#0b0a0e;padding:10px;box-shadow:0 40px 80px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08)}
+.phone img{border-radius:36px}
+.hero .phone{margin-bottom:-120px;transform:rotate(-3deg)}
+.float{position:absolute;background:#fff;color:var(--ink);border-radius:16px;padding:12px 16px;box-shadow:0 20px 40px -12px rgba(0,0,0,.45);font-size:.82rem;line-height:1.35;max-width:230px}
+.float strong{display:block;font-size:.9rem}
+.float .ok{color:var(--green);font-weight:600}
+.f1{left:-120px;top:150px;animation:bob 6s ease-in-out infinite}
+.f2{right:-60px;top:360px;animation:bob 7s ease-in-out infinite reverse}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;color:var(--red);background:#fde8ec;padding:2px 8px;border-radius:999px;margin-bottom:6px}
+@keyframes bob{50%{transform:translateY(-10px)}}
+
+/* problem */
+.problem{padding-top:200px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.stat{background:var(--lav);border-radius:var(--r);padding:34px 30px;display:flex;flex-direction:column;gap:14px}
+.stat .n{font-family:var(--display);font-size:clamp(3rem,5vw,4.2rem);font-weight:800;color:var(--red);letter-spacing:-.04em;line-height:1}
+.stat p{font-size:1.05rem}
+.stat cite{margin-top:auto;font-size:.78rem;color:var(--muted);font-style:normal}
+.insight{margin-top:20px;background:var(--ink);color:#fff;border-radius:var(--r);padding:30px 34px;font-size:1.25rem;font-family:var(--display);font-weight:500}
+.insight b{color:var(--rose);font-weight:700}
+
+/* how */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s}
+.step{position:relative;background:var(--ink-2);border:1px solid var(--line-dark);border-radius:var(--r);padding:30px 26px 32px;overflow:hidden}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:var(--mono);font-size:.8rem;color:var(--muted-dark)}
+.step .ic{width:52px;height:52px;border-radius:16px;background:var(--red);display:grid;place-items:center;margin:20px 0 22px}
+.step:last-child .ic{background:var(--green)}
+.step .ic svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.step h3{margin-bottom:10px;font-size:1.4rem}
+.step p{color:var(--muted-dark);font-size:.97rem}
+.step:not(:last-child)::after{content:"";position:absolute;right:-1px;top:50%;width:1px;height:40%;transform:translateY(-50%);background:linear-gradient(transparent,var(--red),transparent);opacity:.6}
+
+/* story */
+.story{background:var(--lav)}
+.story-grid{display:grid;grid-template-columns:.85fr repeat(3,1fr);gap:28px;align-items:start}
+.persona{background:#fff;border-radius:var(--r);padding:30px;position:sticky;top:100px}
+.persona h3{font-size:1.8rem;margin:6px 0 14px}
+.persona ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;font-size:.95rem}
+.persona li{padding-left:22px;position:relative}
+.persona li::before{content:"";position:absolute;left:0;top:.6em;width:10px;height:2px;background:var(--red)}
+.persona small{display:block;margin-top:20px;color:var(--muted);font-size:.78rem}
+.shot{display:grid;gap:18px}
+.shot .phone{padding:7px;border-radius:34px;box-shadow:0 30px 60px -24px rgba(40,20,70,.35)}
+.shot .phone img{border-radius:28px}
+.shot .num{font-family:var(--display);font-weight:800;font-size:1.5rem;color:var(--red)}
+.shot p{font-size:.95rem;color:var(--muted)}
+.shot:nth-child(3){margin-top:48px}
+.shot:nth-child(4){margin-top:96px}
+.delta{font-family:var(--mono);font-size:.82rem;color:var(--ink);background:#fff;border-radius:10px;padding:8px 10px;display:inline-block}
+.delta s{color:var(--muted)}
+
+/* features */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feat{border:1px solid var(--line);border-radius:var(--r);padding:28px;background:#fff;transition:transform .25s, box-shadow .25s, border-color .25s;display:flex;flex-direction:column;gap:12px}
+.feat:hover{transform:translateY(-4px);box-shadow:0 24px 48px -24px rgba(22,21,27,.25);border-color:transparent}
+.feat-top{display:flex;justify-content:space-between;align-items:center}
+.badge{width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:700;font-family:var(--display)}
+.built{font-size:.75rem;font-weight:600;color:var(--green);display:flex;align-items:center;gap:6px}
+.built::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+.feat p{color:var(--muted);font-size:.96rem}
+.also{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.also span{font-size:.88rem;color:var(--muted);margin-right:6px}
+.chip{font-size:.85rem;padding:7px 14px;border-radius:999px;background:var(--lav);border:1px solid var(--lav-2)}
+
+/* architecture */
+.arch{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.flow{display:grid;gap:10px}
+.node{border:1px solid rgba(61,220,132,.45);background:rgba(61,220,132,.06);border-radius:14px;padding:14px 18px;position:relative}
+.node b{display:block;font-size:1rem}
+.node span{font-size:.85rem;color:var(--muted-dark)}
+.node code{float:right;font-family:var(--mono);font-size:.72rem;color:var(--mint);opacity:.8;margin-top:3px}
+.arrow{height:14px;display:grid;place-items:center;color:var(--muted-dark);font-size:.8rem;line-height:1}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.node.ai{border-color:rgba(247,198,208,.5);background:rgba(212,0,42,.1)}
+.node.ai code{color:var(--rose)}
+.principles{display:grid;gap:30px}
+.pr{display:grid;grid-template-columns:52px 1fr;gap:18px}
+.pr .ic{width:52px;height:52px;border-radius:50%;background:rgba(212,0,42,.15);display:grid;place-items:center}
+.pr .ic svg{width:24px;height:24px;stroke:var(--rose);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pr h3{margin-bottom:6px}
+.pr p{color:var(--muted-dark)}
+.stack{margin-top:36px;display:flex;flex-wrap:wrap;gap:8px}
+.stack span{font-family:var(--mono);font-size:.78rem;padding:6px 12px;border-radius:8px;background:var(--ink-3);color:#ddd9e6}
+
+/* safety */
+.safety{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+.guards{display:grid;gap:14px}
+.guard{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;padding:20px 22px;border-radius:18px;background:#fff;border:1px solid var(--line)}
+.guard .ic{width:44px;height:44px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+.guard .ic svg{width:21px;height:21px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.guard h3{font-size:1.08rem;margin-bottom:3px}
+.guard p{font-size:.94rem;color:var(--muted)}
+.checks{position:relative}
+.checks img{border-radius:18px;box-shadow:0 40px 80px -30px rgba(22,21,27,.5);width:100%;max-width:440px;margin-left:auto}
+.checks .note{position:absolute;left:-10px;bottom:-24px;background:var(--red);color:#fff;font-family:var(--display);font-weight:700;padding:12px 18px;border-radius:14px;font-size:1.05rem;box-shadow:0 20px 40px -16px rgba(212,0,42,.6)}
+
+/* compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.col{border-radius:var(--r);padding:34px}
+.col h3{font-size:1.6rem;margin-bottom:22px}
+.col ul{list-style:none;margin:0;padding:0;display:grid;gap:14px;font-size:1.02rem}
+.col li{display:flex;gap:12px;align-items:flex-start}
+.col li::before{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;margin-top:2px}
+.today{background:#f1f0ee;color:var(--muted)}
+.today h3{color:var(--muted)}
+.today li::before{content:"–";background:#e2e0dc}
+.windy{background:var(--ink);color:#fff}
+.windy h3{color:#fff}
+.windy h3 span{color:var(--red)}
+.windy li::before{content:"✓";background:var(--red);color:#fff}
+
+/* receipt band */
+.band{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}
+.band .phone{max-width:340px;margin:0 auto;transform:rotate(2deg)}
+.next{display:grid;gap:14px;margin-top:32px}
+.next div{display:flex;gap:14px;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--line-dark);color:#ddd9e6}
+.next div b{font-family:var(--mono);font-size:.8rem;color:var(--rose);font-weight:500;flex:none;width:64px}
+
+/* run */
+.run{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+pre{margin:0;background:var(--ink);color:#e9e6f0;border-radius:var(--r);padding:28px 30px;font-family:var(--mono);font-size:.9rem;line-height:1.8;overflow-x:auto}
+pre .c{color:#7d7889}
+pre .p{color:var(--red)}
+.team{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+
+footer{background:var(--ink);color:var(--muted-dark);padding:54px 0;font-size:.88rem}
+footer .wrap{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:start}
+footer p{max-width:70ch}
+footer a{color:#fff}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.f1,.f2{animation:none}html{scroll-behavior:auto}}
+
+@media (max-width:980px){
+  nav ul{display:none}
+  .hero .wrap{grid-template-columns:1fr}
+  .hero-copy{padding-bottom:40px}
+  .hero-visual{width:min(320px,80%)}
+  .f1{left:-70px}.f2{right:-40px}
+  .stats,.features{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .step::after{display:none}
+  .story-grid{grid-template-columns:1fr 1fr}
+  .persona{position:static;grid-column:1/-1}
+  .shot:nth-child(n){margin-top:0}
+  .arch,.safety,.compare,.band,.run{grid-template-columns:1fr}
+  .checks img{margin:0 auto}
+}
+@media (max-width:620px){
+  section{padding:80px 0}
+  .problem{padding-top:170px}
+  .stats,.features,.steps,.story-grid{grid-template-columns:1fr}
+  .f1,.f2{display:none}
+  .hero-meta{gap:20px}
+  footer .wrap{grid-template-columns:1fr}
+  .shot{max-width:320px;margin:0 auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="spark"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6z" fill="#fff"/></svg></span>Windy <small>by TrustByte</small></a>
+    <ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#story">Demo story</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#safety">Safety</a></li>
+    </ul>
+    <a class="btn btn-red btn-sm" href="https://github.com/Danica-YI/TrustByte">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>
+      GitHub
+    </a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="pill"><span class="dot"></span><b>Hackathon project</b> · Westpac Innovation and Coding Competition 2026</span>
+      <h1>The wind behind your <em>plans.</em></h1>
+      <p class="lede">Windy is an AI assistant inside a banking app. It notices when life changes your money, works out the options with a real calculator, explains them in plain words, and lets you decide.</p>
+      <div class="cta">
+        <a class="btn btn-red" href="https://github.com/Danica-YI/TrustByte">View the code
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="https://github.com/Danica-YI/TrustByte/blob/main/docs/presentation/Windy-pitch.pdf">Read the pitch deck</a>
+      </div>
+      <div class="hero-meta">
+        <div><b>6 + 4</b>features built</div>
+        <div><b>13</b>checks per answer</div>
+        <div><b>76</b>automated tests</div>
+        <div><b>~1,060</b>synthetic transactions</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="phone"><img src="img/home.png" alt="Windy home screen: Mia's balance of $1,678.25, a life event card saying 'Looks like you're moving home', and a warning that early December looks tight" width="780" height="1688"></div>
+      <div class="float f1"><span class="tag">Windy · Life event</span><strong>Looks like you're moving home</strong>A $2,400 bond and a new rent payee this week.</div>
+      <div class="float f2"><strong>Plan B · Balanced</strong><span class="ok">✓ 13 of 13 checks passed</span><br>December low −$478 → −$318</div>
+    </div>
+  </div>
+</header>
+
+<section class="problem">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">The problem</span>
+      <h2>Money pressure is everywhere, and plans break quietly.</h2>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><span class="n">35%</span><p>of Australian adults found it difficult or very difficult to get by on their current income.</p><cite>ANUpoll, April 2025 (reported by AIHW)</cite></div>
+      <div class="stat rv"><span class="n">11.2 yrs</span><p>to save a home deposit, while new rents take a record 33.1% of median household income.</p><cite>NHSAC, State of the Housing System 2026</cite></div>
+      <div class="stat rv"><span class="n">45.2%</span><p>of people entering personal insolvency in 2025–26 had a buy now, pay later debt.</p><cite>AFSA, State of the Personal Insolvency System 2025–26</cite></div>
+    </div>
+    <div class="insight rv"><b>The insight:</b> banking apps show where the money went. They don't show what it can do next.</div>
+  </div>
+</section>
+
+<section class="dark" id="how">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">How Windy works</span>
+      <h2>It notices first, and you stay in control.</h2>
+      <p class="lede">"We have the transactions. But then what can we do with them?" The bank already holds the data that shows when a plan is about to break. Today it just lists it.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><h3>Notices</h3><p>Spots a life change, a gap before payday, a new bill or a price rise in your transactions.</p></div>
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div><h3>Works it out</h3><p>A Python engine calculates the options: goal dates, auto-saves and a 5-week forecast.</p></div>
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12z"/></svg></div><h3>Explains</h3><p>The AI explains the result in two or three plain sentences, using only the engine's numbers.</p></div>
+      <div class="step rv"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/></svg></div><h3>You decide</h3><p>Nothing changes until you approve, and every change can be undone.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="story" id="story">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">The demo story</span>
+      <h2>Mia's story: detect, decide, free up money.</h2>
+      <p class="lede">Mia moves house. Windy reads the bond and the new rent payee, checks with her, then shows what it does to every goal and to her balance before payday.</p>
+    </div>
+    <div class="story-grid">
+      <aside class="persona rv">
+        <span class="eyebrow">Meet</span>
+        <h3>Mia, 24</h3>
+        <ul>
+          <li>Software developer, first full-time job, freelance work on the side</li>
+          <li>Paid $2,883 every second Friday</li>
+          <li>Rents in Brisbane, owns a car</li>
+          <li>Goals: Japan, home deposit, emergency fund, Bali</li>
+        </ul>
+        <small>Synthetic persona. 12 months of generated banking history, same on every machine.</small>
+      </aside>
+      <div class="shot rv">
+        <div class="phone"><img src="img/detect.png" alt="Moving home screen listing Swift Movers, an RTA bond and a first payment to a new rental agency, and asking how often the new rent is paid" loading="lazy" width="780" height="1688"></div>
+        <span class="num">1 · Detect</span>
+        <p>A $2,400 bond and a new rent payee. Windy asks instead of guessing: rent is up $160 a fortnight.</p>
+      </div>
+      <div class="shot rv">
+        <div class="phone"><img src="img/decide.png" alt="Review and approve screen for Plan B, showing what changes in each goal and an AI-explained summary" loading="lazy" width="780" height="1688"></div>
+        <span class="num">2 · Decide</span>
+        <p>Three options side by side; Windy never picks. Plan B passes all 13 checks and Mia approves.</p>
+      </div>
+      <div class="shot rv">
+        <div class="phone"><img src="img/free-up.png" alt="Home screen after approval, with the early December warning improved and new cards for regular payments and a grocery spending check" loading="lazy" width="780" height="1688"></div>
+        <span class="num">3 · Free up money</span>
+        <p>The December low improves straight away. One more fix from the forecast clears it.</p>
+        <span class="delta"><s>−$478</s> → −$318 → $42</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">What we built</span>
+      <h2>Six features, one connected experience.</h2>
+      <p class="lede">Every screen reads one live snapshot from the backend, so a change approved on one screen shows up everywhere.</p>
+    </div>
+    <div class="features">
+      <div class="feat rv"><div class="feat-top"><span class="badge">1</span><span class="built">Built</span></div><h3>Life Event Detector</h3><p>Reads a bond and a new rent payee as "you moved", asks first, then shows what it does to every goal.</p></div>
+      <div class="feat rv"><div class="feat-top"><span class="badge">2</span><span class="built">Built</span></div><h3>Goal Trade-off Simulator</h3><p>When goals clash: three options side by side with real dates. Windy never picks for you.</p></div>
+      <div class="feat rv"><div class="feat-top"><span class="badge">3</span><span class="built">Built</span></div><h3>Shortfall Early Warning</h3><p>Sees the −$478 dip around 10 December three weeks early, with fixes that show where the money comes from.</p></div>
+      <div class="feat rv"><div class="feat-top"><span class="badge">4</span><span class="built">Built</span></div><h3>Commitments Watch</h3><p>Finds new subscriptions and price rises, and four pay-later plans taking $186 next payday.</p></div>
+      <div class="feat rv"><div class="feat-top"><span class="badge">5</span><span class="built">Built</span></div><h3>Receipt Lens</h3><p>Splits one big shop into categories through connected receipts. Opt-in, about money, never diet.</p></div>
+      <div class="feat rv"><div class="feat-top"><span class="badge">6</span><span class="built">Built</span></div><h3>Dream Nudge</h3><p>For people with no plan yet: pick a small weekly amount and see what it could become.</p></div>
+    </div>
+    <div class="also rv">
+      <span>Also built:</span>
+      <span class="chip">Ask Windy · live AI chat with memory</span>
+      <span class="chip">Your plan · history and undo</span>
+      <span class="chip">Save together · joint goals</span>
+      <span class="chip">Your data and consent</span>
+      <span class="chip">What if? game</span>
+      <span class="chip">Time machine</span>
+    </div>
+  </div>
+</section>
+
+<section class="dark" id="architecture">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Architecture</span>
+      <h2>Code does the maths, the AI explains, the customer decides.</h2>
+    </div>
+    <div class="arch">
+      <div class="flow rv" role="img" aria-label="Request flow: web app, input guardrails, FastAPI backend, Python engine and AI model, output guardrails, customer approval">
+        <div class="node"><code>app/</code><b>Web app (React + TypeScript)</b><span>Mia interacts with Windy</span></div>
+        <div class="arrow">↓</div>
+        <div class="node"><code>guardrails.py</code><b>Input guardrails</b><span>Consent · permissions · validation</span></div>
+        <div class="arrow">↓</div>
+        <div class="node"><code>main.py</code><b>FastAPI backend</b><span>Coordinates the services</span></div>
+        <div class="arrow">↓</div>
+        <div class="pair">
+          <div class="node"><code>engine.py</code><b>Python engine</b><span>Plans, goal dates, 5-week forecast</span></div>
+          <div class="node ai"><code>windy_ai.py</code><b>AI model</b><span>Explains the result in 2–3 sentences</span></div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="node"><code>guardrails.py</code><b>Output guardrails</b><span>Schema · financial checks · numbers match · safe text</span></div>
+        <div class="arrow">↓</div>
+        <div class="node"><code>state.py</code><b>Customer approves</b><span>Only the simulated plan changes, with undo</span></div>
+      </div>
+      <div>
+        <div class="principles">
+          <div class="pr rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div><div><h3>One engine for every number</h3><p>Plans, goal dates and the forecast come from the same calculator, so the same question always gets the same answer.</p></div></div>
+          <div class="pr rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12z"/></svg></div><div><h3>The AI only explains</h3><p>It gets a summary of the change, never raw transactions or account numbers. In chat it calls 12 tools over the live plan, so it can look things up, not make them up.</p></div></div>
+          <div class="pr rv"><div class="ic"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div><div><h3>A plan you can trust</h3><p>Approvals are saved in SQLite with history, undo, and a log of what Windy used. Windy also remembers past chats and lasting notes.</p></div></div>
+        </div>
+        <div class="stack rv">
+          <span>React</span><span>TypeScript</span><span>Vite</span><span>FastAPI</span><span>Python</span><span>SQLite</span><span>Claude · tool use</span><span>pytest</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <div class="safety">
+      <div>
+        <div class="sec-head rv" style="margin-bottom:36px">
+          <span class="eyebrow">Safe by design</span>
+          <h2>Every answer is checked before Mia sees it.</h2>
+        </div>
+        <div class="guards">
+          <div class="guard rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="16" cy="12" r="2.5"/></svg></div><div><h3>Consent first</h3><p>Each feature has its own switch. Turn one off and the backend refuses to run it, not just the screen.</p></div></div>
+          <div class="guard rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></div><div><h3>Numbers come from the calculator</h3><p>Every figure in an AI sentence must match the engine, or a safe template is used instead.</p></div></div>
+          <div class="guard rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><h3>Financial checks</h3><p>Emergency fund untouched, no account below $0, moves between Mia's accounts add up to zero.</p></div></div>
+          <div class="guard rv"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M5.3 5.3l13.4 13.4"/></svg></div><div><h3>Stays in its lane</h3><p>No product picks or financial advice, and no health or diet talk drawn from purchases.</p></div></div>
+          <div class="guard rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></div><div><h3>Nothing moves without approval</h3><p>Approving only changes the simulated plan, and every change can be undone.</p></div></div>
+        </div>
+      </div>
+      <div class="checks rv">
+        <img src="img/checks.png" alt="Behind the scenes panel listing 13 passed checks for Plan B, from permission and consent through engine, schema, financial checks and safe response, to waiting for Mia to approve" loading="lazy">
+        <div class="note">13 of 13 checks passed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">What's new</span>
+      <h2>Compared with a banking app today.</h2>
+    </div>
+    <div class="compare">
+      <div class="col today rv"><h3>Today</h3><ul><li>Lists your transactions</li><li>You find the problem after payday</li><li>A chatbot waits to be asked</li><li>Generic budgeting tips</li><li>Advice you take on trust</li></ul></div>
+      <div class="col windy rv"><h3>With <span>Windy</span></h3><ul><li>Connects them to your goals</li><li>Warns three weeks early, with fixes</li><li>Windy notices and asks first</li><li>Your own numbers, compared with your own usual</li><li>Calculator figures, checked, approved and undoable</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap band">
+    <div class="phone rv"><img src="img/receipt.png" alt="Receipt breakdown screen for a $142.30 Coles shop split into essentials, extras and household, with the total matching the payment" loading="lazy" width="780" height="1688"></div>
+    <div class="rv">
+      <span class="eyebrow">Where it goes next</span>
+      <h2 style="margin:16px 0 20px">You steer. Windy notices the change, works out the options and explains them.</h2>
+      <p class="lede">Receipt Lens doesn't build a connector to each supermarket. It plugs into receipt networks banks already use, and the same engine checks that every category adds up to what you paid.</p>
+      <div class="next">
+        <div><b>Step 1</b>Pilot with bank staff before customers</div>
+        <div><b>Step 2</b>Connect to existing receipt networks for item-level receipts</div>
+        <div><b>Phase 2</b>Income and buffer smoother, guided applications, smart bill split</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap run">
+    <div class="rv">
+      <span class="eyebrow">Try it</span>
+      <h2 style="margin:16px 0 20px">Runs on your laptop in one command.</h2>
+      <p class="lede">Needs Node 18+ and Python 3.10+. Without an API key Windy falls back to its built-in explanation templates, which pass the same checks.</p>
+      <div class="team">
+        <a class="btn btn-red" href="https://github.com/Danica-YI/TrustByte">Open the repository</a>
+        <a class="btn" style="border:1.5px solid var(--line)" href="https://github.com/Danica-YI/TrustByte/graphs/contributors">Team TrustByte</a>
+      </div>
+    </div>
+    <pre class="rv"><span class="c"># clone and start everything</span>
+<span class="p">$</span> git clone https://github.com/Danica-YI/TrustByte
+<span class="p">$</span> cd TrustByte && ./run.sh
+
+<span class="c"># open the demo</span>
+<span class="p">→</span> http://localhost:8787
+
+<span class="c"># optional: live AI explanations and chat</span>
+<span class="p">$</span> echo "ANTHROPIC_API_KEY=..." > server/.env</pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:#fff">Windy · Team TrustByte.</b> An entry to the Westpac Innovation and Coding Competition 2026. A student concept prototype: it is not a Westpac product and is not endorsed by Westpac. All data and the persona Mia are synthetic; no real bank APIs are used and no money ever moves.</p>
+    <a href="https://github.com/Danica-YI/TrustByte">github.com/Danica-YI/TrustByte</a>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold: .12, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>
